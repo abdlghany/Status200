@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Survey Form</title>
+    <link rel="stylesheet" href="./css/surveyForm.css" />
+  </head>
+  <body>
+    <div id="main">
+      <form action="">
+        <table>
+          <thead>
+            <td colspan="2"><h1>Survey Form</h1></td>
+          </thead>
+          <tbody>
+            <tr>
+              <td class="right">
+                <label for="name">Name:</label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Enter Name"
+                  name="name"
+                  id="name"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="right">
+                <label for="email">E-mail:</label>
+              </td>
+              <td>
+                <input
+                  type="text"
+                  placeholder="Enter E-mail"
+                  name="email"
+                  id="email"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="right">
+                <label for="WE">Work Exlabelerience:</p>
+              </td>
+              <td>
+                <input
+                  type="number"
+                  placeholder="Enter Number"
+                  name="experience"
+                  id="WE"
+                  required
+                />
+              </td>
+            </tr>
+            <tr>
+              <td class="right">
+                <label>
+                  Are you comfortable in investing in real estate on platform
+                  without first investigating properly?
+                </label>
+              </td>
+              <td>
+                <select name="investigate" id="investigate">
+                  <option value="yes" selected>Yes</option>
+                  <option value="no">No</option>
+                </select>
+              </td>
+            </tr>
+            <tr>
+              <td class="right">
+                <label for="suggestion">Suggestions to build trusted labellatform</p>
+              </td>
+              <td>
+                <textarea name="suggestion" id="suggestion"></textarea>
+              </td>
+            </tr>
+            <tr>
+              <td class="right">
+                <p>Are you ready to invest in:</p>
+              </td>
+              <td>
+                <table>
+                  <tr>
+                    <td class="right-table">
+                      <input
+                        type="checkbox"
+                        id="investingR"
+                        value="RealEstate"
+                        name="investing"
+                      />
+                    </td>
+                    <td class="left">
+                      <label for="investingR">Real Estate</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="right-table">
+                      <input
+                        type="checkbox"
+                        id="investingM"
+                        value="MutualFunds"
+                        name="investing"
+                      />
+                    </td>
+                    <td class="left">
+                      <label for="investingM">Mutual Funds</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="right-table">
+                      <input
+                        type="checkbox"
+                        id="investingC"
+                        value="CryptoCurrency"
+                        name="investing"
+                      />
+                    </td>
+                    <td class="left">
+                      <label for="investingC">Crypto Currency</label>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td class="right-table">
+                      <input
+                        type="checkbox"
+                        id="investingS"
+                        value="StocksnBonds"
+                        name="investing"
+                      />
+                    </td>
+                    <td class="left">
+                      <label for="investingS">Stocks & Bonds</label>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td class="right">
+                <p>Are you ready for further contact?</p>
+              </td>
+              <td>
+                <table>
+                  <tbody>
+                    <tr>
+                      <td class="right-table">
+                        <input
+                          type="radio"
+                          name="fContact"
+                          id="fContactY"
+                          value="yes"
+                        />
+                      </td>
+                      <td class="left">
+                        <label for="fContactY">Yes</label>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td class="right-table">
+                        <input
+                          type="radio"
+                          name="fContact"
+                          id="fContactN"
+                          value="no"
+                        />
+                      </td>
+                      <td class="left">
+                        <label for="fContactN">No</label>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </td>
+            </tr>
+            <tr>
+              <td colspan="2">
+                <button type="submit" class="submitButton">Submit</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </form>
+    </div>
+</body>
+
+
+</html>

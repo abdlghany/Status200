@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Bananas</title>
+    <style>
+        a{
+            text-decoration: none;
+            color: black;
+        }
+        ul{
+            list-style-type:upper-roman;
+        }
+        ul ul{
+            list-style-type: lower-roman;
+        }
+        .locationsList{
+            display: inline-block;
+        }
+        table, td, th{
+            border:black 1px solid;
+            padding: 5px;
+            border-collapse: collapse;
+            
+        }
+        table{
+            margin-left: auto;
+            margin-right: auto;
+            border-spacing: 5px;
+            margin-bottom: 40px;
+        }
+        .content {
+            max-width: 600px;
+            width: fit-content;
+            margin-left:auto;
+            margin-right: auto;
+        }
+        .backButton{
+            width: fit-content;
+            display: block;
+            margin-left:auto;
+            margin-right: auto;
+        }
+        tr td button{
+            margin-left: auto; margin-right: auto; width: fit-content; display:inline;
+        }
+
+        .formTable,
+        .formTable td,
+        .formTable th{
+            border: none!important;
+        }
+        .formTable tr td input,
+        .formTable tr td textarea,
+        .formTable tr td select{
+            width: 250px; padding-left: 5px; padding-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <div class="content">
+    <a href="./Index.html" class="backButton">Back to Index</a>
+    <h2>Locations where Bananas live and thrive:</h2>
+    <ul class="locationsList">
+        <li>Malaysia
+            <ul>
+                <li>Southern Malaysia</li>
+                <li>Western Malaysia</li>
+            </ul>
+        </li>
+        <li>Singapore</li>
+        <li>Taiwan</li>
+        <li>China</li>
+        <li>Japan</li>
+        <li>Korea</li>
+    </ul>
+    <h2>Favotire bananas food</h2>
+    <ol>
+        <li>Water</li>
+        <li>Manure</li>
+    </ol>
+    <h2>Colors:</h2>
+    <ul><li>Yellow</li><li>White</li><li>Green</li><li>Red</li><li>Purple</li><li>Blue</li></ul>
+
+    <img src="./resources/Large_Bananas_PNG_Clipart.png" alt="A picture of Bananas">
+    <p>We took a bunch of bananas as a sample, and the results are as follows:</p>
+    <table>
+        <caption>Results of random Bananas sample</caption>
+        <thead>
+            <tr>
+                <th>Banana color</th>
+                <th>Banana length</th>
+                <th>Banana width</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Yellow</td>
+                <td>15.00</td>
+                <td rowspan="2">3.00</td>
+            </tr>
+            <tr>
+                <td>Green</td>
+                <td>13.00</td>
+            </tr>
+            <tr>
+                <td>Yellow</td>
+                <td>18.50</td>
+                <td>3.75</td>
+            </tr>
+        </tbody>
+        
+    </table>
+    <form action="">
+        <table class="formTable">
+            <tr>
+                <td><label for="usernameInput">Username:</label></td>
+                <td> <input id="usernameInput" type="text" placeholder="Your username" required></td>
+            </tr>
+            <tr>
+                <td><label for="emailInput">Email:</label></td>
+                <td><input id="emailInput" type="email" placeholder="Your email" name="email" required></td>
+            </tr>
+            <tr>
+                <td><label for="passwordInput">Password:</label></td>
+                <td><input id="passwordInput" type="password" placeholder="Your password" name="password" required></td>
+            </tr>
+            <tr>
+                <td><label for="opinionInput">Opinion:</label></td>
+                <td><textarea id="opinionInput" placeholder="Let us know what you think about bananas" name="opinion"></textarea></td>
+            </tr>
+            <tr>
+                <td><label for="selectInput">Banana likability scale:</label></td>
+                <td>
+                    <select id="selectInput" name="selection">
+                        <option value="" selected disabled hidden>Please select an option</option>
+                        <option value="Big Bananas">I like Big Bananas</option>
+                        <option value="Small Bananas">I like Small Bananas</option>
+                        <option value="LBig Bananas">I Love Big Bananas</option>
+                        <option value="LSmall Bananas">I Love Small Bananas</option>
+                    </select>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Login</button>&nbsp;<button type="reset">clear</button></td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>

@@ -1,0 +1,49 @@
+.screenshot {
+  width: 35%;
+  margin-bottom: 5px;
+}
+.images {
+  width: fit-content;
+  margin-left: auto;
+  margin-right: auto;
+}
+.images {
+  text-align: center;
+}
+.stars {
+  text-align: left;
+}
+h1,
+h2 {
+  text-align: center;
+}
+.main {
+  margin-left: auto;
+  margin-right: auto;
+  width: 75%;
+}
+strong {
+  font-size: 1.5rem;
+}
+p,
+q {
+  margin-left: 10px;
+}
+table {
+  width: 80%;
+  border-collapse: collapse;
+  margin-left: auto;
+  margin-right: auto;
+}
+th,
+td {
+  border: 1px solid #ddd;
+  padding: 8px;
+  text-align: center;
+}
+th {
+  background-color: #f0f0f0;
+}
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
