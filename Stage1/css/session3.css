@@ -1,0 +1,68 @@
+p {
+  color: red;
+}
+h1 {
+  color: blue;
+}
+.testingAttentionPlease {
+  color: green;
+  background-color: black;
+  padding: 20px;
+}
+#unique {
+  color: purple;
+}
+div > p {
+  color: orange;
+}
+body {
+  font-size: 1.5rem;
+}
+#a2 {
+  color: blue;
+}
+div dd {
+  color: beige;
+} /* وتف هاللون*/
+p:hover {
+  color: #aaaaaa;
+}
+div::first-letter,
+p:first-letter {
+  color: aqua;
+}
+p:hover::first-letter {
+  color: black;
+}
+p::before {
+  content: "Eat this, it's organic ";
+}
+p::after {
+  content: " BRUH";
+}
+a:visited {
+  background-color: blue;
+  color: red;
+}
+a:hover {
+  color: aqua;
+}
+strong:hover {
+  color: red;
+}
+.hClass {
+  color: rgb(127, 255, 0);
+}
+#hid {
+  color: #dc143c;
+  border: 2px solid black;
+  padding: 10px;
+  box-shadow: 10px 5px 5px #dc143c;
+  margin: 20px;
+  background-color: yellow;
+}
+.thiscontainstheh1 {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  background-color: blue;
+}
