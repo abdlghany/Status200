@@ -1,0 +1,31 @@
+table,
+td {
+  padding: 5px;
+  border-collapse: collapse;
+  padding-left: 10px;
+}
+tr:nth-child(odd) {
+  background-color: rgb(240, 247, 254);
+  border-bottom: 2px solid rgb(230, 237, 244);
+  border-top: 2px solid rgb(230, 237, 244);
+}
+tr:last-of-type {
+  background-color: rgb(78, 129, 231);
+  color: white;
+}
+body {
+  font-size: 1.5rem;
+}
+table {
+  margin: 0 auto;
+}
+div {
+  background-color: rgb(238, 108, 82);
+  width: 100px;
+  height: 100px;
+  box-shadow: 5px 5px rgb(211, 211, 211);
+  padding: 50px;
+  border-radius: 7px;
+  margin: 0 auto;
+  margin-top: 10px;
+}
