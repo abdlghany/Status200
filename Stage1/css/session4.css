@@ -1,0 +1,151 @@
+.center-text {
+  text-align: center;
+}
+.box {
+  width: 5rem;
+  height: 5rem;
+}
+.box-one {
+  background-color: gold;
+}
+.box-two {
+  background-color: tomato;
+  position: relative;
+}
+.box-three {
+  background-color: aqua;
+}
+.box-four {
+  background-color: gold;
+}
+.box-five {
+  background-color: tomato;
+  position: absolute;
+  right: 0;
+}
+.box-six {
+  background-color: aqua;
+}
+.box-seven {
+  background-color: gold;
+}
+.box-eight {
+  background-color: tomato;
+  position: fixed;
+  left: 0;
+}
+.box-nine {
+  background-color: aqua;
+}
+.box-ten {
+  background-color: gold;
+}
+.box-eleven {
+  background-color: tomato;
+
+  left: 0;
+}
+.box-twelve {
+  background-color: aqua;
+  position: sticky;
+  bottom: 5px;
+}
+
+.flag {
+  width: 20rem;
+  height: 5rem;
+  position: absolute;
+}
+.flags {
+  position: relative;
+  margin-bottom: 250px;
+}
+.flag-yellow {
+  background-color: yellow;
+  top: 10rem;
+}
+.flag-black {
+  background-color: black;
+  top: 0;
+}
+.flag-red {
+  background-color: red;
+  top: 5rem;
+}
+.boxes-flex {
+  display: flex;
+  justify-content: space-evenly;
+}
+.box-thirteen {
+  background-color: gold;
+}
+.boxes-flex1 {
+  display: flex;
+  justify-content: space-around;
+}
+.boxes-flex2 {
+  display: flex;
+  justify-content: space-between;
+}
+.boxes-flex3 {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+}
+.boxes-flex4 {
+  display: flex;
+  flex-direction: row;
+}
+
+.box-fourteen {
+  background-color: aqua;
+  /* flex: 1 1 15rem; */
+  /* flex-flow:column wrap; */
+  flex-grow: 1;
+}
+.mb {
+  display: flex;
+  flex-direction: row;
+}
+.box-fifteen {
+  background-color: aqua;
+  flex-grow: 1;
+  margin-bottom: 5px;
+  padding: 5px;
+  margin-right: 5px;
+}
+.box-sixteen {
+  background-color: yellow;
+  margin-bottom: 5px;
+  padding: 5px;
+}
+@media (max-width: 600px) {
+  .box-fifteen {
+    background-color: blue;
+    color: white;
+    margin-bottom: 10px;
+    padding: 10px;
+  }
+  .box-sixteen {
+    background-color: yellow;
+  }
+  .mb {
+    flex-direction: column;
+  }
+}
+@media (min-width: 1200px) {
+  .box-fifteen {
+    background-color: black;
+    color: white;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+  .box-sixteen {
+    background-color: pink;
+    color: black;
+    margin-bottom: 20px;
+    padding: 20px;
+  }
+}

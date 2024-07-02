@@ -1,0 +1,418 @@
+* {
+  padding: 0;
+  margin: 0;
+}
+
+body {
+  font-family: Inter;
+  line-height: 1.5;
+  margin: 0;
+  width: 100vw;
+  background: rgb(3, 7, 18);
+  color: #fff;
+}
+
+a {
+  text-decoration: none;
+  color: #fff;
+  transition: color 0.3s;
+}
+
+a:hover {
+  color: rgb(125, 211, 252);
+}
+
+hr {
+  height: 0;
+  border-width: 0;
+  border-bottom: 0.5px dashed rgba(255, 255, 255, 0.3);
+  margin: 2rem 0 1rem;
+}
+
+h2 {
+  font-weight: 400;
+}
+
+table {
+  font-size: 0.9rem;
+}
+
+table caption {
+  text-align: right;
+  margin-bottom: 3px;
+  font-size: 0.8rem;
+}
+
+table,
+th,
+td {
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-collapse: collapse;
+  text-align: right;
+}
+
+table,
+th:first-child,
+td:not([colspan="2"]):first-child {
+  text-align: left;
+}
+
+td[colspan="2"] {
+  text-align: center;
+}
+
+th,
+td {
+  padding: 0.5rem;
+}
+
+thead {
+  background: rgba(255, 255, 255, 0.3);
+  color: rgb(125, 211, 252);
+  font-weight: 600;
+}
+
+thead th {
+  border-bottom-width: 2px;
+}
+
+tfoot {
+  background: rgba(255, 255, 255, 0.1);
+  color: rgb(125, 211, 252);
+  font-weight: 400;
+}
+
+tfoot td {
+  border-top-width: 2px;
+}
+
+.container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.container.left {
+  background: linear-gradient(rgba(3, 7, 8, 1) 0%, rgb(9, 29, 62) 100%);
+  border-bottom: 1px solid #0e2d6a;
+}
+
+.wrapper {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.container.left .wrapper {
+  padding: 8rem 0 8rem 0;
+  width: 80%;
+}
+
+.container.right .wrapper {
+  padding: 2rem 0 8rem 0;
+  width: 100%;
+}
+
+.container.right .wrapper section {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  padding: 0 5%;
+}
+
+article {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.date {
+  position: relative;
+  left: -5%;
+  color: rgb(163, 163, 163);
+  font-size: 0.75rem;
+}
+
+#logo {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 1rem;
+  padding-bottom: 3rem;
+}
+
+#logo > span {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(255, 255, 255);
+  border-radius: 8px;
+  height: 2.2rem;
+}
+
+#logo > span > span {
+  position: relative;
+  font-family: "Rubik", sans-serif;
+  font-weight: 600;
+  font-style: normal;
+  font-size: 1.8rem;
+  font-weight: 900;
+  padding: 0.2rem 0.6rem;
+  color: #030712;
+}
+
+#logo h1 {
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+#welcome {
+  font-weight: 200;
+  font-size: 2.2rem;
+}
+
+#welcome em {
+  color: rgb(125, 211, 252);
+  font-style: normal;
+}
+
+#newsletter {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+}
+#newsletter p {
+  font-size: 0.85rem;
+  font-weight: 200;
+  color: #fff;
+}
+
+form {
+  display: flex;
+  position: relative;
+}
+
+form input {
+  flex: 1 1 100%;
+  padding: 0.8rem;
+  border: 1px solid rgb(41, 47, 62);
+  border-radius: 8px;
+  background: #030712;
+  color: #fff;
+  outline: none;
+  transition: border 0.3s;
+  font-size: 1rem;
+}
+
+form input:focus {
+  border: 1px solid rgb(125, 211, 252);
+}
+
+form button {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  top: 0.35rem;
+  right: 0.35rem;
+  bottom: 0.35rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #2f3140;
+  border-radius: 5px;
+  background: #1f2433;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+form button::after {
+  content: "→";
+  font-size: 1.2rem;
+  margin-top: -0.1rem;
+  margin-left: 0.5rem;
+}
+
+form button:hover {
+  background-color: #2f3140;
+}
+
+#social {
+  position: absolute;
+  display: flex;
+  gap: 2rem;
+  font-size: 0.85rem;
+  bottom: 1rem;
+}
+#social a {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgba(255, 255, 255, 0.5);
+}
+
+#social a:hover {
+  color: rgb(125, 211, 252);
+}
+
+#social a img {
+  display: none;
+}
+
+.video-container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.video-container iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+#posts {
+  flex: 1 0 75%;
+}
+
+.movie {
+  display: flex;
+  gap: 2rem;
+}
+
+.movie .poster {
+  max-width: 25%;
+}
+
+.movie .poster img {
+  width: 100%;
+  border-radius: 8px;
+}
+
+.movie .review {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  gap: 1rem;
+}
+
+.movie > div .actors {
+  font-size: 0.8rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+}
+
+.movie > div .actors span {
+  font-weight: 600;
+}
+
+.movie > div .actors span,
+.movie > div .actors a {
+  margin-right: 0.5rem;
+}
+.movie > div .actors a {
+  color: rgb(125, 211, 2523);
+  transition: all 0.3s;
+  padding: 0.5px;
+  border-radius: 3px;
+}
+.movie > div .actors a:hover {
+  background-color: rgb(125, 211, 252);
+  color: rgb(255, 255, 255);
+}
+.movie > div .actors a:not(:last-child)::after {
+  content: ",";
+}
+
+.readmore {
+  display: flex;
+  align-self: flex-end;
+}
+
+.readmore a {
+  font-size: 0.78rem;
+  padding: 0.5rem 1rem;
+  border: 1px solid #2f3140;
+  border-radius: 5px;
+  background: #1f2433;
+  color: #fff;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s;
+  transform: rotate(-3deg);
+}
+
+.readmore a:hover {
+  background-color: #2f3140;
+  transform: scale(1.2) rotate(0deg);
+}
+
+@media screen and (min-width: 1024px) {
+  body {
+    display: flex;
+    flex-direction: row;
+    height: 100vh;
+    justify-content: flex-end;
+  }
+  .container {
+    width: 50%;
+  }
+  .container.left {
+    left: 0;
+    background: linear-gradient(
+      90deg,
+      rgba(3, 7, 8, 1) 0%,
+      rgb(9, 29, 62) 100%
+    );
+    border-bottom: none;
+    border-right: 1px solid #0e2d6a;
+    position: fixed;
+    overflow-y: auto;
+    height: 100%;
+    justify-content: flex-end;
+  }
+
+  .container.right {
+    border-right: 1px solid #0e2d6a;
+    /* height: 300vh; */
+    align-items: flex-start;
+  }
+
+  .container.left .wrapper {
+    max-width: 24rem;
+    min-width: auto;
+    margin-right: 8rem;
+  }
+
+  .container.right .wrapper {
+    max-width: 42rem;
+    margin-left: 0;
+  }
+
+  .container.right article {
+    padding-left: 3rem;
+  }
+}
+
+@media screen and (min-width: 1024px) and (min-height: 747px) {
+  #social {
+    position: fixed;
+    bottom: 1rem;
+  }
+}
