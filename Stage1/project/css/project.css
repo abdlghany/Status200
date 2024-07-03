@@ -7,8 +7,7 @@
 body {
   font-family: Arial, sans-serif;
   color: white;
-  display: flex;
-  flex-direction: column;
+
   justify-content: center;
   align-items: center;
   height: 100vh;
@@ -16,6 +15,8 @@ body {
 }
 
 .container {
+  display: flex;
+  flex-direction: row;
   display: flex;
   width: 100%;
   height: 100vh;
@@ -25,11 +26,14 @@ body {
   width: 40%;
   background: linear-gradient(to right, black, #2d0017);
   padding: 20px;
-  display: flex;
-  flex-direction: column;
+  position: relative;
+  
   justify-content: space-between;
 }
+.left-content{
+  align-items: center;
 
+}
 .right-side {
   width: 60%;
   background-color: #00002d;
@@ -71,14 +75,13 @@ h3 {
   background: linear-gradient(to right, black, #2d0017);
   color: white;
   cursor: pointer;
-  width: auto;
+  width: 22%;
   align-self: flex-end;
   height: 3rem;
   margin-top: -56px;
   margin-right: 155px;
-  font-size: 1.5rem;
-  padding-left: 20px;
-  padding-right: 20px;
+  font-size: 1.3rem;
+  position:absolute;
 }
 
 .subscribe-form button:hover {
@@ -91,6 +94,7 @@ h3 {
   display: flex;
   justify-content: center;
   bottom: 0;
+  position: absolute;
 }
 
 .footer a img {
