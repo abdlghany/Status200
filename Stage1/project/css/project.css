@@ -1,4 +1,5 @@
-* {
+*,
+body {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
@@ -7,36 +8,43 @@
 body {
   font-family: Arial, sans-serif;
   color: white;
-
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #1c1c1c;
+
+  background-color: #00002d;
 }
 
 .container {
   display: flex;
-  flex-direction: row;
-  display: flex;
+
   width: 100%;
-  height: 100vh;
 }
 
 .left-side {
   width: 40%;
-  background: linear-gradient(to right, black, #2d0017);
-  padding: 20px;
+  /* background: linear-gradient(to right, #1c0006, #2d0017); */
+  padding: 2rem;
   position: relative;
-  
-  justify-content: space-between;
+  background-image: linear-gradient(135deg, #2c3e50 60%, transparent 60%),
+    linear-gradient(225deg, #2c3e50 60%, transparent 60%);
 }
-.left-content{
-  align-items: center;
 
+.left-content {
+  text-align: center;
+  border-radius: 8px;
+  backdrop-filter: blur(20px);
+  background-color: rgba(0, 0, 0, 0.25);
+  box-shadow: 0 1px 12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(0, 0, 0, 0.5);
+  padding: 4rem 2rem 4rem 2rem;
+  padding-top: auto;
+  top: 2rem;
+  position: sticky;
 }
 .right-side {
   width: 60%;
-  background-color: #00002d;
+
   padding: 20px;
   overflow-y: auto;
 }
@@ -51,6 +59,7 @@ h3 {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
+  align-items: center;
 }
 
 .subscribe-form input,
@@ -58,43 +67,63 @@ h3 {
   padding: 5px;
   border: 2px solid #2d2d2d;
   outline: none;
-
   border-radius: 10px;
 }
 
 .subscribe-form input {
   background-color: #00002d;
   color: white;
-  width: 80%;
+  width: 100%;
   height: 4rem;
   font-size: 1.2rem;
-  padding-left: 10px;
+  padding-left: 1rem;
+  min-width: 40vh;
+  position: relative;
+  padding-right: 1rem;
+  margin-top: 1rem;
+  align-self: flex-end;
+  right: auto;
+  font-size: 0.95rem;
 }
 
 .subscribe-form button {
-  background: linear-gradient(to right, black, #2d0017);
+  background: linear-gradient(to right, #00002d, #00002d);
   color: white;
   cursor: pointer;
   width: 22%;
   align-self: flex-end;
   height: 3rem;
-  margin-top: -56px;
-  margin-right: 155px;
+  right: auto;
+  top: 0.5rem;
   font-size: 1.3rem;
-  position:absolute;
+  position: relative;
+  justify-content: center;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  min-width: 140px;
+  max-width: 190px;
 }
 
 .subscribe-form button:hover {
   background: #1a0010;
+  font-size: 1.2rem;
 }
-
+.subscribe-form button:hover svg {
+  display: inline-block;
+  vertical-align: middle;
+}
+.subscribe-form button svg {
+  display: none;
+  vertical-align: middle;
+}
 .footer {
-  width: 100%;
-  padding: 10px 0;
+  width: 40%;
+  padding: 1.5rem 0;
   display: flex;
   justify-content: center;
   bottom: 0;
-  position: absolute;
+  position: fixed;
 }
 
 .footer a img {
@@ -103,36 +132,37 @@ h3 {
   margin: 0 10px;
 }
 
-.latest-movie video {
+.latest-game video {
   width: 100%;
   height: auto;
   margin-bottom: 20px;
 }
 
-.latest-movie img {
+.latest-game img {
   width: 100%;
   height: auto;
   margin-bottom: 20px;
 }
 
-.older-movies .movie {
+.older-games .game {
   display: flex;
   flex-direction: column;
   margin-top: 20px;
 }
 
-.older-movies .movie img {
+.older-games .game img {
   width: 30%;
   margin-right: 20px;
 }
 
-.movie-details {
+.game-details {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .read-more {
+  margin-top: 1rem;
   align-self: flex-start;
   padding: 10px 20px;
   background-color: #2d0017;
@@ -140,17 +170,27 @@ h3 {
   color: white;
   cursor: pointer;
   transition: transform 0.2s ease-in-out;
+  transform: scale(1.1) rotate(3deg);
 }
 
 .read-more:hover {
   background-color: #1a0010;
-  transform: scale(1.1) rotate(5deg);
+  transform: scale(1) rotate(0deg);
 }
-
+a {
+  text-decoration: none;
+}
 .carousel {
   height: 200px;
   background-color: #333;
   margin-bottom: 20px;
+  scroll-snap-type: x mandatory;
+  scroll-padding: 0 24px;
+  display: flex;
+  overflow: auto;
+}
+.carousel .item {
+  scroll-snap-align: start;
 }
 
 .box-office {
@@ -176,4 +216,29 @@ h3 {
 
 .posted-on {
   margin-bottom: 10px;
+}
+@media (max-width: 1150px) {
+  .subscribe-form button {
+    flex-direction: column;
+    text-align: center;
+  }
+  .container {
+    flex-direction: column;
+  }
+  .right-side {
+    width: 100%;
+    padding: 20px;
+    overflow-y: auto;
+  }
+  .left-side {
+    width: 100%;
+    border-right: none;
+  }
+  .footer {
+    width: 100%;
+    position: relative;
+  }
+}
+a {
+  margin-right: 20px;
 }

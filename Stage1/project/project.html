@@ -10,66 +10,69 @@
     <div class="container">
       <div class="left-side">
         <div class="left-content">
-        <h1>Welcome to Ninja's Gaming Blog</h1>
-        <p>
-          This blog is dedicated to movie reviews, latest trailers, and more.
-          Subscribe to stay updated!
-        </p>
-        <form class="subscribe-form">
-          <label for="email">Subscribe:</label>
-          <input
-            type="email"
-            id="email"
-            name="email"
-            placeholder="Enter your email"
-          />
-          <button type="submit">Subscribe</button>
-        </form>
-      </div>
-        <div class="footer">
-          <a href="#"><img src="path/to/facebook.svg" alt="Facebook" /></a>
-          <a href="#"><img src="path/to/twitter.svg" alt="Twitter" /></a>
-          <a href="#"><img src="path/to/instagram.svg" alt="Instagram" /></a>
-          <a href="#"><img src="path/to/reddit.svg" alt="Reddit" /></a>
+          <h1>Welcome to Ninja's Gaming Blog</h1>
+          <p>
+            This blog is dedicated to game reviews, best and latest games, and
+            more!. Subscribe to stay updated!
+          </p>
+          <form class="subscribe-form">
+            <input
+              type="email"
+              id="email"
+              name="email"
+              placeholder="Enter your email to receive our newsletter"
+            />
+            <button type="submit">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="24px"
+                viewBox="0 -960 960 960"
+                width="24px"
+                fill="#ffffff"
+              >
+                <path
+                  d="M160-200v-80h80v-280q0-83 50-147.5T420-792v-28q0-25 17.5-42.5T480-880q25 0 42.5 17.5T540-820v28q80 20 130 84.5T720-560v280h80v80H160Zm320-300Zm0 420q-33 0-56.5-23.5T400-160h160q0 33-23.5 56.5T480-80ZM320-280h320v-280q0-66-47-113t-113-47q-66 0-113 47t-47 113v280Z"
+                />
+              </svg>
+              Subscribe
+            </button>
+          </form>
         </div>
       </div>
-    
+
       <div class="right-side">
-        <div class="latest-movie">
-          <h2>Latest Movie Review</h2>
+        <div class="latest-game">
+          <h2>Latest Game Review</h2>
           <video controls>
             <source src="path/to/trailer.mp4" type="video/mp4" />
             Your browser does not support the video tag.
           </video>
-          <img
-            src="path/to/latest-movie-poster.jpg"
-            alt="Latest Movie Poster"
-          />
+          <img src="path/to/latest-game-poster.jpg" alt="Latest Game Poster" />
         </div>
-        <div class="older-movies">
-          <h3>Other Movies</h3>
+        <div class="older-games">
+          <h3>Other Games</h3>
           <div class="carousel">
             <!-- Will add carousel items here later-->
           </div>
-          <div class="movie">
+          <div class="game">
             <p class="posted-on">Posted on INSERT DATE HERE</p>
-            <img src="path/to/movie-poster.jpg" alt="Movie Poster" />
-            <div class="movie-details">
-              <p>A brief description of the movie.</p>
+            <img src="path/to/game-poster.jpg" alt="Game Poster" />
+            <div class="game-details">
+              <p>A brief description of the game.</p>
               <p><strong>Starring:</strong> Actor 1, Actor 2, Actor 3</p>
               <button class="read-more">Read more >></button>
             </div>
           </div>
-          <!-- Will Repeat this for other movies -->
+          <!-- Will Repeat this for other games -->
         </div>
         <table class="box-office">
           <tr>
-            <th>Movie</th>
-            <th>Revenue</th>
-            <th>Showtimes</th>
+            <th>Game</th>
+            <th>Price</th>
+            <th>Launched on</th>
           </tr>
           <tr>
-            <td rowspan="2">Movie 1</td>
+            <td rowspan="2">Game 1</td>
             <td>$100M</td>
             <td>June 23, 2024</td>
           </tr>
@@ -77,8 +80,93 @@
             <td>$120M</td>
             <td>June 24, 2024</td>
           </tr>
-          <!-- Will Repeat for other movies -->
+          <!-- Will Repeat for other games -->
         </table>
       </div>
+    </div>
+    <div class="footer">
+      <a href="#"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          width="50"
+          height="50"
+          viewBox="0 0 50 50"
+        >
+          <path
+            fill="#2c3e50"
+            d="M41,4H9C6.24,4,4,6.24,4,9v32c0,2.76,2.24,5,5,5h32c2.76,0,5-2.24,5-5V9C46,6.24,43.76,4,41,4z M37,19h-2c-2.14,0-3,0.5-3,2 v3h5l-1,5h-4v15h-5V29h-4v-5h4v-3c0-4,2-7,6-7c2.9,0,4,1,4,1V19z"
+          ></path></svg
+      ></a>
+      <a href="#"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          width="50"
+          height="50"
+          viewBox="0 0 50 50"
+        >
+          <path
+            fill="#2c3e50"
+            d="M42,12.429c-1.323,0.586-2.746,0.977-4.247,1.162c1.526-0.906,2.7-2.351,3.251-4.058c-1.428,0.837-3.01,1.452-4.693,1.776C34.967,9.884,33.05,9,30.926,9c-4.08,0-7.387,3.278-7.387,7.32c0,0.572,0.067,1.129,0.193,1.67c-6.138-0.308-11.582-3.226-15.224-7.654c-0.64,1.082-1,2.349-1,3.686c0,2.541,1.301,4.778,3.285,6.096c-1.211-0.037-2.351-0.374-3.349-0.914c0,0.022,0,0.055,0,0.086c0,3.551,2.547,6.508,5.923,7.181c-0.617,0.169-1.269,0.263-1.941,0.263c-0.477,0-0.942-0.054-1.392-0.135c0.94,2.902,3.667,5.023,6.898,5.086c-2.528,1.96-5.712,3.134-9.174,3.134c-0.598,0-1.183-0.034-1.761-0.104C9.268,36.786,13.152,38,17.321,38c13.585,0,21.017-11.156,21.017-20.834c0-0.317-0.01-0.633-0.025-0.945C39.763,15.197,41.013,13.905,42,12.429"
+          ></path></svg
+      ></a>
+      <!-- Instagram's stupid logo below, open at your own risk -->
+      <a href="#"
+        ><svg
+          xmlns="http://www.w3.org/2000/svg"
+          x="0px"
+          y="0px"
+          width="50"
+          height="50"
+          viewBox="0 0 50 50"
+        >
+          <radialGradient
+            id="yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1"
+            cx="19.38"
+            cy="42.035"
+            r="44.899"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0" stop-color="#fd5"></stop>
+            <stop offset=".328" stop-color="#ff543f"></stop>
+            <stop offset=".348" stop-color="#fc5245"></stop>
+            <stop offset=".504" stop-color="#e64771"></stop>
+            <stop offset=".643" stop-color="#d53e91"></stop>
+            <stop offset=".761" stop-color="#cc39a4"></stop>
+            <stop offset=".841" stop-color="#c837ab"></stop>
+          </radialGradient>
+          <path
+            fill="url(#yOrnnhliCrdS2gy~4tD8ma_Xy10Jcu1L2Su_gr1)"
+            d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
+          ></path>
+          <radialGradient
+            id="yOrnnhliCrdS2gy~4tD8mb_Xy10Jcu1L2Su_gr2"
+            cx="11.786"
+            cy="5.54"
+            r="29.813"
+            gradientTransform="matrix(1 0 0 .6663 0 1.849)"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop offset="0" stop-color="#4168c9"></stop>
+            <stop offset=".999" stop-color="#4168c9" stop-opacity="0"></stop>
+          </radialGradient>
+          <path
+            fill="#2c3e50"
+            d="M34.017,41.99l-20,0.019c-4.4,0.004-8.003-3.592-8.008-7.992l-0.019-20	c-0.004-4.4,3.592-8.003,7.992-8.008l20-0.019c4.4-0.004,8.003,3.592,8.008,7.992l0.019,20	C42.014,38.383,38.417,41.986,34.017,41.99z"
+          ></path>
+          <path
+            fill="#00002d"
+            d="M24,31c-3.859,0-7-3.14-7-7s3.141-7,7-7s7,3.14,7,7S27.859,31,24,31z M24,19c-2.757,0-5,2.243-5,5	s2.243,5,5,5s5-2.243,5-5S26.757,19,24,19z"
+          ></path>
+          <circle cx="31.5" cy="16.5" r="1.5" fill="#00002d"></circle>
+          <path
+            fill="#00002d"
+            d="M30,37H18c-3.859,0-7-3.14-7-7V18c0-3.86,3.141-7,7-7h12c3.859,0,7,3.14,7,7v12	C37,33.86,33.859,37,30,37z M18,13c-2.757,0-5,2.243-5,5v12c0,2.757,2.243,5,5,5h12c2.757,0,5-2.243,5-5V18c0-2.757-2.243-5-5-5H18z"
+          ></path></svg
+      ></a>
+    </div>
   </body>
 </html>
