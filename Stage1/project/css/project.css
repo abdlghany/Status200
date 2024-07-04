@@ -8,17 +8,18 @@ body {
 body {
   font-family: Arial, sans-serif;
   color: white;
+
   justify-content: center;
   align-items: center;
   height: 100vh;
-
   background-color: #00002d;
 }
 
 .container {
   display: flex;
-
   width: 100%;
+  max-width: 1900px;
+  min-width:490px;
 }
 
 .left-side {
@@ -26,15 +27,14 @@ body {
   /* background: linear-gradient(to right, #1c0006, #2d0017); */
   padding: 2rem;
   position: relative;
-  background-image: linear-gradient(135deg, #2c3e50 60%, transparent 60%),
-    linear-gradient(225deg, #2c3e50 60%, transparent 60%);
+  background-image: linear-gradient(135deg, #2c3e50 55%, transparent 55%),
+    linear-gradient(225deg, #2c3e50 55%, transparent 55%);
 }
 
 .left-content {
   text-align: center;
   border-radius: 8px;
-  backdrop-filter: blur(20px);
-  background-color: rgba(0, 0, 0, 0.25);
+  background: linear-gradient(0deg, #00000055 30%, #00000000 100%);
   box-shadow: 0 1px 12px rgba(0, 0, 0, 0.25);
   border: 1px solid rgba(0, 0, 0, 0.5);
   padding: 4rem 2rem 4rem 2rem;
@@ -106,7 +106,7 @@ h3 {
 }
 
 .subscribe-form button:hover {
-  background: #1a0010;
+  background: #00003F;
   font-size: 1.2rem;
 }
 .subscribe-form button:hover svg {
@@ -217,7 +217,7 @@ a {
 .posted-on {
   margin-bottom: 10px;
 }
-@media (max-width: 1150px) {
+@media (max-width: 1250px) {
   .subscribe-form button {
     flex-direction: column;
     text-align: center;
