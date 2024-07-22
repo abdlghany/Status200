@@ -1,0 +1,50 @@
+.nav-img{
+   height: 100px;
+}
+.Nav{
+    display: flex;
+    justify-content: center;
+}
+hr{
+    color:white;
+    border-top: 1px solid gray;
+}
+.downloadcyberpilot{
+    float:left ;
+    width: 200px;
+}
+.tryfreeloader{
+    float: right;
+    width: 200px;
+}
+h1{  
+}
+#star{
+    width: 40px;
+ }
+ #hot{
+    width: 150px;
+ }
+.MainBody{
+    text-align: center;
+
+}
+#starLink, #cool-p{
+    font-size: 1.5rem;
+}
+
+#geocities{
+    width: 15rem;
+}
+#geocitieslink{
+    font-size: 2rem;
+}
+#scam-img{
+    width: 600px;
+}
+.footer{
+    text-align:center;
+}
+.footer a, .footer p{
+    font-size: 1.2rem;
+}
