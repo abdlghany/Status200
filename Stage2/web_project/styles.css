@@ -1,0 +1,122 @@
+/* Making sure there's no space between the navigation bar and the body */
+body, html{
+    padding: 0;
+    margin: 0;
+    font-family: Arial, Helvetica, sans-serif;
+    line-height: 1.2rem;
+    font-size: 1.1rem;
+}
+
+/* Sticky navigation bar (at the top of the page) */
+nav {
+    padding-bottom: 0;
+    display: flex;
+    justify-content: center;
+    background-color: #2a2438;
+    position:fixed;
+    top:0;
+    right:0;
+    left:0;
+    max-height: 5rem;
+}
+/* Navigation bar's list items */
+.nav-li  a {
+    text-decoration: none;
+    color: white;
+}
+.nav-li  a:hover {
+    color: lightblue;
+}
+.nav-li {
+    display: inline-block;
+    margin-right: 1.5rem;
+    min-width: 70px;
+}
+
+.nav-ul{
+    list-style: none;
+    vertical-align: middle;
+}
+.centerContent{
+    width: 100%;
+    text-align: center;
+    margin-top:3rem;
+    padding-top:2rem;
+    background: linear-gradient(90deg,white 0%, #dbd8e3 10%, #5c5470 50%, #352f44 90%);
+    min-height: 95vh;
+}
+.centerContent h1{
+    margin-bottom: 3rem;
+}
+.centerContent > p, .contactDetails > p{
+    background: linear-gradient(90deg, #000000 50%, #ffffff 50%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.WeValue img{
+    vertical-align: middle;
+}
+/* Services Page Section */
+.parent{
+    display: flex;
+    flex-direction: row;
+}
+.parent p{
+    text-align: justify;
+    overflow: hidden;
+}
+.left, .middle, .right{
+    /* Give each of the 3 sections 3rd of the current screen width */
+    width: 33.33%;
+    padding: 1rem;
+    /* fill the rest of the page based on screen height if the content isn't enough to reach the end of the screen  */
+    min-height: 83vh;
+}
+.left { 
+    background:#dbd8e3;
+    /* Overwrite the previous background color if supported */
+	background: linear-gradient(90deg, #ffffff 10%, #dbd8e3 90%);
+}
+.middle { 
+    background: #5c5470;
+    /* Overwrite the previous background color if supported */
+    background: linear-gradient(90deg, #dbd8e3 10%, #5c5470 90%);
+}
+.right p{ 
+    background: linear-gradient(90deg, #000000 40%, #ffffff 40%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.right { 
+	background: #352f44;
+    /* Overwrite the previous background color if supported */
+    background: linear-gradient(90deg, #5c5470 10%, #352f44 90%);
+}
+/* Change the website's look based on the current screen width */
+@media (max-width: 720px){
+    .parent{
+        flex-direction: column;
+    }
+    .left, .middle, .right{
+        width: 93%;
+        background: transparent;
+    }
+    .left p, .middle p, .right p{
+    background: linear-gradient(90deg, #000000 50%, #ffffff 50%);
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    }
+}
+/* Contact Details Link section */
+#contactDetails a{
+text-decoration: none;
+vertical-align: middle;
+color: blue;
+}
+#contactDetails a:hover{
+    color: lightblue;
+}
+/* Make sure images don't leave their containers on any side */
+.image img{
+    max-width: 100%;
+}
