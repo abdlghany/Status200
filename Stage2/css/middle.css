@@ -1,0 +1,28 @@
+#MainBody{
+display: flex;
+flex-direction:row;
+justify-content: space-around;
+}
+#leftDiv, #centerDiv, #rightDiv{
+    width: 33.33%;
+    text-align: center;
+    padding: 10px;
+}
+img{
+width: 100%;
+display: block;
+border-radius: 2%;
+margin-bottom: 10px;
+object-fit: cover;
+}
+p{
+    text-align: left;
+}
+@media (max-width: 720px){
+    #MainBody{
+        flex-direction: column;
+    }
+    #leftDiv, #centerDiv, #rightDiv{
+        width: 100%;
+    }
+}

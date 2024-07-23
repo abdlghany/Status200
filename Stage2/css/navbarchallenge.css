@@ -1,7 +1,9 @@
+/* Making sure there's no space between the navigation bar and the body */
 body, html{
     padding: 0;
     margin: 0;
 }
+/* Sticky navigation bar */
 nav {
     padding-bottom: 0;
     display: flex;
@@ -12,9 +14,11 @@ nav {
     position:sticky;
     top:0;
 }
+/* Navigation bar's list items */
 .nav-li  a {
     text-decoration: none;
     color: white;
+    vertical-align: middle;
 }
 
 .nav-li  a svg {
@@ -23,11 +27,13 @@ nav {
 
 .nav-ul{
     list-style: none;
-    margin:0;
+    margin-bottom:0;
+    vertical-align: middle;
 }
 .nav-li {
     display: inline-block;
     margin-right: 1.5rem;
+    vertical-align: middle;
 }
 .nav-li img{
     width: 35px;
@@ -35,15 +41,16 @@ nav {
     vertical-align: middle;
 }
 #searchImg{
-    width: 20px;
-    height: 20px;
+    width: 35px;
+    height: 35px;
 }
+/* Sign In Button Section */
 #singinButton{
     background-color: black;
     color: white;
     border-radius: 5px;
     border: 1px solid gray;
-    padding: 0.4rem;
+    padding: 0.5rem;
     font-size: 0.9rem;
     text-decoration: none;
 }
@@ -51,6 +58,7 @@ nav {
 background-color: #6e6e6eff;
 border:none;
 }
+/* Page content that's below the navigation bar */
 .content{
     text-align: center;
 }
@@ -58,4 +66,6 @@ border:none;
     width: 750px;
    display: block;
    margin: 0 auto;
+   margin-bottom: 20px;
+   border-radius: 2%;
 }
