@@ -1,0 +1,37 @@
+nav {
+    display: flex;
+    justify-content: center;
+    background-color: gray;
+    padding: 0.5rem 0;
+}
+a:hover {
+    color: blue;
+}
+.nav-li > a {
+    text-decoration: none;
+    
+}
+.nav-ul{
+    list-style: none;
+
+}
+.nav-li {
+    display: inline-block;
+    margin-right: 2rem;
+}
+#WorkWithUs {
+    background-color: gray;
+    margin-top: 2rem;
+    position: absolute;
+    margin-left: 2rem;
+    padding:1rem;
+    display: none;
+    flex-direction: column;
+}
+#WorkWithUs li {
+    margin-bottom: 1rem;
+}
+
+div:target{
+    display: flex;
+}

@@ -1,0 +1,61 @@
+body, html{
+    padding: 0;
+    margin: 0;
+}
+nav {
+    padding-bottom: 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: black;
+    padding-left:11rem ;
+    padding-right:11rem ;
+    position:sticky;
+    top:0;
+}
+.nav-li  a {
+    text-decoration: none;
+    color: white;
+}
+
+.nav-li  a svg {
+    vertical-align: middle;
+}
+
+.nav-ul{
+    list-style: none;
+    margin:0;
+}
+.nav-li {
+    display: inline-block;
+    margin-right: 1.5rem;
+}
+.nav-li img{
+    width: 35px;
+    height: 35px;
+    vertical-align: middle;
+}
+#searchImg{
+    width: 20px;
+    height: 20px;
+}
+#singinButton{
+    background-color: black;
+    color: white;
+    border-radius: 5px;
+    border: 1px solid gray;
+    padding: 0.4rem;
+    font-size: 0.9rem;
+    text-decoration: none;
+}
+#singinButton:hover{
+background-color: #6e6e6eff;
+border:none;
+}
+.content{
+    text-align: center;
+}
+.content img{
+    width: 750px;
+   display: block;
+   margin: 0 auto;
+}
