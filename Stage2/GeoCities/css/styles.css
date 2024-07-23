@@ -1,23 +1,29 @@
+/* Navigation bar Images' class */
 .nav-img{
    height: 100px;
 }
+/* Navigation bar division */
 .Nav{
     display: flex;
     justify-content: center;
+    margin-top:-10px;
 }
 hr{
     color:white;
     border-top: 1px solid gray;
 }
+/* Left side picture */
 .downloadcyberpilot{
     float:left ;
     width: 200px;
 }
+/* Right side picture */
 .tryfreeloader{
     float: right;
     width: 200px;
 }
 h1{  
+    margin-bottom: -6px;
 }
 #star{
     width: 40px;
@@ -25,6 +31,7 @@ h1{
  #hot{
     width: 150px;
  }
+ /* Main part of website's homepage */
 .MainBody{
     text-align: center;
 
@@ -32,9 +39,10 @@ h1{
 #starLink, #cool-p{
     font-size: 1.5rem;
 }
-
+/* aligning the image to the middle vertically */
 #geocities{
     width: 15rem;
+    vertical-align: middle;
 }
 #geocitieslink{
     font-size: 2rem;
@@ -42,9 +50,11 @@ h1{
 #scam-img{
     width: 600px;
 }
+/* Footer Division */
 .footer{
     text-align:center;
 }
+/* Footer Text */
 .footer a, .footer p{
     font-size: 1.2rem;
 }
