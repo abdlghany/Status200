@@ -5,14 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>About Us</title>
     <link rel="stylesheet" href="styles.css">
+    <script src="js.js"></script>
 </head>
 <body>
      <!-- Navigation bar -->
      <nav>
         <ul class="nav-ul">
-            <li class="nav-li"><a href="index.html" title="Homepage">Home</a></li>
+            <li class="nav-li"><a href="index.html" title="Homepage" >Home</a></li>
             <!-- We're in About us so it doesn't point anywhere -->
-            <li class="nav-li"><a href="#">About us</a></li>
+            <li class="nav-li"><a href="javascript:showAboutSection()" onclick="showAboutSection(); return false;"  id="about">About us</a></li>
+            <div id="aboutSection">
+                <li>
+                    <ul class="nav-ul">
+                        <li  class="nav-li"><a href="#">Jeez</a></li>
+                        <li  class="nav-li"><a href="#">Let me</a></li>
+                        <li  class="nav-li"><a href="#">Drive</a></li>
+                        <li  class="nav-li"><a href="#">For a sec</a></li>
+                    </ul>
+                </li>
+            </div>
             <li class="nav-li"><a href="services.html">Services</a></li>
             <li class="nav-li"><a href="contact.html">Contact us</a></li>
         </ul>  
@@ -24,5 +35,8 @@
         <!-- Placeholder image -->
         <div class="image"><img src="https://placehold.co/150" alt=""></div>
     </div>
+    <script>
+        window.onload(loadAboutSection());
+    </script>
 </body>
 </html>

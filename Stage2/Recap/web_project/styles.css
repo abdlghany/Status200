@@ -6,7 +6,6 @@ body, html{
     line-height: 1.2rem;
     font-size: 1.1rem;
 }
-
 /* Sticky navigation bar (at the top of the page) */
 nav {
     padding-bottom: 0;
@@ -32,7 +31,6 @@ nav {
     margin-right: 1.5rem;
     min-width: 70px;
 }
-
 .nav-ul{
     list-style: none;
     vertical-align: middle;
@@ -119,4 +117,17 @@ color: blue;
 /* Make sure images don't leave their containers on any side */
 .image img{
     max-width: 100%;
+}
+#aboutSection li{
+display: block;
+margin-bottom: 5px;
+margin-top:5px;
+}
+#aboutSection{
+    display: none;
+    background-color: #2a2438;
+    margin-top: 2rem;
+    flex-direction: column;
+    position: absolute;
+    
 }

@@ -2,17 +2,26 @@
 body, html{
     padding: 0;
     margin: 0;
+    
 }
 /* Sticky navigation bar */
 nav {
     padding-bottom: 0;
     display: flex;
+    flex-direction: row;
     justify-content: space-around;
     background-color: black;
     padding-left:11rem ;
     padding-right:11rem ;
-    position:sticky;
+    position:fixed;
     top:0;
+    right: 0;
+    left: 0;
+    max-height: 4rem;
+}
+.dark{
+    background-color: #101010;
+    color: white;
 }
 /* Navigation bar's list items */
 .nav-li  a {
@@ -36,8 +45,8 @@ nav {
     vertical-align: middle;
 }
 .nav-li img{
-    width: 35px;
-    height: 35px;
+    height: 25px;
+    width: 25px;
     vertical-align: middle;
 }
 #searchImg{
@@ -55,17 +64,133 @@ nav {
     text-decoration: none;
 }
 #singinButton:hover{
-background-color: #6e6e6eff;
-border:none;
+    background-color: #6e6e6eff;
+    border:none;
 }
 /* Page content that's below the navigation bar */
 .content{
     text-align: center;
+    margin-top: 5rem;
+    width: 100%;
 }
 .content img{
-    width: 750px;
-   display: block;
-   margin: 0 auto;
-   margin-bottom: 20px;
-   border-radius: 2%;
+    width:60%;
+    display: block;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    border-radius: 2%;
+}
+#MoreSection {
+    position: absolute;
+    color: white;
+    background-color: black;
+    padding: 0 10px;
+    padding-top: 10px;
+    display: none;
+    z-index: 10; /* Ensure it appears above other elements */
+}
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+  }
+/* Hide default HTML checkbox */
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  /* The slider */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #101010;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+  }
+  
+  input:checked + .slider {
+    background-color: gray;
+  }
+  
+  input:focus + .slider {
+    box-shadow: 0 0 1px #2196F3;
+  }
+  
+  input:checked + .slider:before {
+    -webkit-transform: translateX(26px);
+    -ms-transform: translateX(26px);
+    transform: translateX(26px);
+  }
+  
+  /* Rounded slider */
+  .slider.round {
+    border-radius: 34px;
+  }
+  
+  .slider.round:before {
+    border-radius: 50%;
+  }
+#MoreSection li {
+    margin-bottom: 10px;
+}
+
+@media screen and (max-width: 887px){
+    nav{
+        flex-direction: column;
+        top:0;
+        bottom: 0;
+        left: 0;
+        padding-left:0;
+        padding-right: 0;
+        max-height: 100vh;
+        max-width: 8rem;
+    }
+    .nav-li{
+        margin-bottom: 0.8rem;
+        margin-left: 0;
+        display: block;
+}
+.content{
+    margin-left:8rem;
+
+    
+}
+.nav-li img{
+    width: 50%;
+}
+.nav-ul{
+padding-left: 1rem;
+margin:0;
+}
+nav ul:last-of-type{
+    display: none;
+}
+}
+@media screen and (max-width: 1600px) and (min-width: 887px){
+    nav {
+        padding-left:0rem ;
+        padding-right:0rem ;
+        position:fixed;
+        top:0;
+        right: 0;
+        left: 0;
+        max-height: 6rem;    }
 }
