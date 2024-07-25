@@ -28,8 +28,11 @@
             margin: 0 auto;
             padding: 0.5rem;
         }
-
-    </style>
+        .radio-td{
+            display: flex;
+            flex-direction: row;
+        }
+        </style>
 </head>
 <body>
     <form onsubmit="return calculateBMI()">
@@ -47,6 +50,12 @@
                 <td><input type="number" id="height" placeholder="cm" required max="220" min="25"></td>
             </tr>
             <tr>
+                <td><label>Select your gender: </label></td>
+                <td class="radio-td"><input type="radio" id="male" name="gender" value="m"><label class="input-label" for="male">Male</label>
+                    <input type="radio" id="female" name="gender" value="f"><label class="input-label" for="female">Female</label>
+                </td>
+            </tr>
+            <tr>
                 <td colspan="2"><button type="submit">Find out your BMI!</button></td>
             </tr>
             <tr><td colspan="2"><p id="bmi"></p></td></tr>
@@ -54,21 +63,46 @@
 </form>
     <script>
         var clicks = 0
+        function getValueOfElement(ElementID){
+            elementValue = document.getElementById(ElementID).value
+            return elementValue;
+        }
+        function addDataToinnerHTML(FieldName, message){
+            FieldName.innerHTML = FieldName.innerHTML + message;
+           return null
+        }
         function calculateBMI(){
-        var name = document.getElementById("name").value;
-        var weight = document.getElementById("weight").value*1;
-        var height = document.getElementById("height").value/100;
-        bmi = (weight / (height*height)).toFixed(1);
+        var name = getValueOfElement("name");
+        var weight = getValueOfElement("weight")*1;
+        var height = getValueOfElement("height")/100;
+        // this 'awesome' varaible will calculate bmi and round it to 1 number after the decimal point.
+        var bmi = Math.round((weight / (height*height))*10)/10;
         var bmiField = document.getElementById('bmi');
-        bmiField.innerHTML ="Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>\"Your Height: "+height + "m weight: "+weight+"kg\"";
-        if(bmi > 25){
+        var outputBMI ="Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>\"Your Height: "+height + "m weight: "+weight+"kg\"<br/>";
+        bmiField.innerHTML = outputBMI;
+        if(bmi < 18.5){
+            addDataToinnerHTML(bmiField, "You're <b>Underweight!</b>");
+        }
+        else if(bmi < 25){
+            addDataToinnerHTML(bmiField, "Your BMI is <b>normal!</b>");
+        }
+        else if(bmi < 30){
+            addDataToinnerHTML(bmiField, "Your're <b>Overweight!</b></br>");
             clicks +=1;
-            if(clicks > 3){
-                bmiField.innerHTML = bmiField.innerHTML + "<br><b>No matter how many times you click, you still fat.</b>"
+            if(clicks > 5){
+                addDataToinnerHTML(bmiField, "<b>No matter how many times you click, you still fat. :(</b>");
+                }
+        }
+        else {
+            addDataToinnerHTML(bmiField, "You're <b>Obese!</b></br>");
+            clicks +=1;
+            if(clicks > 5){ 
+                addDataToinnerHTML(bmiField, "<b>No matter how many times you click, you still fat. :(</b>");
                 }
         }
         return false;
         }
+
     </script>
 </body>
 </html>
