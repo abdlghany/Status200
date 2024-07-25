@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BMI Calculator</title>
+    <style>
+        *{
+            line-height: 1.3rem;
+            font-size: 1.2rem;
+        }
+        input, label{
+            margin-bottom: 1rem;
+            margin-top: 1rem;
+            vertical-align: middle;
+            width: 100%;
+        }
+        input{
+            min-width: 6rem;
+        }
+        form{
+            text-align: center;
+            display: flex;
+            justify-content: center;
+        }
+        button, p{
+            display: block;
+            margin: 0 auto;
+            padding: 0.5rem;
+        }
+
+    </style>
+</head>
+<body>
+    <form onsubmit="return calculateBMI()">
+        <table>
+            <tr>
+                <td><label for="name">Enter Your name: </label></td>
+                <td><input type="text" id="name" placeholder="Enter your name" required><br></td>
+            </tr>
+            <tr>
+                <td><label for="weight">Enter Your weight (kg): </label></td>
+                <td><input type="number" id="weight" placeholder="kg" required max="635" min="1"><br></td>
+            </tr>
+            <tr>
+                <td><label for="height">Enter your height (cm): </label></td>
+                <td><input type="number" id="height" placeholder="cm" required max="220" min="25"></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Find out your BMI!</button></td>
+            </tr>
+            <tr><td colspan="2"><p id="bmi"></p></td></tr>
+    </table>
+</form>
+    <script>
+        var clicks = 0
+        function calculateBMI(){
+        var name = document.getElementById("name").value;
+        var weight = document.getElementById("weight").value*1;
+        var height = document.getElementById("height").value/100;
+        bmi = (weight / (height*height)).toFixed(1);
+        var bmiField = document.getElementById('bmi');
+        bmiField.innerHTML ="Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>\"Your Height: "+height + "m weight: "+weight+"kg\"";
+        if(bmi > 25){
+            clicks +=1;
+            if(clicks > 3){
+                bmiField.innerHTML = bmiField.innerHTML + "<br><b>No matter how many times you click, you still fat.</b>"
+                }
+        }
+        return false;
+        }
+    </script>
+</body>
+</html>

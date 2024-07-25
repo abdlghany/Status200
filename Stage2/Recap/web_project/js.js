@@ -4,19 +4,25 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Function to position and toggle the display of #MoreSection
     const toggleMoreSection = () => {
-        if (moreSection.style.display === 'block') {
-            moreSection.style.display = 'none';
+        if (moreSection.classList.contains('hidden')) {
+            moreSection.classList.remove('hidden');
+            setTimeout(() => {
+                moreSection.classList.add('visible');
+            }, 10);
         } else {
             positionMoreSection();
-            moreSection.style.display = 'block';
+            moreSection.classList.remove('visible');
+        setTimeout(() => {
+            moreSection.classList.add('hidden');
+        }, 300); 
         }
     };
 
     // Function to position #MoreSection below the anchor
     const positionMoreSection = () => {
         const rect = moreButton.getBoundingClientRect();
-        moreSection.style.top = `${rect.bottom + window.scrollY}px`;
-        moreSection.style.left = `${rect.left + window.scrollX}px`;
+        moreSection.style.top = `${rect.bottoms}px`;
+        moreSection.style.left = `${rect.left}px`;
     };
 
     // Event listener for the "More" button click
@@ -27,57 +33,67 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Event listener for the ESC key press
     document.addEventListener('keydown', (event) => {
-        if (event.key === 'Escape' && moreSection.style.display === 'block') {
-            moreSection.style.display = 'none';
+        if (event.key === 'Escape' && moreSection.classList.contains('hidden')) {
+            moreSection.classList.remove('visible');
+        setTimeout(() => {
+            moreSection.classList.add('hidden');
+        }, 300);
         }
     });
 
     // Event listener for clicks outside of #MoreSection
     document.addEventListener('click', (event) => {
-        if (moreSection.style.display === 'block' && !moreSection.contains(event.target) && !moreButton.contains(event.target)) {
-            moreSection.style.display = 'none';
+        if (moreSection.classList.contains('hidden') && !moreSection.contains(event.target) && !moreButton.contains(event.target)) {
+            moreSection.classList.remove('visible');
+        setTimeout(() => {
+            moreSection.classList.add('hidden');
+        }, 300);
         }
     });
 
     // Event listeners for hover over the "More" button
     moreButton.addEventListener('mouseenter', () => {
         positionMoreSection();
-        moreSection.style.display = 'block';
+        moreSection.classList.add('visible');
     });
 
     // Event listener for hover away from the "More" button and #MoreSection
     moreButton.addEventListener('mouseleave', (event) => {
         if (!moreSection.contains(event.relatedTarget)) {
-            moreSection.style.display = 'none';
+            moreSection.classList.remove('visible');
+        setTimeout(() => {
+            moreSection.classList.add('hidden');
+        }, 300);
         }
     });
 
     moreSection.addEventListener('mouseleave', (event) => {
         if (!moreButton.contains(event.relatedTarget)) {
-            moreSection.style.display = 'none';
-        }
-    });
-
-    // Adjust the position of #MoreSection when the window is scrolled or resized
-    window.addEventListener('scroll', () => {
-        if (moreSection.style.display === 'block') {
-            positionMoreSection();
+            moreSection.classList.remove('visible');
+        setTimeout(() => {
+            moreSection.classList.add('hidden');
+        }, 300);
         }
     });
 
     window.addEventListener('resize', () => {
-        if (moreSection.style.display === 'block') {
+        if (moreSection.classList.contains('visible')) {
             positionMoreSection();
         }
     });
 });
-function toggleTheme(){
+function toggleTheme() {
     var element = document.getElementById("colorme");
-        if(element.classList.contains('dark')){
-            element.classList.remove('dark');
-        }
-        else
-        element.classList.add('dark')
-
+    if(element){
+        element.classList.toggle("switchTheme");
+    };
+//     if (element.style.background == "white") {
+//         element.style.background = "black";
+//         element.style.color = "white";
+//     }
+//     else{
+//         element.style.background = "white";
+//         element.style.color = "black";
+//     }
+// }
 }
-
