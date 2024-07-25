@@ -39,61 +39,89 @@
         <table>
             <tr>
                 <td><label for="name">Enter Your name: </label></td>
-                <td><input type="text" id="name" placeholder="Enter your name" required><br></td>
+                <td><input type="text" id="name" placeholder="Enter your name"><br></td>
             </tr>
             <tr>
                 <td><label for="weight">Enter Your weight (kg): </label></td>
-                <td><input type="number" id="weight" placeholder="kg" required max="635" min="1"><br></td>
+                <td><input type="number" id="weight" placeholder="kg"><br></td>
             </tr>
             <tr>
                 <td><label for="height">Enter your height (cm): </label></td>
-                <td><input type="number" id="height" placeholder="cm" required max="220" min="25"></td>
-            </tr>
-            <tr>
-                <td><label>Select your gender: </label></td>
-                <td class="radio-td"><input type="radio" id="male" name="gender" value="m"><label class="input-label" for="male">Male</label>
-                    <input type="radio" id="female" name="gender" value="f"><label class="input-label" for="female">Female</label>
-                </td>
+                <td><input type="number" id="height" placeholder="cm"></td>
             </tr>
             <tr>
                 <td colspan="2"><button type="submit">Find out your BMI!</button></td>
             </tr>
             <tr><td colspan="2"><p id="bmi"></p></td></tr>
+            <tr><td colspan="2"><p id="errorMessage"></p></td></tr>
     </table>
 </form>
     <script>
+        function passMessageToElement (elementID, message){
+            document.getElementById(elementID).innerHTML = message;
+            return null
+        }
         function getValueOfElement(ElementID){
             elementValue = document.getElementById(ElementID).value
             return elementValue;
         }
+
         function calculateBMI(){
+        //reset text paragraphs after every button click. (elementID, message to pass)
+        passMessageToElement("errorMessage", "");
+        passMessageToElement("bmi", "");
         var classification;
+        //trimming the name to get rid of spaces at the start and at the end.
         var name = getValueOfElement("name").trim();
         var weight = getValueOfElement("weight")*1;
         var height = getValueOfElement("height")/100;
         // this 'awesome' varaible will calculate bmi and round it to 1 number after the decimal point.
-        var bmi = Math.round((weight / (height*height))*10)/10;
+        var bmi = Math.round((weight / Math.pow(height,2))*10)/10;
+        //check if variable name isn't null or empty
         if(name){
-             // Regular expression to match any digit [0-9], still need to check for non-alphabetical signs.
-            var regex = /\d/; 
-           
-            if(regex.test(name)){
-                alert('onho');
+             // Regular expression to match any digit alphabetical number, capital or small, then (space or ' or -) and so on...
+            var regex = /^[a-zA-Z]+(?:[' -][a-zA-Z]+)*$/; 
+            if(!regex.test(name) || name.length < 2 || name.length > 100){
+                passMessageToElement("errorMessage",  "Please input a valid name!<br>Your name cannot contain numbers or symbols<br>or be less than 2 characters or more than 100.");
+            }
+            //check if weight variable isn't null or empty
+            else if(!weight){
+                passMessageToElement("errorMessage",  "Weight field is required!<br>Cannot be 0");
+            }
+            else{
+                 //check how much the person's weight is, reject input if higher than 635 or lower than 1
+                if (weight > 635 || weight < 1){
+                    passMessageToElement("errorMessage",  "Please input a valid weight!<br>between 1kg and 635kg."); 
+                }
+                else if(!height){
+                    passMessageToElement("errorMessage",  "Height field is required!<br>Cannot be 0");
+                }
+                else{
+                     //check if person is bigger than 2.2meters or shorter than 0.5meters
+                    if (height > 2.2 || height < 0.55){
+                        passMessageToElement("errorMessage",  "Please input a valid height!<br>between 55cm and 220cm.");
+                    }
+                    else{
+                        if(bmi < 18.5){
+                            classification = "underweight";
+                        }
+                        else if(bmi < 25){
+                            classification = "normal";
+                        }
+                        else if(bmi < 30){
+                            classification = "overweight";
+                        }
+                        else{
+                            classification = "obese";
+                        }
+                        passMessageToElement("bmi", "Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>Your BMI shows that you're <b>" + classification + "</b>");
+                    }
+                }
             }
         }
-        if(bmi < 18.5){
-            classification = "underweight";
-        }
-        else if(bmi < 25){
-            classification = "normal";
-        }
-        else if(bmi < 30){
-            classification = "overweight";
-        }
         else{
-            classification = "obese";
+            passMessageToElement("errorMessage",  "Name field is required!");
         }
-        document.getElementById('bmi').innerHTML = "Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>Your BMI shows that you're <b>" + classification + "</b>";
         return false;
         }
     </script>
