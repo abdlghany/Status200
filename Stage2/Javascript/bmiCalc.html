@@ -57,10 +57,12 @@
     </table>
 </form>
     <script>
+        //function to change an element's inner HTML
         function passMessageToElement (elementID, message){
             document.getElementById(elementID).innerHTML = message;
             return null
         }
+        //function to get the value of an elemeny by ID
         function getValueOfElement(ElementID){
             elementValue = document.getElementById(ElementID).value
             return elementValue;
@@ -101,6 +103,7 @@
                     if (height > 2.2 || height < 0.55){
                         passMessageToElement("errorMessage",  "Please input a valid height!<br>between 55cm and 220cm.");
                     }
+                    //after passing all the checks, do the bmi calculations and display ouput to the user.
                     else{
                         if(bmi < 18.5){
                             classification = "underweight";
