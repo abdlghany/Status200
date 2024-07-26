@@ -52,20 +52,20 @@ function bmiClassification(name, bmi, weightUnit, heightUnit){
     return "Dear "+name+", Your BMI is: <b>"+ bmi +weightUnit+"/"+heightUnit+"<sup>2</sup></b> " + "<br/>Your BMI shows that you're <b>" + classification + "</b>";
 }
 //a function that changes units based on user selection
-function changeUnits(selectedUnit){
-    //get the currently selected unit whenever the user changes their selection.
-    var message = "";
-    if(selectedUnit == "inch"){
-        message = "Enter your height ("+selectedUnit+")<span class=\"red\">*</span>";
-    }else if(selectedUnit =="cm"){
-        message = "Enter your height ("+selectedUnit+")<span class=\"red\">*</span>";
-    }else{
-        //default value.
-        selectedUnit ="cm";
-        message = "Enter your height (cm)(default)<span class=\"red\">*</span>";
-       
+function changeUnits(selectedUnit, labelId, inputName){
+    //default value
+    var unit = "unit";
+    if(labelId.includes("height")){
+        unit = "height";
     }
-    passMessageToElement("heightLabel", message);
+    else if(labelId.includes("weight")){
+        unit= "weight";
+    }
+    //get the currently selected unit whenever the user changes their selection.
+    var message = "Enter your "+unit+" ("+selectedUnit+")<span class=\"red\">*</span>";
+    passMessageToElement(labelId, message);
+    //change the input's placeholder based on the current selected unit.
+    document.getElementsByName(inputName)[0].placeholder= selectedUnit;
     return selectedUnit;
 }
 

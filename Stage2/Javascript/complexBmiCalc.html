@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complex BMI Calculator</title>
+    <link rel="stylesheet" href="./css/styles.css">
+        <script src="./js/complexBmiCalc.js"></script>
+        <script src="./js/myReusableFunctions.js"></script>
+</head>
+<body id="mainBody">
+    <form onsubmit="return calculateBMI();">
+
+        <table>
+            <tr>
+                <td><h1>Complex BMI Calculator</h1>
+                </td></tr>
+            <tr>
+                <td><label for="name">Enter Your name<span class="red">*</span>: </label></td>
+                <td><input type="text" id="name" placeholder="Enter your name" onkeyup="calculateBMI();" autofocus onfocus="this.select()"><br></td>
+            </tr>
+            <tr>
+                <td><label for="weightUnit" >Select a weight unit: </label></td>
+                <td><select name="weightUnit" id="weightUnit" >
+                    <option value="kg" selected disabled="disabled">Please select an option</option>
+                    <option value="kg" onclick="changeUnits('kg','weightLabel','weight');calculateBMI();">Metric (kg)</option>
+                    <option value="pound" onclick="changeUnits('pound','weightLabel','weight');calculateBMI();">Imperial (pound)</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="weight" id="weightLabel">Enter Your weight (kg)<span class="red">*</span>: </label></td>
+                <td><input type="number" id="weight" name="weight" placeholder="kg" onkeyup="calculateBMI();"><br></td>
+            </tr>
+            <tr>
+                <td><label for="heightUnit">Select a heught unit: </label></td>
+                <td><select name="heightUnit" id="heightUnit" >
+                    <option value="cm" selected disabled="disabled">Please select an option</option>
+                    <option value="cm" onclick="changeUnits('cm','heightLabel','height');calculateBMI();">Metric (cm)</option>
+                    <option value="inch" onclick="changeUnits('inch','heightLabel','height');calculateBMI();">Imperial (Inch)</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="height" id="heightLabel">Enter your height (cm)(default)<span class="red">*</span>: </label></td>
+                <td><input type="number" id="height" name="height" placeholder="cm" onkeyup="calculateBMI();"></td>
+            </tr>
+            <tr>
+                <td><label for="decimal">Enter How many decimal points for BMI: </label></td>
+                <td><input type="number" id="decimal" placeholder="Default is 1" onkeyup="decimalChanged();calculateBMI(); "></td>
+            </tr>
+            <tr>
+                <td colspan="2"><button type="submit">Find out your BMI!</button></td>
+            </tr>
+            <tr><td colspan="2"><p id="messageP"></p></td></tr>
+    </table>
+</form>
+</body>
+</html>
