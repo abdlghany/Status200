@@ -1,0 +1,35 @@
+*{
+    line-height: 1.3rem;
+    font-size: 1.2rem;
+}
+input, label{
+    margin-bottom: 1rem;
+    margin-top: 1rem;
+    vertical-align: middle;
+    width: 100%;
+}
+input{
+    min-width: 6rem;
+    padding-left: 5px;
+}
+form{
+    text-align: left;
+    display: flex;
+    justify-content: center;
+}
+button, p{
+    display: block;
+    margin: 0 auto;
+    padding: 0.5rem;
+}
+.radio-td{
+    display: flex;
+    flex-direction: row;
+}
+.red{
+    color:red;
+}
+.darkTheme{
+    background-color: black;
+    color: white;
+}
