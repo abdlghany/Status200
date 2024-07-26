@@ -37,25 +37,26 @@
         }
         </style>
         <script src="./bmiCalc.js"></script>
+        <script src="./rounder.js"></script>
 </head>
 <body>
     <form onsubmit="return calculateBMI()">
         <table>
             <tr>
                 <td><label for="name">Enter Your name<span class="red">*</span>: </label></td>
-                <td><input type="text" id="name" placeholder="Enter your name"><br></td>
+                <td><input type="text" id="name" placeholder="Enter your name" onkeyup="calculateBMI()"><br></td>
             </tr>
             <tr>
                 <td><label for="weight">Enter Your weight (kg)<span class="red">*</span>: </label></td>
-                <td><input type="number" id="weight" placeholder="kg"><br></td>
+                <td><input type="number" id="weight" placeholder="kg" onkeyup="calculateBMI()"><br></td>
             </tr>
             <tr>
                 <td><label for="height">Enter your height (cm)<span class="red">*</span>: </label></td>
-                <td><input type="number" id="height" placeholder="cm"></td>
+                <td><input type="number" id="height" placeholder="cm" onkeyup="calculateBMI()"></td>
             </tr>
             <tr>
                 <td><label for="decimal">Enter How many decimal points for BMI:<span class="red">*</span>: </label></td>
-                <td><input type="number" id="decimal" placeholder="1,2,3..."></td>
+                <td><input type="number" id="decimal" placeholder="Default is 0" onkeyup="calculateBMI()"></td>
             </tr>
             <tr>
                 <td colspan="2"><button type="submit">Find out your BMI!</button></td>

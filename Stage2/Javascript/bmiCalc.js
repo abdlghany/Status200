@@ -4,14 +4,6 @@ function passMessageToElement (elementID, message){
     document.getElementById(elementID).innerHTML = message;
     return null
 }
-function decmilaRounder(value, decimals){
-    //10 to the power of the number the user passed to this function to define how many decimal numbers we return
-    var powerOf = Math.pow(10, decimals);
-    //using the method 'round' after multiplying by 10
-    //then dividing by 10 to get our number back with 1 decimal point (the round will round the number to the nearest integer) Ex. round(0.55 * 10)
-    // = 5, then we divide by 10, we get 0.5
-    return Math.round(value * powerOf) / powerOf;
-}
 {/* function to get the value of an elemeny by ID */}
 function getValueOfElement(ElementID){
     elementValue = document.getElementById(ElementID).value
@@ -56,7 +48,7 @@ if(name){
             }
             //after passing all the checks, do the bmi calculations and display ouput to the user.
             else if(decimal >= 0 && decimal <21){
-                var bmi =decmilaRounder(weight / Math.pow(height,2), decimal);
+                var bmi = decmilaRounder(weight / Math.pow(height,2), decimal);
                 if(bmi < 18.5){
                     classification = "underweight";
                 }
