@@ -17,9 +17,11 @@ var classification;
 //trimming the name to get rid of spaces at the start and at the end.
 var name = getValueOfElement("name").trim();
 var weight = getValueOfElement("weight")*1;
+var numberSystem = getValueOfElement("numberSystem");
 var height = getValueOfElement("height")/100;
 var decimal = getValueOfElement("decimal")*1;
-// this 'awesome' varaible will calculate bmi and round it to 1 number after the decimal point. 
+var unit;
+var heightLabel = getValueOfElement("heightLabel");
 
 //check if variable name isn't null or empty
 if(name){
@@ -42,12 +44,39 @@ if(name){
             passMessageToElement("errorMessage",  "Height field is required!<br>Cannot be 0");
         }
         else{
+            if(numberSystem != "selection"){
+                if(numberSystem == "i"){
+                    passMessageToElement("heightLabel", "Enter your height (Inch)")            
+                    if (height*100 < 48 || height*100 > 100){
+                        passMessageToElement("errorMessage",  "Please input a valid height!<br>between 55cm and 270cm.");
+                    }
+                    //after passing all the checks, do the bmi calculations and display ouput to the user.
+                    else if(decimal >= 0 && decimal <21){
+                      
+                        var bmi = decmilaRounder(weight / Math.pow(height*100/39.3701,2), decimal);
+                        if(bmi < 18.5){
+                            classification = "underweight";
+                        }
+                        else if(bmi < 25){
+                            classification = "normal";
+                        }
+                        else if(bmi < 30){
+                            classification = "overweight";
+                        }
+                        else{
+                            classification = "obese";
+                        }
+                        passMessageToElement("bmi", "Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>Your BMI shows that you're <b>" + classification + "</b>");
+                        } 
+                }
              //check if person is bigger than 2.7meters or shorter than 0.5meters
-            if (height > 2.7 || height < 0.55){
+            else if (height > 2.7 || height < 0.55){
+                passMessageToElement("heightLabel", "Enter your height (cm)")  
                 passMessageToElement("errorMessage",  "Please input a valid height!<br>between 55cm and 270cm.");
             }
             //after passing all the checks, do the bmi calculations and display ouput to the user.
             else if(decimal >= 0 && decimal <21){
+                passMessageToElement("heightLabel", "Enter your height (cm)")  
                 var bmi = decmilaRounder(weight / Math.pow(height,2), decimal);
                 if(bmi < 18.5){
                     classification = "underweight";
@@ -62,6 +91,11 @@ if(name){
                     classification = "obese";
                 }
                 passMessageToElement("bmi", "Dear "+name+", Your BMI is: <b>"+ bmi + "kg/m<sup>2</sup></b> " + "<br/>Your BMI shows that you're <b>" + classification + "</b>");
+                }
+                else{passMessageToElement("errorMessage","Please Select a unit!")}
+                
+ 
+                
               
                 }
                 else{ 
@@ -75,4 +109,7 @@ else{
     passMessageToElement("errorMessage",  "Name field is required!");
 }
 return false;
+}
+function switchTheme(){
+    document.getElementById("mainBody").classList.toggle("darkTheme");
 }

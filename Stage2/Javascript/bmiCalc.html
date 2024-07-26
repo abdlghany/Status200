@@ -35,28 +35,42 @@
         .red{
             color:red;
         }
+        .darkTheme{
+            background-color: black;
+            color: white;
+        }
         </style>
         <script src="./bmiCalc.js"></script>
         <script src="./rounder.js"></script>
 </head>
-<body>
+<body id="mainBody">
     <form onsubmit="return calculateBMI()">
+
         <table>
+            <tr><td colspan="2"><h1>Let's Gamble</h1></td></tr>
             <tr>
                 <td><label for="name">Enter Your name<span class="red">*</span>: </label></td>
-                <td><input type="text" id="name" placeholder="Enter your name" onkeyup="calculateBMI()"><br></td>
+                <td><input type="text" id="name" placeholder="Enter your name" onkeyup="calculateBMI();"><br></td>
             </tr>
             <tr>
                 <td><label for="weight">Enter Your weight (kg)<span class="red">*</span>: </label></td>
-                <td><input type="number" id="weight" placeholder="kg" onkeyup="calculateBMI()"><br></td>
+                <td><input type="number" id="weight" placeholder="kg" onkeyup="calculateBMI();"><br></td>
             </tr>
             <tr>
-                <td><label for="height">Enter your height (cm)<span class="red">*</span>: </label></td>
-                <td><input type="number" id="height" placeholder="cm" onkeyup="calculateBMI()"></td>
+                <td><label for="numberSystem">Select a unit<span class="red">*</span>: </label></td>
+                <td><select name="numberSystem" id="numberSystem" >
+                    <option value="selection" selected disabled>Please select an option</option>
+                    <option value="m" onclick="calculateBMI();">Metric (CM)</option>
+                    <option value="i" onclick="calculateBMI();">Imperial (Inch)</option>
+                </select></td>
+            </tr>
+            <tr>
+                <td><label for="height" id="heightLabel">Enter your height<span class="red">*</span>: </label></td>
+                <td><input type="number" id="height" placeholder="height" onkeyup="calculateBMI();"></td>
             </tr>
             <tr>
                 <td><label for="decimal">Enter How many decimal points for BMI:<span class="red">*</span>: </label></td>
-                <td><input type="number" id="decimal" placeholder="Default is 0" onkeyup="calculateBMI()"></td>
+                <td><input type="number" id="decimal" placeholder="Default is 0" onkeyup="calculateBMI(); "></td>
             </tr>
             <tr>
                 <td colspan="2"><button type="submit">Find out your BMI!</button></td>
