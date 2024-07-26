@@ -19,7 +19,7 @@
             min-width: 6rem;
         }
         form{
-            text-align: center;
+            text-align: left;
             display: flex;
             justify-content: center;
         }
@@ -32,6 +32,7 @@
             display: flex;
             flex-direction: row;
         }
+
         </style>
 </head>
 <body>
@@ -77,12 +78,14 @@
         var name = getValueOfElement("name").trim();
         var weight = getValueOfElement("weight")*1;
         var height = getValueOfElement("height")/100;
-        // this 'awesome' varaible will calculate bmi and round it to 1 number after the decimal point.
+        // this 'awesome' varaible will calculate bmi and round it to 1 number after the decimal point. using the method 'round' after multiplying by 10
+        //then dividing by 10 to get our number back with 1 decimal point (the round will round the number to the nearest integer) Ex. round(0.55 * 10)
+        // = 5, then we divide by 10, we get 0.5
         var bmi = Math.round((weight / Math.pow(height,2))*10)/10;
         //check if variable name isn't null or empty
         if(name){
-             // Regular expression to match any digit alphabetical number, capital or small, then (space or ' or -) and so on...
-            var regex = /^[a-zA-Z]+(?:[' -][a-zA-Z]+)*$/; 
+             // Regular expression to match any alphabetical letter, capital or small, then (space or ' or -) and so on...until it ends with a @
+            var regex = /^[a-zA-Z]+(?:[' -][a-zA-Z]+)*$/;
             if(!regex.test(name) || name.length < 2 || name.length > 100){
                 passMessageToElement("errorMessage",  "Please input a valid name!<br>Your name cannot contain numbers or symbols<br>or be less than 2 characters or more than 100.");
             }
@@ -100,7 +103,7 @@
                 }
                 else{
                      //check if person is bigger than 2.2meters or shorter than 0.5meters
-                    if (height > 2.2 || height < 0.55){
+                    if (height > 2.7 || height < 0.55){
                         passMessageToElement("errorMessage",  "Please input a valid height!<br>between 55cm and 220cm.");
                     }
                     //after passing all the checks, do the bmi calculations and display ouput to the user.
