@@ -43,16 +43,8 @@ function bmiClassification(name, bmi, weightUnit, heightUnit){
 }
 //a function that changes units based on user selection
 function changeUnits(selectedUnit, labelId, inputName){
-    //default value
-    var unit = "unit";
-    if(labelId.includes("height")){
-        unit = "height";
-    }
-    else if(labelId.includes("weight")){
-        unit= "weight";
-    }
     //get the currently selected unit whenever the user changes their selection.
-    var message = "Enter your "+unit+" ("+selectedUnit+")<span class=\"red\">*</span>";
+    var message = "Enter your "+inputName+" ("+selectedUnit+")<span class=\"red\">*</span>";
     passMessageToElement(labelId, message);
     //change the input's placeholder based on the current selected unit.
     document.getElementsByName(inputName)[0].placeholder= selectedUnit;
@@ -72,7 +64,7 @@ function validateName(name){
 }
 function resetMessages(){
     const messageFields = ["nameMessage","heightMessage","weightMessage","messageP", "decimalMessage"]
-    //reset all message fields.
+    //reset all message fields usinf a foreach loop.
     messageFields.forEach(function(field){
     passMessageToElement(field, "");
     document.getElementById(field).style.display = "none";
@@ -81,6 +73,7 @@ function resetMessages(){
 
 function toggleMessagefield(messageField) {
     var field = document.getElementById(messageField);
+    //check if the message field is not empty and display it. otherwise hide it.
     if (field.innerHTML.trim() !== "") {
         field.style.display = "block";
     } else {

@@ -8,6 +8,8 @@
         <script src="./js/complexBmiCalc.js"></script>
         <script src="./js/myReusableFunctions.js"></script>
 </head>
+<!-- decimal changed will set the default value of the decimal field to 1, and save it in a variable if the user changes it.
+resetMessages function will reset all alert messages when the page loads, to ensure they're empty and hidden. -->
 <body id="mainBody" class="darkTheme" onload="decimalChanged();resetMessages();">
     <form onsubmit="return calculateBMI();">
 
@@ -52,6 +54,9 @@
                 <td><label for="decimal">Enter How many decimal points for BMI: </label></td>
                 <td><input type="number" id="decimal" placeholder="Default is 1" value="1" onkeyup="calculateBMI(); "></td>
                 <td><p id="decimalMessage" class="message"></p></td>
+            </tr>
+            <tr>
+                <td colspan="3"><p>Fields marked with '<span class="red">*</span>' are mandatory.</p></td>
             </tr>
             <tr>
                 <td colspan="3"><button type="submit">Find out your BMI!</button></td>
