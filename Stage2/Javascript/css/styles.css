@@ -6,11 +6,16 @@
 h1{
     text-align: center;
 }
-input, label, select, p{
+input, label, p{
     margin-bottom: 1rem;
     margin-top: 1rem;
     vertical-align: middle;
     width: 100%;
+}
+select{
+    width:100%;
+    margin-top:1rem;
+    vertical-align: middle;
 }
 input, select, p{
     min-width: 6rem;
@@ -52,4 +57,14 @@ hr{
     margin-bottom: 0px;
     padding-top:0px;
     margin-bottom: 0px;
+}
+.message{
+    font-size: 0.8rem;
+    color: red;
+    margin: 0;
+}
+.helper{
+    font-size: 0.8rem;
+    color: #666;
+    margin: 0;
 }

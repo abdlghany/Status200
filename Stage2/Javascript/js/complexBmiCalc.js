@@ -6,27 +6,41 @@ var decimal = 1;
 function calculateBMI(){
     selectedHeightUnit = changeUnits(getValueOfElement("heightUnit"), "heightLabel", "height");
     selectedWeightUnit = changeUnits(getValueOfElement("weightUnit"), "weightLabel", "weight");
-    decimalChanged();
-    resetMessages();
     //variable declaration
+    var weightHelperMessage = "";
+    var heightHelperMessage = "";
     var name = getValueOfElement("name").trim();
     var weight = getValueOfElement("weight")*1;
     var height = getValueOfElement("height")*1;
     var bmi = 0;
     var messageField = "";
-    
+
+    if (selectedWeightUnit == "pound") {
+        weightHelperMessage = "2 to 330 pounds";
+        weight /= 2.2;
+    }else{
+        weightHelperMessage = "1 to 150 kgs";
+    }
+    if (selectedHeightUnit == "inch") {
+        heightHelperMessage = "16 to 100 Inches";
+    }
+    else{
+        heightHelperMessage = "40 to 250 cm";
+        }
+    passMessageToElement("weightHelper",weightHelperMessage);
+    passMessageToElement("heightHelper",heightHelperMessage);
+    decimalChanged();
+    resetMessages(["nameMessage","heightMessage","weightMessage","messageP", "decimalMessage"]);
+
     if (name) {
-        if (validateName(name)) {
+        nameback = validateName(name);
+        if (nameback != "") {
             messageField = "nameMessage";
-            message = "Please insert a valid name!<br>Only letters and spaces are allowed<br>Must be less than 2 characters or more than 100.";
+            message = nameback;
         } else if (!weight) {
             messageField = "weightMessage";
-            message = "Weight field is required!<br>Cannot be 0";
+            message = "Weight field is required!<br>Cannot be 0 or contain spaces";
         } else {
-            if (selectedWeightUnit == "pound") {
-                    // Convert to kg
-                    weight /= 2.2046226;
-            }
             // Check if the weight is valid (in kg)
             if (!isValueBetween(weight, 0.9, 150.1)) {
                 messageField = "weightMessage";
@@ -39,7 +53,7 @@ function calculateBMI(){
             }
              else if (!height) {
                 messageField = "heightMessage";
-                message = "Height field is required!<br>Cannot be 0";
+                message = "Height field is required!<br>Cannot be 0 or contain spaces";
             } else {
                 if (isValueBetween(decimal, -1, 10)) {
                     if (selectedHeightUnit == "inch") {

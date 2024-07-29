@@ -9,7 +9,7 @@ function decimalRounder(value, decimals){
 /* function to change an element's inner HTML */
 function passMessageToElement (elementID, message){
     document.getElementById(elementID).innerHTML = message;
-    return null
+    return null;
 }
 /* function to get the value of an elemeny by ID */
 function getValueOfElement(ElementID){
@@ -48,6 +48,7 @@ function changeUnits(selectedUnit, labelId, inputName){
     passMessageToElement(labelId, message);
     //change the input's placeholder based on the current selected unit.
     document.getElementsByName(inputName)[0].placeholder= selectedUnit;
+
     return selectedUnit;
 }
 function validateName(name){
@@ -55,15 +56,16 @@ function validateName(name){
         name = name.replace(/\s+/g, '');
         // Regular expression to match any alphabetical letter, capital or small, then (space or ' or -) and so on...making sure it doesn't end with
          //anything other than the specified characters using $, reference https://www.w3schools.com/jsref/jsref_obj_regexp.asp
-         var regex = /^[a-zA-Zا-ي]+(?:[ ][a-zA-Zا-ي]+)*$/;
-         if(!regex.test(name) || name.length < 2 || name.length > 100){
-             return true;
-         }else{
-            return false;
-         }
+        var regex = /^[a-zA-Zا-ي]+(?:[ ][a-zA-Zا-ي]+)*$/;
+        if(!regex.test(name)){
+            return "Please insert a valid name!<br>Only letters and spaces are allowed";
+        }else if(name.length < 2){return "Name can't have less than 2 characters.";}
+        else if(name.length > 100){return "Name can't have more than 2 characters.";}
+        else{
+           return false;
+        }
 }
-function resetMessages(){
-    const messageFields = ["nameMessage","heightMessage","weightMessage","messageP", "decimalMessage"]
+function resetMessages(messageFields){
     //reset all message fields usinf a foreach loop.
     messageFields.forEach(function(field){
     passMessageToElement(field, "");
