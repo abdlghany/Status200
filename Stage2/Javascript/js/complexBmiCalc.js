@@ -25,16 +25,15 @@ function calculateBMI(){
         } else {
             if (selectedWeightUnit == "pound") {
                     // Convert to kg
-                    weight = weight / 2.2046226;
+                    weight /= 2.2046226;
             }
             // Check if the weight is valid (in kg)
             if (!isValueBetween(weight, 0.9, 150.1)) {
+                messageField = "weightMessage";
                 if(selectedWeightUnit == "pound"){
-                    messageField = "weightMessage";
-                    message = "Please insert a valid weight!<br>Between 2 pounds and 332 pounds."; 
+                    message = "Please insert a valid weight!<br>Between 2 pounds and 330 pounds."; 
                 }
                 else{
-                    messageField = "weightMessage";
                     message = "Please insert a valid weight!<br>Between 1kg and 150kg.";    
                     }
             }
@@ -85,6 +84,11 @@ function calculateBMI(){
 
 function decimalChanged(){
     decimal = getValueOfElement("decimal")*1;
+    try {
+        decimal = parseInt(decimal);
+    } catch (error) {
+
+    }
     if (decimal && decimal != 0) {
         // Do nothing because the user has changed the default value and it's not invalid or null or 0.
     } else if (decimal == 0) {
@@ -93,5 +97,4 @@ function decimalChanged(){
         // Default to 1 if nothing exists instead of giving the user an error.
         decimal = 1;      
     }
-
 }

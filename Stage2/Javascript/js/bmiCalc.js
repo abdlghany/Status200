@@ -6,7 +6,7 @@ var message = "";
 var decimal = 1;
 function calculateBMI(){
     //make sure the changeUnits function works even if the user didn't change the unit but changed something else or clicked the button.
-    selectedUnit = changeUnits(getValueOfElement("unit"));
+    selectedUnit = changeUnits(getValueOfElement("unit"),"unitLabel", "height");
     //trimming the name to get rid of spaces at the start and at the end.
     var name = getValueOfElement("name").trim();
     //multiplying by 1 to make sure the value gets converted to a number (can use parseInt instead).
@@ -36,7 +36,7 @@ function calculateBMI(){
                         if (selectedUnit == "inch") {     
                             // Check if the height is valid in inches
                             if (!isValueBetween(height, 15, 101)) {
-                                message = "Please insert a valid height!<br>Between 16 Inches and 100 Inches." + height;
+                                message = "Please insert a valid height!<br>Between 16 Inches and 100 Inches.";
                             } else {
                                 // Converting height from inch to m
                                 height = height / 100 * 2.54;
@@ -46,7 +46,7 @@ function calculateBMI(){
                         } else {
                             // Check if the height is valid in cm
                             if (!isValueBetween(height, 251, 39)) {
-                                message = "Please insert a valid height!<br>Between 40cm and 250cm." + + height;
+                                message = "Please insert a valid height!<br>Between 40cm and 250cm.";
                             } else {
                                 // Converting height from cm to m
                                 height = height / 100;
@@ -69,6 +69,11 @@ function calculateBMI(){
 
 function decimalChanged(){
     decimal = getValueOfElement("decimal")*1;
+    try {
+        decimal = parseInt(decimal);
+    } catch (error) {
+        
+    }
     if(decimal){
         //do nothing becuase the user has changed the default value.
     }else{

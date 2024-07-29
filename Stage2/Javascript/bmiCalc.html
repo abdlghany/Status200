@@ -21,19 +21,19 @@
             </tr>
             <tr>
                 <td><label for="weight">Enter Your weight (kg)<span class="red">*</span>: </label></td>
-                <td><input type="number" id="weight" placeholder="kg" onkeyup="calculateBMI();"><br></td>
+                <td><input type="number" id="weight" name="width" placeholder="kg" onkeyup="calculateBMI();"><br></td>
             </tr>
             <tr>
-                <td><label for="unit">Select a unit: </label></td>
-                <td><select name="unit" id="unit" >
+                <td><label for="unit" id="unitLabel">Enter your height: </label></td>
+                <td><select name="unit" id="unit">
                     <option value="selection" selected disabled="disabled">Please select an option</option>
-                    <option value="cm" onclick="changeUnits('cm');calculateBMI();">Metric (cm)</option>
-                    <option value="inch" onclick="changeUnits('inch');calculateBMI();">Imperial (Inch)</option>
+                    <option value="cm" onclick="calculateBMI();">Metric (cm)</option>
+                    <option value="inch" onclick="calculateBMI();">Imperial (Inch)</option>
                 </select></td>
             </tr>
             <tr>
                 <td><label for="height" id="heightLabel">Enter your height (cm)(default)<span class="red">*</span>: </label></td>
-                <td><input type="number" id="height" placeholder="height" onkeyup="calculateBMI();"></td>
+                <td><input type="number" id="height" name="height" placeholder="height" onkeyup="calculateBMI();"></td>
             </tr>
             <tr>
                 <td><label for="decimal">Enter How many decimal points for BMI: </label></td>

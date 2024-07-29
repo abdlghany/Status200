@@ -51,7 +51,7 @@ function changeUnits(selectedUnit, labelId, inputName){
     return selectedUnit;
 }
 function validateName(name){
-        //remove extra empty spaces between the words (\s finds whitespace characters) and replcae replaces them with nothing. '/g/ finds all that match
+        //remove extra empty spaces (even between words) (\s finds whitespace characters) and replcae replaces them with nothing. '/g/ finds all that match
         name = name.replace(/\s+/g, '');
         // Regular expression to match any alphabetical letter, capital or small, then (space or ' or -) and so on...making sure it doesn't end with
          //anything other than the specified characters using $, reference https://www.w3schools.com/jsref/jsref_obj_regexp.asp
