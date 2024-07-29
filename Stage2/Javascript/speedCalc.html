@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Speed Calculator</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="./js/myReusableFunctions.js"></script>
+    <script src="./js/speedCalc.js"></script>
+</head>
+<body>
+    <table>
+        <tr>
+            <td><label for="distance">Enter a distance (Km):</label></td>
+            <td><input type="text" name="distance" id="distance_input" placeholder="Km" autofocus onfocus="this.select()"></td>
+        </tr>
+        <tr>
+            <td><label for="time">Enter the time (Hrs):</label></td>
+            <td><input type="text" name="time" id="time_input" placeholder="Hrs"></td>
+        </tr>
+        <tr><td colspan="2"><button onclick="calculateSpeed();">Calculate Speed</button></td></tr>
+        <tr><td colspan="2"><p id="output_p"></p></td></tr>
+    </table>
+</body>
+</html>
