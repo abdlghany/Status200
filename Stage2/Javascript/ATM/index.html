@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Welcome to U-Bank</title>
+    <link rel="stylesheet" href="ATM.css">
+    
+</head>
+<body onload="showLoginMenu();">
+    <div class="navbar"><h1>U-Bank ATM</h1></div>
+    <div class="content" id="contentLogin">
+        <h2>Welcome to U-Bank!</h2>
+        <h3>Please login to continue</h3>
+        <form onsubmit="return loginF();">
+            <table>
+                <tr>
+                    <td><label for="accountNoInput">Enter your Account Number:</label></td>
+                    <td><input type="number" name="accountNo" id="accountNoInput" placeholder="Account No." autofocus onfocus="this.select()">
+                        <p id="accountNoHelper" class="helper">Numbers Only.</p></td>
+                    <td><p id="accountNoP" class="message"></p></td>
+                </tr>
+                <tr>
+                    <td><label for="pinNoInput">Enter Your PIN Number:</label></td>
+                    <td><input type="number" name="pinNo" id="pinNoInput" placeholder="PIN No.">
+                        <p id="pinNoHelper" class="helper">Numbers Only.</p></td>
+                    <td><p id="pinNoP" class="message"></p></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button id="loginButton" class="button-2">Login</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="content" id="contentWithdraw">
+        <h3>Welcome (Username)</h3>
+
+        <form onsubmit="return withdrawF();">
+            <table>
+                <tr>
+                    <td><label for="withdrawInput">Enter the desired withdrawl amount:</label></td>
+                    <td><input type="number" name="withdraw" id="withdrawInput" placeholder="Amount" autofocus onfocus="this.select()">
+                        <p id="withdrawHelper" class="helper">Numbers Only.</p></td>
+                    <td><p id="withdrawP" class="message"></p></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button id="withdrawButton" class="button-2">Withdraw</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="content" id="contentDeposit">
+        <h3>Welcome (Username)</h3>
+        <form onsubmit="return depositF();">
+            <table>
+                <tr>
+                    <td><label for="depositInput">Enter the desired deposit amount:</label></td>
+                    <td><input type="number" name="deposit" id="depositInput" placeholder="Amount" autofocus onfocus="this.select()">
+                        <p id="depositHelper" class="helper">Numbers Only.</p></td>
+                    <td><p id="depositP" class="message"></p></td>
+                </tr>
+                <tr>
+                    <td colspan="3"><button id="depositButton" class="button-2">Deposit</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="content" id="contentBalance">
+        <h3>Welcome (Username)</h3>
+        <form onsubmit="return balanceF();">
+            <table>
+                <tr>
+                    <td><p id="balanceAccountNoP" class="message">Your Balance is: RM(Current Balance)</p></td>
+                </tr>
+                <tr>
+                    <td><p id="balanceP" class="message"></p></td>
+                </tr>
+                <tr>
+                    <td><button id="balanceButton" class="button-2">Click to reveal your Balance</button></td>
+                </tr>
+            </table>
+        </form>
+    </div>
+    <div class="footer">
+        <button id="withdrawButtonFooter" class="button-3" onclick="showWithdrawContent();">Withdraw</button>
+        <button id="depositButtonFooter" class="button-3" onclick="showDepositContent();">Deposit</button>
+        <button id="balanceButtonFooter" class="button-3" onclick="showBalanceContent();">Check Balance</button>
+    </div>
+    <script src="ATM.js"></script>
+</body>
+</html>
