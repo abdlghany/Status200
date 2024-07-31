@@ -18,7 +18,8 @@ function calculateBMI(){
     if (selectedWeightUnit == "pound") {
         weightHelperMessage = "2 to 330 pounds";
         weight /= 2.2;
-    }else{
+    }
+    else{
         weightHelperMessage = "1 to 150 kgs";
     }
     if (selectedHeightUnit == "inch") {

@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ATM Demo</title>
+    <style>
+        body{
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+        }
+        .down{
+            position: fixed;
+            bottom: 10px;
+            left: 10px;
+        }
+        input, button, p,select{
+            padding:5px;
+            font-size: 1.2rem;
+            font-weight: bold;
+            
+        }
+        .top-right{
+            position: fixed;
+            top: 10px;
+            right:10px;
+        }
+        .dark-theme{
+            background: #000000;
+            color:white;
+        }
+
+    </style>
+</head>
+<body onload="fillOptionsMenu();" id="BodyId" class="dark-theme changeTheme">
+    <p id="output"></p>
+    <p id="themeOutput"></p>
+    <div class="down">
+        <!-- <input type="text" id="name_input" placeholder="Write a name to add...">
+        <button onclick="addName();">Add name to the array and display it!</button> -->
+        <input type="number" id="addToAvailableNotesInput" class="dark-theme changeTheme">
+        <span>*</span>
+        <select name="addAvailableSelection" id="addAvailableSelection" class="dark-theme changeTheme">
+            <option value="0" disabled>Please select a note</option>
+        </select>
+        <button onclick="addNotes();" class="dark-theme changeTheme">Add to available funds</button>
+        <button onclick="removeNotes();" class="dark-theme changeTheme">Withdraw from available funds</button>
+    </div>
+    <div class="top-right">
+        <button onclick="toggleTheme()" class="dark-theme changeTheme">Toggle Theme</button>
+    </div>
+    <script src="./js/ATM_demo.js"></script>
+</body>
+</html>
