@@ -46,7 +46,7 @@ function withdrawF(){
     var withdrawAmount = document.getElementById("withdrawInput").value;
     var ohWithdrawAmount = withdrawAmount;
     var userBalance = userAccountsBalance[loggedInUser];
-    if(isNaN(withdrawAmount) || withdrawAmount == "" || withdrawAmount == 0){
+    if(isNaN(withdrawAmount) || withdrawAmount == "" || withdrawAmount <= 0){
         passMessageToElement("withdrawP", "<br>Amount specified is not valid<br>Try Again!");
     } else if(userBalance >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
@@ -72,7 +72,7 @@ function withdrawF(){
             document.getElementById("withdrawP").innerHTML +="You will get " + notesToDispense[i]+"<br><br>";
             }
             userAccountsBalance[loggedInUser] -= ohWithdrawAmount;
-            document.getElementById("withdrawP").innerHTML += "Your balance is now: "+userAccountsBalance[loggedInUser];
+            document.getElementById("withdrawP").innerHTML += "Your balance is now: RM"+userAccountsBalance[loggedInUser];
             //refresh the view
             showWithdrawContent();
         } else {
@@ -88,7 +88,7 @@ function withdrawF(){
 function depositF(){
     var depositAmount = document.getElementById("depositInput").value;
     var ogDepositAmount = depositAmount;
-    if(depositAmount == 0 || depositAmount == "" || isNaN(depositAmount)){
+    if(depositAmount <= 0 || depositAmount == "" || isNaN(depositAmount)){
         passMessageToElement("depositP", "<br>Amount specified is not valid<br>Try Again!");
     }
     else{
