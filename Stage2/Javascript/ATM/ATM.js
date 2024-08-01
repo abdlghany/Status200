@@ -4,6 +4,7 @@ var userAccountPins = [755960, 463899];
 var userAccountUsername = ["User1", "User2"];
 var userAccountBalance = [1500,8900];
 var RMNotes = [1,5,10,20,50,100];
+var RMNotesAvailable = [0,0,0,0,0,0];
 var loggedInUser = -1;
 var userLoggedIn = false;
 
@@ -11,19 +12,23 @@ function loginF(){
     accountNoInput = parseInt(getValueById("accountNoInput"));
     accountPinInput= getValueById("pinNoInput");
     for(let i=0;i<userAccountNos.length;i++){
-        resetMessages(["pinNoP","accountNoP"]);
+        resetMessages(["pinNoP","accountNoP", "balanceAccountNoP"]);
         if(accountNoInput == userAccountNos[i]){
             loggedInUser = i;
             if(userAccountPins[loggedInUser] == accountPinInput){
-                loggedInUser = true;
+                userLoggedIn = true;
                 showBalanceContent();
                 showLogoutButton();
+                usernameFields = document.getElementsByClassName("username");
+                for(let x = 0; x<usernameFields.length;x++){
+                    usernameFields[x].innerHTML = "Welcome "+userAccountUsername[loggedInUser];
+                }
                 break;
             }else{
-                passMessageToElement("pinNoP","Please check your PIN No." + i);
+                passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
             }
         }else{
-    passMessageToElement("accountNoP","Please verify that your account No. is correct.");
+    passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
    
         }
     }
@@ -34,21 +39,11 @@ function withdrawF(){
     return false;
 }
 function depositF(){
-    if(userLoggedIn){
 
-    }
-    else{
-        passMessageToElement("loginMessageP","Please login to continue...");
-    }
     return false;
 }
 function balanceF(){
-    if(userLoggedIn){
-
-    }
-    else{
-        passMessageToElement("loginMessageP","Please login to continue...");
-    }
+    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountBalance[loggedInUser].toFixed(2)+"</b>")
     return false;
 }
 
@@ -57,7 +52,7 @@ function showWithdrawContent(){
         showContent("contentWithdraw");
     }
     else{
-        passMessageToElement("loginMessageP","Please login to continue...");
+        passMessageToElement("loginMessageP","Please login to withdraw...");
     }
 }
 function showDepositContent(){
@@ -65,7 +60,7 @@ function showDepositContent(){
         showContent("contentDeposit");
     }
     else{
-        passMessageToElement("loginMessageP","Please login to continue...");
+        passMessageToElement("loginMessageP","Please login to deposit...");
     }
 }
 function showBalanceContent(){
@@ -73,12 +68,17 @@ function showBalanceContent(){
         showContent("contentBalance");
     }
     else{
-        passMessageToElement("loginMessageP","Please login to continue...");
+        passMessageToElement("loginMessageP","Please login to view Balance...");
     }
 }
 function showLoginMenu(){
     showContent("contentLogin");
+    passMessageToElement("loginMessageP","");
     hideLogoutButton();
+    usernameFields = document.getElementsByClassName("username");
+    for(let x = 0; x<usernameFields.length;x++){
+        usernameFields[x].innerHTML = "Welcome "+"(Username)";
+    }
 }
 function showContent(contentID){
     var allContents = document.getElementsByClassName("content");
