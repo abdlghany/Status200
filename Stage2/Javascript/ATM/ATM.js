@@ -73,7 +73,14 @@ function withdrawF(){
             //refresh the view
             showWithdrawContent();
         } else {
-            passMessageToElement("withdrawP", "Sorry, there aren't enough notes to fulfill your request.<br><br>Available notes are " + getArrayContentsMessage(RMNotes, " "));
+            var totalNotesAvailableSum = 0;
+            for(let i=0; i<RMNotes.length; i++){
+                var noteValue = parseInt(RMNotes[i]);
+                var notesAvailable = parseInt(RMNotesAvailable[i]);
+                console.log("Note Value: "+noteValue + " Notes Available: " + notesAvailable);
+                totalNotesAvailableSum += (noteValue * notesAvailable);
+            }
+            passMessageToElement("withdrawP", "Sorry, there aren't enough notes to fulfill your request.<br><br>Available notes are " + getArrayContentsMessage(RMNotes, " ")+ "This machine contains a total of RM"+totalNotesAvailableSum);
         }
     }
     else{
@@ -100,8 +107,8 @@ function depositF(){
             }
         }
         if(depositAmount == 0){
-            document.getElementById("depositP").innerHTML ="Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>";
             userAccountsBalance[loggedInUser] += ogDepositAmount;
+            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+userAccountsBalance[loggedInUser]);
         }
         else{
             passMessageToElement("depositP", "Sorry This machine only accepts "+ getArrayContentsMessage(RMNotes, " ")+ "Notes")
@@ -155,6 +162,7 @@ function showLoginMenu(){
     passMessageToElement("loginMessageP","");
     hideLogoutButton();
     usernameFields = document.getElementsByClassName("username");
+    //resetting all welcome messages.
     for(let x = 0; x<usernameFields.length;x++){
         usernameFields[x].innerHTML = "Welcome "+"(Username)";
     }
