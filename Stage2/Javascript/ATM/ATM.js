@@ -4,13 +4,14 @@ var userAccountPins = [755960, 463899];
 var userAccountUsername = ["User1", "User2"];
 var userAccountBalance = [1500,8900];
 var RMNotes = [1,5,10,20,50,100];
-var RMNotesAvailable = [0,0,0,0,0,0];
+var RMNotesAvailable = [10,10,10,10,10,10];
 var loggedInUser = -1;
 var userLoggedIn = false;
 
 function loginF(){
     accountNoInput = parseInt(getValueById("accountNoInput"));
     accountPinInput= getValueById("pinNoInput");
+    if(accountNoInput && accountPinInput){
     for(let i=0;i<userAccountNos.length;i++){
         resetMessages(["pinNoP","accountNoP", "balanceAccountNoP"]);
         if(accountNoInput == userAccountNos[i]){
@@ -32,6 +33,14 @@ function loginF(){
    
         }
     }
+}else{
+    if(accountNoInput){
+        passMessageToElement("pinNoP","PIN No. field cannot be empty.");
+    }
+    else{
+        passMessageToElement("accountNoP","Account No. field cannot be empty.");
+    }
+}
     return false;
 }
 function withdrawF(){
@@ -111,5 +120,7 @@ function resetMessages(messageFieldIds){
 function logoutF(){
     loggedInUser = -1;
     userLoggedIn = false;
+    document.getElementById("accountNoInput").value = ""
+    document.getElementById("pinNoInput").value = ""
     showLoginMenu();
 }
