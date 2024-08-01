@@ -63,15 +63,17 @@
                     <td><label for="depositInput">Enter the desired deposit amount:</label></td>
                     <td><input type="number" name="deposit" id="depositInput" placeholder="Amount" autofocus onfocus="this.select()">
                         <p id="depositHelper" class="helper">Numbers Only.</p></td>
-                    <td><p id="depositP" class="message"></p></td>
+                   
                 </tr>
                 <tr>
-                    <td colspan="3"><button id="depositButton" class="button-2">Deposit</button></td>
+                    <td colspan="2"><button id="depositButton" class="button-2">Deposit</button></td>
                 </tr>
+                <tr><td colspan="2"> <p id="depositP" class="message"></p></td></tr>
             </table>
         </form>
     </div>
     <div class="content" id="contentBalance">
+        <!-- the paragraph will get rewritten when the user successfully logs in. -->
         <h3 id="depositUsername" class="username">Welcome (Username)</h3>
         <form onsubmit="return balanceF();">
             <table>
@@ -82,7 +84,7 @@
                     <td><p id="balanceP" ></p></td>
                 </tr>
                 <tr>
-                    <td><button id="balanceButton" class="button-2">Click to reveal your Balance</button></td>
+                    <td><button id="balanceButton" class="button-2">Reveal your Balance</button></td>
                 </tr>
             </table>
         </form>

@@ -1,7 +1,7 @@
-// Variable declaration.
+// Variable declaration (dummy data).
 var userAccountNos = [19586553566, 19568442322];
 var userAccountPins = [755960, 463899];
-var userAccountUsername = ["User1", "User2"];
+var userAccountUsername = ["John Doe", "Doe Johnny"];
 var userAccountsBalance = [1500, 8900];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
@@ -11,53 +11,50 @@ var userLoggedIn = false;
 function loginF(){
     accountNoInput = parseInt(getValueById("accountNoInput"));
     accountPinInput= getValueById("pinNoInput");
+    resetMessages(["pinNoP","accountNoP", "balanceAccountNoP", "withdrawP"]);
     if(accountNoInput && accountPinInput){
-    for(let i=0;i<userAccountNos.length;i++){
-        resetMessages(["pinNoP","accountNoP", "balanceAccountNoP", "withdrawP"]);
-        if(accountNoInput == userAccountNos[i]){
-            loggedInUser = i;
-            if(userAccountPins[loggedInUser] == accountPinInput){
-                userLoggedIn = true;
-                showBalanceContent();
-                showLogoutButton();
-                usernameFields = document.getElementsByClassName("username");
-                for(let x = 0; x<usernameFields.length;x++){
-                    usernameFields[x].innerHTML = "Welcome "+userAccountUsername[loggedInUser];
+        for(let i=0; i<userAccountNos.length; i++){
+            if(accountNoInput == userAccountNos[i]){
+                loggedInUser = i;
+                if(userAccountPins[loggedInUser] == accountPinInput){
+                    userLoggedIn = true;
+                    showBalanceContent();
+                    showLogoutButton();
+                    usernameFields = document.getElementsByClassName("username");
+                    for(let x = 0; x<usernameFields.length;x++){
+                        usernameFields[x].innerHTML = "Welcome "+userAccountUsername[loggedInUser];
+                    }
+                    break;
+                }else{
+                    passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
                 }
-                break;
             }else{
-                passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
+        passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
             }
-        }else{
-    passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
-   
         }
     }
-}else{
-    if(accountNoInput){
-        passMessageToElement("pinNoP","PIN No. field cannot be empty.");
+    else if(accountNoInput){
+            passMessageToElement("pinNoP","PIN No. field cannot be empty.");
     }
     else{
-        passMessageToElement("accountNoP","Account No. field cannot be empty.");
+            passMessageToElement("accountNoP","Account No. field cannot be empty.");
     }
-}
     return false;
 }
+
 function withdrawF(){
     var withdrawAmount = document.getElementById("withdrawInput").value;
-    var withdrawSum = withdrawAmount;
+    var ohWithdrawAmount = withdrawAmount;
     var userBalance = userAccountsBalance[loggedInUser];
     if(isNaN(withdrawAmount) || withdrawAmount == "" || withdrawAmount == 0){
         passMessageToElement("withdrawP", "<br>Amount specified is not valid<br>Try Again!");
     } else if(userBalance >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
         var notesToDispense = []; // store the number of notes to dispense for each note pass
-
-        for (let x = RMNotes.length-1; x >= 0; x--) {
+        for (let x=RMNotes.length-1; x >= 0; x--) {
             if (RMNotesAvailable[x] > 0) {
                 //convert to the nearest lower integer (lower than the result of the division);
                 var noteCount = Math.floor(withdrawAmount / RMNotes[x]);
-
                 if (noteCount > 0) {
                     if (noteCount > RMNotesAvailable[x]) {
                         noteCount = RMNotesAvailable[x];
@@ -70,11 +67,11 @@ function withdrawF(){
         }
 
         if (withdrawAmount === 0) {
-            document.getElementById("withdrawP").innerHTML ="Your withdrawl of RM"+withdrawSum+" is successful<br><br>";
+            document.getElementById("withdrawP").innerHTML ="Your withdrawl of RM"+ohWithdrawAmount+" is successful<br><br>";
             for(let i = 0; i<notesToDispense.length;i++){
             document.getElementById("withdrawP").innerHTML +="You will get " + notesToDispense[i]+"<br><br>";
             }
-            userAccountsBalance[loggedInUser] -= withdrawSum;
+            userAccountsBalance[loggedInUser] -= ohWithdrawAmount;
             document.getElementById("withdrawP").innerHTML += "Your balance is now: "+userAccountsBalance[loggedInUser];
             //refresh the view
             showWithdrawContent();
@@ -83,7 +80,7 @@ function withdrawF(){
         }
     }
     else{
-        passMessageToElement("withdrawP", "Sorry your balance ("+userBalance+") is lower than the amount specified ("+withdrawAmount+").")
+        passMessageToElement("withdrawP", "Sorry your current balance ("+userBalance+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
     }
     return false;
 }
@@ -106,7 +103,7 @@ function depositF(){
             }
         }
         if(depositAmount == 0){
-            document.getElementById("depositP").innerHTML ="Your deposit of RM"+ogDepositAmount+" is successfully added to your account<br><br>";
+            document.getElementById("depositP").innerHTML ="Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>";
             userAccountsBalance[loggedInUser] += parseInt(ogDepositAmount);
         }
         else{
@@ -119,6 +116,7 @@ function depositF(){
     }
     return false;
 }
+
 function balanceF(){
     passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountsBalance[loggedInUser].toFixed(2)+"</b>")
     return false;
@@ -138,6 +136,7 @@ function showWithdrawContent(){
         passMessageToElement("loginMessageP","Please login to withdraw cash...");
     }
 }
+
 function showDepositContent(){
     if(userLoggedIn){
         showContent("contentDeposit");
@@ -148,6 +147,7 @@ function showDepositContent(){
         passMessageToElement("loginMessageP","Please login to deposit cash...");
     }
 }
+
 function showBalanceContent(){
     if(userLoggedIn){
         showContent("contentBalance");
@@ -157,6 +157,7 @@ function showBalanceContent(){
         passMessageToElement("loginMessageP","Please login to view Balance...");
     }
 }
+
 function showLoginMenu(){
     showContent("contentLogin");
     passMessageToElement("loginMessageP","");
@@ -166,6 +167,7 @@ function showLoginMenu(){
         usernameFields[x].innerHTML = "Welcome "+"(Username)";
     }
 }
+
 function showContent(contentID){
     var allContents = document.getElementsByClassName("content");
     for(let i =0; i<allContents.length;i++){
@@ -175,25 +177,31 @@ function showContent(contentID){
     document.getElementById(contentID).classList.add("displayBlock");
     document.getElementById(contentID).classList.remove("displayNone");
 }
+
 function showLogoutButton(){
     document.getElementById("logoutButton").classList.add("displayBlock");
     document.getElementById("logoutButton").classList.remove("displayNone");
 }
+
 function hideLogoutButton(){
     document.getElementById("logoutButton").classList.remove("displayBlock");
     document.getElementById("logoutButton").classList.add("displayNone");
 }
+
 function getValueById(ID){
     return document.getElementById(ID).value;
 }
+
 function passMessageToElement(elementId, message){
     document.getElementById(elementId).innerHTML = message;
 }
+
 function resetMessages(messageFieldIds){
     messageFieldIds.forEach(function resetMessage(messageFieldId){
         passMessageToElement(messageFieldId,"");
     })
 }
+
 function logoutF(){
     loggedInUser = -1;
     userLoggedIn = false;
