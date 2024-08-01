@@ -18,7 +18,9 @@ label, input{
     margin:5px;
     color: #DDD;
 }
-
+.center{
+    text-align: center;
+}
 .navbar{
     position: fixed;
     top:0;

@@ -2,9 +2,9 @@
 var userAccountNos = [19586553566, 19568442322];
 var userAccountPins = [755960, 463899];
 var userAccountUsername = ["User1", "User2"];
-var userAccountBalance = [1500,8900];
-var RMNotes = [1,5,10,20,50,100];
-var RMNotesAvailable = [10,10,10,10,10,10];
+var userAccountsBalance = [1500, 8900];
+const RMNotes = [10, 20, 50, 100];
+var RMNotesAvailable = [10, 10, 10, 10];
 var loggedInUser = -1;
 var userLoggedIn = false;
 
@@ -13,7 +13,7 @@ function loginF(){
     accountPinInput= getValueById("pinNoInput");
     if(accountNoInput && accountPinInput){
     for(let i=0;i<userAccountNos.length;i++){
-        resetMessages(["pinNoP","accountNoP", "balanceAccountNoP"]);
+        resetMessages(["pinNoP","accountNoP", "balanceAccountNoP", "withdrawP"]);
         if(accountNoInput == userAccountNos[i]){
             loggedInUser = i;
             if(userAccountPins[loggedInUser] == accountPinInput){
@@ -44,37 +44,114 @@ function loginF(){
     return false;
 }
 function withdrawF(){
-   
+    var withdrawAmount = document.getElementById("withdrawInput").value;
+    var withdrawSum = withdrawAmount;
+    var userBalance = userAccountsBalance[loggedInUser];
+    if(isNaN(withdrawAmount) || withdrawAmount == "" || withdrawAmount == 0){
+        passMessageToElement("withdrawP", "<br>Amount specified is not valid<br>Try Again!");
+    } else if(userBalance >= withdrawAmount){
+        withdrawAmount = parseInt(withdrawAmount);
+        var notesToDispense = []; // store the number of notes to dispense for each note pass
+
+        for (let x = RMNotes.length-1; x >= 0; x--) {
+            if (RMNotesAvailable[x] > 0) {
+                //convert to the nearest lower integer (lower than the result of the division);
+                var noteCount = Math.floor(withdrawAmount / RMNotes[x]);
+
+                if (noteCount > 0) {
+                    if (noteCount > RMNotesAvailable[x]) {
+                        noteCount = RMNotesAvailable[x];
+                    }
+                    RMNotesAvailable[x] -= noteCount;
+                    withdrawAmount -= noteCount * RMNotes[x];
+                    notesToDispense.push("RM"+RMNotes[x]+": "+ +noteCount);
+                }
+            }
+        }
+
+        if (withdrawAmount === 0) {
+            document.getElementById("withdrawP").innerHTML ="Your withdrawl of RM"+withdrawSum+" is successful<br><br>";
+            for(let i = 0; i<notesToDispense.length;i++){
+            document.getElementById("withdrawP").innerHTML +="You will get " + notesToDispense[i]+"<br><br>";
+            }
+            userAccountsBalance[loggedInUser] -= withdrawSum;
+            document.getElementById("withdrawP").innerHTML += "Your balance is now: "+userAccountsBalance[loggedInUser];
+            //refresh the view
+            showWithdrawContent();
+        } else {
+            passMessageToElement("withdrawP", "Sorry, there aren't enough notes to fulfill your request.");
+        }
+    }
+    else{
+        passMessageToElement("withdrawP", "Sorry your balance ("+userBalance+") is lower than the amount specified ("+withdrawAmount+").")
+    }
     return false;
 }
-function depositF(){
 
+function depositF(){
+    var depositAmount = document.getElementById("depositInput").value;
+    var ogDepositAmount = depositAmount;
+    if(depositAmount == 0 || depositAmount == "" || isNaN(depositAmount)){
+        passMessageToElement("depositP", "<br>Amount specified is not valid<br>Try Again!");
+    }
+    else{
+        for(let x=RMNotes.length-1;x>= 0;x--){
+            if(depositAmount > 0){
+                var noteCount = Math.floor(depositAmount / RMNotes[x]);
+
+                if (noteCount > 0) {
+                    RMNotesAvailable[x] += noteCount;
+                    depositAmount -= noteCount * RMNotes[x];
+                }
+            }
+        }
+        if(depositAmount == 0){
+            document.getElementById("depositP").innerHTML ="Your deposit of RM"+ogDepositAmount+" is successfully added to your account<br><br>";
+            userAccountsBalance[loggedInUser] += parseInt(ogDepositAmount);
+        }
+        else{
+            passMessageToElement("depositP", "Sorry This machine only accepts ")
+            for(let i=0; i<RMNotes.length; i++){
+                document.getElementById("depositP").innerHTML += RMNotes[i];
+            }
+            document.getElementById("depositP").innerHTML+= " Notes"
+        }
+    }
     return false;
 }
 function balanceF(){
-    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountBalance[loggedInUser].toFixed(2)+"</b>")
+    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountsBalance[loggedInUser].toFixed(2)+"</b>")
     return false;
 }
 
 function showWithdrawContent(){
     if(userLoggedIn){
         showContent("contentWithdraw");
+        var availableNotesP = document.getElementById("availableNotesP");
+        document.getElementById("withdrawInput").value = "";
+        availableNotesP.innerHTML = "";
+        for(let x = 0; x<RMNotes.length;x++){
+            availableNotesP.innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
+        }
     }
     else{
-        passMessageToElement("loginMessageP","Please login to withdraw...");
+        passMessageToElement("loginMessageP","Please login to withdraw cash...");
     }
 }
 function showDepositContent(){
     if(userLoggedIn){
         showContent("contentDeposit");
+        document.getElementById("depositInput").value = "";
+        passMessageToElement("depositP","");
     }
     else{
-        passMessageToElement("loginMessageP","Please login to deposit...");
+        passMessageToElement("loginMessageP","Please login to deposit cash...");
     }
 }
 function showBalanceContent(){
     if(userLoggedIn){
         showContent("contentBalance");
+        passMessageToElement("balanceAccountNoP","");
     }
     else{
         passMessageToElement("loginMessageP","Please login to view Balance...");

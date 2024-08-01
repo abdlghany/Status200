@@ -38,6 +38,8 @@
     </div>
     <div class="content" id="contentWithdraw">
         <h3 id="withdrawUsername"  class="username">Welcome (Username)</h3>
+        <h2>Available Notes:</h2>
+        <p id="availableNotesP" class="center"></p>
 
         <form onsubmit="return withdrawF();">
             <table>
@@ -45,11 +47,11 @@
                     <td><label for="withdrawInput">Enter the desired withdrawl amount:</label></td>
                     <td><input type="number" name="withdraw" id="withdrawInput" placeholder="Amount" autofocus onfocus="this.select()">
                         <p id="withdrawHelper" class="helper">Numbers Only.</p></td>
-                    <td><p id="withdrawP" class="message"></p></td>
                 </tr>
                 <tr>
                     <td colspan="3"><button id="withdrawButton" class="button-2">Withdraw</button></td>
                 </tr>
+                <tr><td colspan="3"><p id="withdrawP" class="message"></p></td></tr>
             </table>
         </form>
     </div>
