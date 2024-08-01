@@ -76,7 +76,10 @@ function withdrawF(){
             //refresh the view
             showWithdrawContent();
         } else {
-            passMessageToElement("withdrawP", "Sorry, there aren't enough notes to fulfill your request.");
+            passMessageToElement("withdrawP", "Sorry, there aren't enough notes to fulfill your request.<br><br>Available notes are ");
+            for(let i = 0; i<RMNotes.length;i++){
+                document.getElementById("withdrawP").innerHTML += RMNotes[i]+" "
+            }
         }
     }
     else{
