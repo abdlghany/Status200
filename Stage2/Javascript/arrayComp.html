@@ -9,39 +9,38 @@
 <body>
     <h1>Form to get the name, age and profession and display the average ages and people above 40</h1>
     <form onsubmit="return storeDate()">
-        <label for="nameInput">Enter a Name: </label>
+        <label for="nameInput">Enter a Name: </label><br>
         <input type="text" id="nameInput"><br>
-        <label for="ageInput">Enter an age: </label>
+        <label for="ageInput">Enter an age: </label><br>
         <input type="number" id="ageInput"><br>
-        <label for="professionInput">Enter a profession:</label>
+        <label for="professionInput">Enter a profession:</label><br>
         <input type="text" id="professionInput"><br>
         <button type="submit">Click me</button>
     </form>
     <p id="output"></p>
-
     <script>  
         var nameArray = [];
         var ageArray = [];
         var professionArray = [];
         function storeDate(){
-            var nameInput = document.getElementById("nameInput").value;
-            var ageInput = Math.floor(document.getElementById("ageInput").value*1);
-            var professionInput = document.getElementById("professionInput").value;
             var output ="";
-            nameArray[nameArray.length] = nameInput;
-            ageArray[ageArray.length] = ageInput;
-            professionArray[professionArray.length] = professionInput;
+            nameArray[nameArray.length] = document.getElementById("nameInput").value;;
+            ageArray[ageArray.length] = Math.floor(document.getElementById("ageInput").value*1);;
+            professionArray[professionArray.length] = document.getElementById("professionInput").value;;
             var currentAverageAge = 0;
             for(let i =0 ; i<ageArray.length; i++){
                 
                 currentAverageAge += parseInt(ageArray[i]);
 
                 if(ageArray[i] > 40){
-                    output += "Name: " + nameArray[i] + " age " + ageArray[i] + "<br>";
+                    output += "Name: " + nameArray[i] + ", profession: " + professionArray[i] + "<br>";
                 }
             }
             currentAverageAge = parseInt( currentAverageAge / ageArray.length);
-            document.getElementById("output").innerHTML = "Average Age: " + currentAverageAge  + "<br>Names and ages of people above 40:<br>"+ output;
+            if(output != ""){
+                output = "<br>Names and ages of people above 40:<br>" + output;
+            }
+            document.getElementById("output").innerHTML = "Average Age is: " + currentAverageAge  + output;
             return false;
         }
     </script>
