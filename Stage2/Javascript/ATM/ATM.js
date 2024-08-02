@@ -7,7 +7,7 @@ const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
 var loggedInUser = -1;
 var userLoggedIn = false;
-//a function that runs when the login button is clicked
+//a function that runs when the login button is clicked.
 function loginF(){
     var accountNoInput = parseInt(getValueById("accountNoInput"));
     var accountPinInput= getValueById("pinNoInput");
@@ -166,7 +166,7 @@ function showLoginMenu(){
     showContent("contentLogin");
     passMessageToElement("loginMessageP","");
     hideLogoutButton();
-    usernameFields = document.getElementsByClassName("username");
+    var usernameFields = document.getElementsByClassName("username");
     //resetting all welcome messages.
     for(let x = 0; x<usernameFields.length;x++){
         usernameFields[x].innerHTML = "Welcome "+"(Username)";
