@@ -43,13 +43,22 @@ function loginF(){
 }
 //a function that runs when the user clicks the button Withdraw in the 'withdraw' section
 function withdrawF(){
-    var withdrawAmount = getValueById("withdrawInput");
+    var totalNotesAvailableSum = 0;
+    for(let i=0; i<RMNotes.length; i++){
+        var noteValue = parseInt(RMNotes[i]);
+        var notesAvailable = parseInt(RMNotesAvailable[i]);
+        totalNotesAvailableSum += (noteValue * notesAvailable);
+    }
+    var withdrawAmount = parseInt(getValueById("withdrawInput"));
     //saving the variable in another one so that we can modify it's value freely
-    var ogWithdrawAmount = withdrawAmount;
+    var ogWithdrawAmount = parseInt(withdrawAmount);
     //check if the amount is valid, bigger than 0 and
     if(isNaN(withdrawAmount) || withdrawAmount == "" || withdrawAmount <= 0){
         passMessageToElement("withdrawP", "<br>Amount specified is not valid<br>Try Again!");
-    } else if(userAccountsBalance[loggedInUser] >= withdrawAmount){
+    }else if(totalNotesAvailableSum < withdrawAmount){
+        passMessageToElement("withdrawP", "Sorry your request cannot be fullfilled at this time<br>Because this machine contains a total of RM"+totalNotesAvailableSum);
+    } 
+    else if(userAccountsBalance[loggedInUser] >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
         var notesToDispense = []; // store the number of notes to dispense for each note pass
         for (let x=RMNotes.length-1; x >= 0; x--) {
@@ -73,14 +82,8 @@ function withdrawF(){
             //refresh the view
             showWithdrawContent();
         } else {
-            var totalNotesAvailableSum = 0;
-            for(let i=0; i<RMNotes.length; i++){
-                var noteValue = parseInt(RMNotes[i]);
-                var notesAvailable = parseInt(RMNotesAvailable[i]);
-                console.log("Note Value: "+noteValue + " Notes Available: " + notesAvailable);
-                totalNotesAvailableSum += (noteValue * notesAvailable);
-            }
-            passMessageToElement("withdrawP", "Sorry, there aren't enough notes to fulfill your request.<br><br>Available notes are " + getArrayContentsMessage(RMNotes, " ")+ "This machine contains a total of RM"+totalNotesAvailableSum);
+            
+            passMessageToElement("withdrawP", "Sorry, this machine doesn't support notes other than " + getArrayContentsMessage(RMNotes, " "));
         }
     }
     else{
@@ -126,7 +129,7 @@ function showWithdrawContent(){
     if(userLoggedIn){
         showContent("contentWithdraw");
         document.getElementById("withdrawInput").value = "";
-       passMessageToElement("availableNotesP", "");
+        passMessageToElement("availableNotesP", "");
         for(let x = 0; x<RMNotes.length;x++){
       document.getElementById("availableNotesP").innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
         }
@@ -139,6 +142,7 @@ function showWithdrawContent(){
 function showDepositContent(){
     if(userLoggedIn){
         showContent("contentDeposit");
+        passMessageToElement("withdrawP", "");
         document.getElementById("depositInput").value = "";
         passMessageToElement("depositP","");
     }
@@ -150,6 +154,7 @@ function showDepositContent(){
 function showBalanceContent(){
     if(userLoggedIn){
         showContent("contentBalance");
+        passMessageToElement("withdrawP", "");
         passMessageToElement("balanceAccountNoP","");
     }
     else{
@@ -213,7 +218,7 @@ function logoutF(){
 //loops through the array values and returns them along with whataver message is passed to the variable "afterTheArray".
 function getArrayContentsMessage(arrayToLoop, afterTheArray){
     var message = "";
-    for(let i = 0; i<arrayToLoop.length;i++){
+    for(let i = 0; i<arrayToLoop.length; i++){
         message +=  arrayToLoop[i]+afterTheArray;
         }
         return message;
