@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>While Loop</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+
+  
+    <p>Enter the number you want to start at:</p>
+    <input type="number" id="lowerUserInput">
+    <p>Enter the number you want to stop at:</p>
+    <input type="number" id="userInput">
+    <button onclick="return takeTheNumber();">Click me</button>
+    <p id="output">Even numbers within your range are: </p>
+    <script src="./js/myReusableFunctions.js"></script>
+    <script>  
+        function takeTheNumber(){
+            var output = "Even numbers within your range are: ";
+            var userInput = document.getElementById("userInput").value*1;
+            var lowerUserInput = document.getElementById("lowerUserInput").value*1;
+            for(let i = lowerUserInput; i <= userInput; i++){
+                if(i%2 == 0){
+                output += i + " ";
+            }
+            }
+            document.getElementById("output").innerHTML = output;
+        }
+    </script>
+</body>
+</html>
