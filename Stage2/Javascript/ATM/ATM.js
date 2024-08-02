@@ -21,7 +21,7 @@ function loginF(){
                     showBalanceContent();
                     showLogoutButton();
                     usernameFields = document.getElementsByClassName("username");
-                    for(let x = 0; x<usernameFields.length;x++){
+                    for(let x = 0; x<usernameFields.length; x++){
                         usernameFields[x].innerHTML = "Welcome "+userAccountUsername[loggedInUser];
                     }
                     break;
@@ -99,7 +99,7 @@ function depositF(){
         passMessageToElement("depositP", "<br>Amount specified is not valid<br>Try Again!");
     }
     else{
-        for(let x=RMNotes.length-1;x>= 0;x--){
+        for(let x=RMNotes.length-1; x>= 0; x--){
             if(depositAmount > 0){
                 var noteCount = Math.floor(depositAmount / RMNotes[x]);
 
@@ -130,7 +130,7 @@ function showWithdrawContent(){
         showContent("contentWithdraw");
         document.getElementById("withdrawInput").value = "";
         passMessageToElement("availableNotesP", "");
-        for(let x = 0; x<RMNotes.length;x++){
+        for(let x = 0; x<RMNotes.length; x++){
       document.getElementById("availableNotesP").innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
         }
     }
@@ -168,7 +168,7 @@ function showLoginMenu(){
     hideLogoutButton();
     var usernameFields = document.getElementsByClassName("username");
     //resetting all welcome messages.
-    for(let x = 0; x<usernameFields.length;x++){
+    for(let x = 0; x<usernameFields.length; x++){
         usernameFields[x].innerHTML = "Welcome "+"(Username)";
     }
 }
@@ -176,7 +176,7 @@ function showLoginMenu(){
 function showContent(contentID){
     var allContents = document.getElementsByClassName("content");
     var ElementById = document.getElementById(contentID);
-    for(let i =0; i<allContents.length;i++){
+    for(let i =0; i<allContents.length; i++){
         allContents[i].classList.remove("displayBlock");
         allContents[i].classList.add("displayNone");
     }
