@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Light Switch</title>
+    <style>
+        img {
+            height: 400px;
+            position: relative;
+          }
+          button {
+            margin-top: 3rem;
+            margin-left: 4rem;
+            min-width: 100px;
+            padding: 10px;
+          }
+    </style>
+  </head>
+  <body onload="hideStuff();">
+    <img src="./images/lightoff.svg" alt="Light off" id="off" />
+    <img src="./images/lighton.svg" alt="Light on" id="on"/>
+    <button id="buttonOff" onclick="change('off','on');change('buttonOff', 'buttonOn')">Off</button>
+    <button id="buttonOn" onclick="change('on','off');change('buttonOn', 'buttonOff')">On</button>
+
+    <hr>
+    <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Mollitia temporibus voluptate ab corrupti eius, asperiores quas eveniet totam doloribus, ipsa provident in quibusdam alias aperiam sit harum, sequi assumenda itaque!
+        <span id="extraText">
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore dolores ipsum aspernatur eaque? Illo quia illum obcaecati excepturi magni alias impedit voluptate quos! Modi placeat accusamus deserunt iste fugiat non!
+        </span></p>
+        <button onclick="change('','extraText');change('readMore1','readMore2')" id="readMore1">Read more</button>
+        <button onclick="change('extraText','');change('readMore2','readMore1')" id="readMore2">Read less</button>
+
+    <script>
+        function change(hide, show) {
+            if(hide){
+                document.getElementById(hide).style.display = "none";
+            }
+            if(show){
+                document.getElementById(show).style.display = "block";
+            }         
+          }
+          function hideStuff(){
+            change('on', 'off'); 
+            change('buttonOn','buttonOff');
+            change('extraText', '');
+            change('readMore2', '');
+          }
+    </script>
+  </body>
+</html>
