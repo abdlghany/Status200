@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BOOTCAMP ZOO</title>
+    <link rel="stylesheet" href="./css/oneHourTest.css">
+
+</head>
+<body onload="pageLoaded(0)">
+    <div id="navBar">
+        <img src="./images/monkey.png" alt="Monkey" id="navBarMonkey">
+        <div id="navBarText">
+        <h1><a href="#" onclick="showContent(0)">BOOTCAMP ZOO</a></h1>
+        <p id="subtitle"></p>
+        </div>
+        <img src="./images/dino.png" alt="Dino" id="navBarDino">
+    </div>
+    <div id="mainPage">
+        <h1>Choose your favourite!</h1>
+        <div id="mainPageButtons">
+            <button id="birdsButton" onclick="showContent(1)">BIRDS</button>
+            <button id="nocturnalButton" onclick="showContent(2)">NOCTURNAL</button>
+            <button id="safariButton" onclick="showContent(3)">SAFARI</button>
+            <button id="reptilesButton" onclick="showContent(4)">REPTILES</button>
+        </div>
+    </div>
+    <!-- Birds section -->
+    <div id="birds">
+        <img src="./images/bird1.jpg" alt="Bird 1"/>
+        <img src="./images/bird2.jpg" alt="Bird 2"/>
+        <img src="./images/bird3.jpg" alt="Bird 3"/>
+        <img src="./images/bird4.jpg" alt="Bird 4"/>
+        <img src="./images/bird5.jpg" alt="Bird 5"/ class="showMore">
+        <img src="./images/bird6.jpg" alt="Bird 6"/ class="showMore"><br>
+        <button class="showMoreB" onclick="showMore()">Show More</button>
+    </div>
+    <!-- Noctrurnal Section -->
+    <div id="nocturnal">
+       
+        <img src="./images/noct1.jpg" alt="nocturnal 1"/>
+        <img src="./images/noct2.jpg" alt="nocturnal 2"/>
+        <img src="./images/noct3.jpg" alt="nocturnal 3"/>
+        <img src="./images/noct4.jpg" alt="nocturnal 4"/>
+        <img src="./images/noct5.jpg" alt="nocturnal 5"/ class="showMore">
+        <img src="./images/noct6.jpg" alt="nocturnal 6"/ class="showMore"><br>
+        <button class="showMoreB" onclick="showMore()">Show More</button>
+    </div>
+    <!-- safari Section -->
+    <div id="safari">
+        <img src="./images/safari1.jpg" alt="safari 1"/>
+        <img src="./images/safari2.jpg" alt="safari 2"/>
+        <img src="./images/safari3.jpg" alt="safari 3"/>
+        <img src="./images/safari4.jpg" alt="safari 4"/>
+        <img src="./images/safari5.jpg" alt="safari 5"/ class="showMore">
+        <img src="./images/safari6.jpg" alt="safari 6"/ class="showMore"><br>
+        <button class="showMoreB" onclick="showMore()">Show More</button>
+    </div>
+    <!-- reptile Section -->
+    <div id="reptiles">
+        <img src="./images/reptile1.jpg" alt="reptile 1"/>
+        <img src="./images/reptile2.jpg" alt="reptile 2"/>
+        <img src="./images/reptile3.jpg" alt="reptile 3"/>
+        <img src="./images/reptile4.jpg" alt="reptile 4"/>
+        <img src="./images/reptile5.jpg" alt="reptile 5"/ class="showMore">
+        <img src="./images/reptile6.jpg" alt="reptile 6"/ class="showMore"><br>
+        <button class="showMoreB" onclick="showMore()">Show More</button>
+    </div>
+    <script src="./js/OHT.js" defer></script>
+</body>
+</html>

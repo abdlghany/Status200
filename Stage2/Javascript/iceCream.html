@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Good smell, FLAVOUR</title>
+</head>
+<body>
+    <p>Select one of the following Ice Cream flavours: Strawberry, Banana, Chocolate or Vanilla</p>
+    <input type="text" id="iceFlavour">
+    <button onclick="generateOutput()">Submit Flavour</button>
+    <p id="output"></p>
+    <script>
+        function generateOutput(){
+            var flavour = document.getElementById("iceFlavour").value.toLowerCase();
+            var output = document.getElementById("output");
+            var availableFlavours = ["strawberry", "banana", "chocolate", "vanilla"];
+            if(availableFlavours.includes(flavour)){
+                output.innerHTML = "Nice selection!<br>your "+ flavour + " Ice Cream will be ready soon!! Enjoy...";
+            }
+            else{
+                output.innerHTML = "Sorry this flavour does not exist!";
+            }
+        }
+    </script>
+</body>
+</html>
