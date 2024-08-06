@@ -3,7 +3,12 @@ var moreIsShown = false;
 function showContent(contentIndex){
     var content = document.getElementById(contents[contentIndex]);
     var subtitle = document.getElementById("subtitle");
-    subtitle.innerHTML = contents[contentIndex].toString().toUpperCase();
+    if(contentIndex != 0){
+        subtitle.innerHTML = contents[contentIndex].toString().toUpperCase();
+    }
+    else{
+        subtitle.innerHTML = "";
+    }
     document.getElementById(contents[contentIndex]).style.display = "block";
     pageLoaded(contentIndex);
 }
