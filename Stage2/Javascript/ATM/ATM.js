@@ -41,6 +41,7 @@ function loginF(){
 //a function that runs when the user clicks the button Withdraw in the 'withdraw' section
 function withdrawF(){
     var totalNotesAvailableSum = 0;
+    var userAccountBalance = userAccountsBalance[localStorage.getItem("loggedInUser")];
     for(let i=0; i<RMNotes.length; i++){
         var noteValue = parseInt(RMNotes[i]);
         var notesAvailable = parseInt(RMNotesAvailable[i]);
@@ -55,7 +56,7 @@ function withdrawF(){
     }else if(totalNotesAvailableSum < withdrawAmount){
         passMessageToElement("withdrawP", "Sorry your request cannot be fullfilled at this time<br>Because this machine contains a total of RM"+totalNotesAvailableSum);
     } 
-    else if(userAccountsBalance[localStorage.getItem("loggedInUser")] >= withdrawAmount){
+    else if(userAccountBalance >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
         var notesToDispense = []; // store the number of notes to dispense for each note pass
         for (let x=RMNotes.length-1; x >= 0; x--) {
@@ -73,9 +74,9 @@ function withdrawF(){
             }
         }
         if (withdrawAmount === 0) {
-            userAccountsBalance[localStorage.getItem("loggedInUser")] -= ogWithdrawAmount;
+            userAccountBalance -= ogWithdrawAmount;
             passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount+" is successful<br><br> You will get:<br>"+
-            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+userAccountsBalance[localStorage.getItem("loggedInUser")]); 
+            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+userAccountBalance); 
             //refresh the view
             showWithdrawContent();
         } else {
@@ -84,7 +85,7 @@ function withdrawF(){
         }
     }
     else{
-        passMessageToElement("withdrawP", "Sorry your current balance ("+userAccountsBalance[localStorage.getItem("loggedInUser")]+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
+        passMessageToElement("withdrawP", "Sorry your current balance ("+userAccountBalance+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
     }
     return false;
 }
@@ -160,6 +161,11 @@ function showBalanceContent(){
 }
 //shows login menu when the user logs out.
 function showLoginMenu(){
+    if(localStorage.getItem("loggedInUser")){
+        showBalanceContent();
+        showLogoutButton();
+    }
+    else{
     showContent("contentLogin");
     passMessageToElement("loginMessageP","");
     hideLogoutButton();
@@ -168,6 +174,7 @@ function showLoginMenu(){
     for(let x = 0; x<usernameFields.length; x++){
         usernameFields[x].innerHTML = "Welcome "+"(Username)";
     }
+    }    
 }
 //hide all sections except that one passed as a parameter. using class names (content) in HTML.
 function showContent(contentID){
