@@ -8,7 +8,6 @@ function showContent(contentIndex){
     pageLoaded(contentIndex);
 }
 
-
 function pageLoaded(dontHide){
     showLess();
     //hide all pages except the dontHide index.
