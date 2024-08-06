@@ -5,8 +5,6 @@ var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
 var userAccountsBalance = [1500, 8900, 9999999];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
-var loggedInUser = -1;
-var userLoggedIn = false;
 //a function that runs when the login button is clicked.
 function loginF(){
     var accountNoInput = parseInt(getValueById("accountNoInput"));
@@ -15,14 +13,13 @@ function loginF(){
     if(accountNoInput && accountPinInput){
         for(let i=0; i<userAccountNos.length; i++){
             if(accountNoInput == userAccountNos[i]){
-                loggedInUser = i;
-                if(userAccountPins[loggedInUser] == accountPinInput){
-                    userLoggedIn = true;
+                localStorage.setItem("loggedInUser", i);
+                if(userAccountPins[i] == accountPinInput){
                     showBalanceContent();
                     showLogoutButton();
                     usernameFields = document.getElementsByClassName("username");
                     for(let x = 0; x<usernameFields.length; x++){
-                        usernameFields[x].innerHTML = "Welcome "+userAccountUsername[loggedInUser];
+                        usernameFields[x].innerHTML = "Welcome "+userAccountUsername[i];
                     }
                     break;
                 }else{
@@ -58,7 +55,7 @@ function withdrawF(){
     }else if(totalNotesAvailableSum < withdrawAmount){
         passMessageToElement("withdrawP", "Sorry your request cannot be fullfilled at this time<br>Because this machine contains a total of RM"+totalNotesAvailableSum);
     } 
-    else if(userAccountsBalance[loggedInUser] >= withdrawAmount){
+    else if(userAccountsBalance[localStorage.getItem("loggedInUser")] >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
         var notesToDispense = []; // store the number of notes to dispense for each note pass
         for (let x=RMNotes.length-1; x >= 0; x--) {
@@ -76,9 +73,9 @@ function withdrawF(){
             }
         }
         if (withdrawAmount === 0) {
-            userAccountsBalance[loggedInUser] -= ogWithdrawAmount;
+            userAccountsBalance[localStorage.getItem("loggedInUser")] -= ogWithdrawAmount;
             passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount+" is successful<br><br> You will get:<br>"+
-            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+userAccountsBalance[loggedInUser]); 
+            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+userAccountsBalance[localStorage.getItem("loggedInUser")]); 
             //refresh the view
             showWithdrawContent();
         } else {
@@ -87,7 +84,7 @@ function withdrawF(){
         }
     }
     else{
-        passMessageToElement("withdrawP", "Sorry your current balance ("+userAccountsBalance[loggedInUser]+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
+        passMessageToElement("withdrawP", "Sorry your current balance ("+userAccountsBalance[localStorage.getItem("loggedInUser")]+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
     }
     return false;
 }
@@ -110,8 +107,8 @@ function depositF(){
             }
         }
         if(depositAmount == 0){
-            userAccountsBalance[loggedInUser] += ogDepositAmount;
-            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+userAccountsBalance[loggedInUser]);
+            userAccountsBalance[localStorage.getItem("loggedInUser")] += ogDepositAmount;
+            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+userAccountsBalance[localStorage.getItem("loggedInUser")]);
         }
         else{
             passMessageToElement("depositP", "Sorry This machine only accepts "+ getArrayContentsMessage(RMNotes, " ")+ "Notes")
@@ -121,12 +118,12 @@ function depositF(){
 }
 //funtion to show the current user's balance, it runs when the button "Reveal your balance" is clicked.
 function balanceF(){
-    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountsBalance[loggedInUser].toFixed(2)+"</b>")
+    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountsBalance[localStorage.getItem("loggedInUser")].toFixed(2)+"</b>")
     return false;
 }
 // shows the section "withdraw". if the user is logged in.
 function showWithdrawContent(){
-    if(userLoggedIn){
+    if(localStorage.getItem("loggedInUser")){
         showContent("contentWithdraw");
         document.getElementById("withdrawInput").value = "";
         passMessageToElement("availableNotesP", "");
@@ -140,7 +137,7 @@ function showWithdrawContent(){
 }
 //shows the section "deposit". if the user is logged in.
 function showDepositContent(){
-    if(userLoggedIn){
+    if(localStorage.getItem("loggedInUser")){
         showContent("contentDeposit");
         passMessageToElement("withdrawP", "");
         document.getElementById("depositInput").value = "";
@@ -152,7 +149,7 @@ function showDepositContent(){
 }
 //shows the section Check Balance. if the user is logged in.
 function showBalanceContent(){
-    if(userLoggedIn){
+    if(localStorage.getItem("loggedInUser")){
         showContent("contentBalance");
         passMessageToElement("withdrawP", "");
         passMessageToElement("balanceAccountNoP","");
@@ -209,8 +206,7 @@ function resetMessages(messageFieldIds){
 }
 //Function that logs the user out when they click "logout".
 function logoutF(){
-    loggedInUser = -1;
-    userLoggedIn = false;
+    localStorage.removeItem("loggedInUser");
     document.getElementById("accountNoInput").value = ""
     document.getElementById("pinNoInput").value = ""
     showLoginMenu();

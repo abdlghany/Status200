@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Local Storage</title>
+    <style>
+        #loginScreen input, #loginScreen button{
+            margin: 1rem;
+            min-height: 30px;
+            min-width: 100px;
+        }
+    </style>
+</head>
+<body onload="showContent(0)">
+    <div id="loginScreen">
+        <input type="text" id="username" placeholder="username"><br>
+        <input type="password" id="password" placeholder="password"><br>
+        <button onclick="createUser()">Sign up</button><br>
+        <button onclick="login()">Login</button>
+        <p id="output"></p>
+    </div>
+    <div id="welcomeScreen">
+        <p id="welcome"></p>
+        <button onclick="Logout()">Logout</button>
+    </div>
+    <script>
+        var contents = ["loginScreen", "welcomeScreen"];
+        //Cookie Name, Cookie Value, No. of Expiration days
+        function createUser(){
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            if(!localStorage.getItem(username)){
+                localStorage.setItem(username,password);
+            }
+           else{
+            document.getElementById("output").innerHTML = "Username already exists!";
+           }
+        }
+
+        function login(){
+            var username = document.getElementById("username").value;
+            var password = document.getElementById("password").value;
+            var storedPassword = localStorage.getItem(username);
+            if(storedPassword && password && password == storedPassword){
+                document.getElementById("welcome").innerHTML = "Welcome " +username;
+                localStorage.setItem("loggedInUser", username);
+                showContent(1);
+            }
+            else{
+                document.getElementById("output").innerHTML = "Invalid username or password!";
+            }
+        }
+        function Logout(){
+            localStorage.removeItem("loggedInUser");
+            showContent(0);
+        }
+
+        function showContent(contentIndex){
+            for(let i = 0; i<contents.length; i++){
+                if(i != contentIndex){
+                    document.getElementById(contents[i]).style.display = "none";
+                }
+            }
+            document.getElementById(contents[contentIndex]).style.display = "block";
+            return "";
+        }
+    </script>
+</body>
+</html>
