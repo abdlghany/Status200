@@ -4,17 +4,156 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BOOTCAMP ZOO</title>
-    <link rel="stylesheet" href="./css/oneHourTest.css">
+
+    <style>
+        * {
+            line-height: 1.3rem;
+            font-size: 1.2rem;
+        }
+        
+        body, html {
+            padding: 0;
+            margin: 0;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        h1, p {
+            text-align: center;
+        }
+        
+        a {
+            text-decoration: none;
+            color: white;
+        }
+        
+        #navBar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            background: #a21232;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            max-height: 6rem;
+            min-height: 5rem;
+            color: white;
+        }
+        
+        #mainPageButtons {
+            display: flex;
+            width: 20rem;
+            height: 20rem;
+            gap: 2rem;
+            justify-content: center;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+        
+        #navBarMonkey, #navBarDino {
+            max-height: 5rem;
+            height: 5rem;
+            margin-top: 0.2rem;
+            margin-bottom: 0.2rem;
+        }
+        
+        #navBarMonkey {
+            margin-left: 1rem;
+        }
+        
+        #navBarDino {
+            margin-right: 1rem;
+        }
+        
+        #birdsButton {
+            background-color: #87CEEB;
+        }
+        
+        #birdsButton:hover {
+            background-color: #97DEFB;
+        }
+        
+        #nocturnalButton {
+            background-color: #292980;
+            color: white;
+        }
+        
+        #nocturnalButton:hover {
+            background-color: #393990;
+        }
+        
+        #safariButton {
+            background-color: #F0E68C;
+        }
+        
+        #safariButton:hover {
+            background-color: #FFF69C;
+        }
+        
+        #reptilesButton {
+            background-color: #808000;
+        }
+        
+        #reptilesButton:hover {
+            background-color: #909010;
+        }
+        
+        #birdsButton, #nocturnalButton, #safariButton, #reptilesButton {
+            border: 1px solid #000;
+            border-radius: 1rem;
+            flex: 1 1 45%;
+            text-align: center;
+            padding: 0.9rem;
+        }
+        
+        #mainPage {
+            display: block;
+        }
+        
+        img {
+            max-width: 40%;
+            object-fit: cover;
+            height: 100%;
+            margin: 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+        
+        .showMore {
+            display: none;
+        }
+        
+        .showMoreB {
+            display: block;
+            margin: 0 auto;
+            margin-bottom: 2rem;
+            padding: 10px;
+        }
+        
+        #birds, #nocturnal, #safari, #reptiles {
+            padding-top: 5rem;
+            width: 90%;
+            height: 80vh;
+            display: none;
+            margin: auto;
+            text-align: center;
+        }
+        
+    </style>
 </head>
 <body onload="pageLoaded(0)">
     <!-- Navigation Bars -->
     <div id="navBar">
-        <img src="./images/monkey.png" alt="Monkey" id="navBarMonkey">
-        <div id="navBarText">
+        <img src="./images/monkey.png" alt="Monkey" id="navBarMonkey" onclick="previousContent()">
+        <div>
             <h1><a href="#" onclick="showContent(0)">BOOTCAMP ZOO</a></h1>
             <p id="subtitle"></p>
         </div>
-        <img src="./images/dino.png" alt="Dino" id="navBarDino">
+        <img src="./images/dino.png" alt="Dino" id="navBarDino" onclick="nextContent()">
     </div>
     <!-- Main Section -->
     <div id="mainPage">
@@ -67,6 +206,72 @@
         <button class="showMoreB" onclick="showMore()">Show More</button>
     </div>
 
-    <script src="./js/OHT.js" defer></script>
+    <script>
+        var contents = ["mainPage", "birds", "nocturnal", "safari", "reptiles"]
+var currentIndex;
+var moreIsShown = false;
+function showContent(contentIndex){
+    var subtitle = document.getElementById("subtitle");
+    if(contentIndex != 0){
+        subtitle.innerHTML = contents[contentIndex].toString().toUpperCase();
+    }
+    else{
+        subtitle.innerHTML = "";
+    }
+    document.getElementById(contents[contentIndex]).style.display = "block";
+    pageLoaded(contentIndex);
+    currentIndex = contentIndex;
+}
+function nextContent(){
+if(currentIndex < contents.length-1){
+    showContent(currentIndex+1);
+}else{
+    //DO NOTHING.
+}
+}
+function previousContent(){
+    if(currentIndex > 0){
+        showContent(currentIndex-1);
+    }else{
+        //DO NOTHING.
+    }
+}
+function pageLoaded(dontHide){
+    showLess();
+    //hide all pages except the dontHide index.
+    for(let i = 0 ; i < contents.length; i++){
+        if(i != dontHide){
+            document.getElementById(contents[i]).style.display = "none";
+        }
+    }
+}
+
+function showMore(){
+    if(moreIsShown){showLess()}
+    else{
+    var showElements = document.getElementsByClassName("showMore");
+    for (let i = 0; i<showElements.length; i++){
+        showElements[i].style.display = "inline-block";
+    }
+    var showMoreB = document.getElementsByClassName("showMoreB");
+    for (let i = 0; i<showMoreB.length; i++){
+        showMoreB[i].innerHTML = "Show Less";
+    }
+    moreIsShown = true;
+}
+}
+
+function showLess(){
+    var showElements = document.getElementsByClassName("showMore");
+    for (let i = 0; i<showElements.length; i++){
+        showElements[i].style.display = "none";
+    }
+    var showMoreB = document.getElementsByClassName("showMoreB");
+    for (let i = 0; i<showMoreB.length; i++){
+        showMoreB[i].innerHTML = "Show More";
+    }
+    moreIsShown = false;
+}
+    </script>
 </body>
 </html>

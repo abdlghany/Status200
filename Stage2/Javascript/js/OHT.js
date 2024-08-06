@@ -1,7 +1,7 @@
 var contents = ["mainPage", "birds", "nocturnal", "safari", "reptiles"]
+var currentIndex;
 var moreIsShown = false;
 function showContent(contentIndex){
-    var content = document.getElementById(contents[contentIndex]);
     var subtitle = document.getElementById("subtitle");
     if(contentIndex != 0){
         subtitle.innerHTML = contents[contentIndex].toString().toUpperCase();
@@ -11,8 +11,22 @@ function showContent(contentIndex){
     }
     document.getElementById(contents[contentIndex]).style.display = "block";
     pageLoaded(contentIndex);
+    currentIndex = contentIndex;
 }
-
+function nextContent(){
+if(currentIndex < contents.length-1){
+    showContent(currentIndex+1);
+}else{
+    //DO NOTHING.
+}
+}
+function previousContent(){
+    if(currentIndex > 0){
+        showContent(currentIndex-1);
+    }else{
+        //DO NOTHING.
+    }
+}
 function pageLoaded(dontHide){
     showLess();
     //hide all pages except the dontHide index.
