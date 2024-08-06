@@ -1,3 +1,4 @@
+// index 0 is the homepage, the order of the other pages will depend on the layout of the homepage and how are they ordered in it...
 var contents = ["mainPage", "birds", "nocturnal", "safari", "reptiles"]
 var currentIndex;
 var moreIsShown = false;
@@ -13,6 +14,15 @@ function showContent(contentIndex){
     pageLoaded(contentIndex);
     currentIndex = contentIndex;
 }
+function pageLoaded(dontHide){
+    showLess();
+    //hide all pages except the dontHide index.
+    for(let i = 0 ; i < contents.length; i++){
+        if(i != dontHide){
+            document.getElementById(contents[i]).style.display = "none";
+        }
+    }
+}
 function nextContent(){
 if(currentIndex < contents.length-1){
     showContent(currentIndex+1);
@@ -27,15 +37,7 @@ function previousContent(){
         //DO NOTHING.
     }
 }
-function pageLoaded(dontHide){
-    showLess();
-    //hide all pages except the dontHide index.
-    for(let i = 0 ; i < contents.length; i++){
-        if(i != dontHide){
-            document.getElementById(contents[i]).style.display = "none";
-        }
-    }
-}
+
 
 function showMore(){
     if(moreIsShown){showLess()}
