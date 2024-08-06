@@ -5,13 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Welcome to U-Bank</title>
     <link rel="stylesheet" href="ATM.css">
-    
 </head>
+<!-- showLoginMenu function checks if the user isn't logged in and shows him the login screen, otherwise it shows Check Balance page -->
 <body onload="showLoginMenu();">
+    <!-- Navigation bar -->
     <div class="navbar">
         <h1>U-Bank ATM</h1>
         <button class="button-1" id="logoutButton" onclick="return logoutF();">Logout</button>
     </div>
+    <!-- Login screen -->
     <div class="content" id="contentLogin">
         <h2>Welcome to U-Bank!</h2>
         <h3>Please login to continue</h3>
@@ -36,6 +38,7 @@
             </table>
         </form>
     </div>
+    <!-- Withdraw Screen -->
     <div class="content" id="contentWithdraw">
         <h3 id="withdrawUsername"  class="username">Welcome (Username)</h3>
         <h2>Available Notes:</h2>
@@ -55,6 +58,7 @@
             </table>
         </form>
     </div>
+    <!-- Deposit screen -->
     <div class="content" id="contentDeposit">
         <h3 id="depositUsername"  class="username">Welcome (Username)</h3>
         <form onsubmit="return depositF();">
@@ -72,6 +76,7 @@
             </table>
         </form>
     </div>
+    <!-- Balance screen -->
     <div class="content" id="contentBalance">
         <!-- the paragraph will get rewritten when the user successfully logs in. -->
         <h3 id="depositUsername" class="username">Welcome (Username)</h3>
@@ -89,11 +94,13 @@
             </table>
         </form>
     </div>
+    <!-- Website Footer -->
     <div class="footer">
         <button id="withdrawButtonFooter" class="button-3" onclick="showWithdrawContent();">Withdraw</button>
         <button id="depositButtonFooter" class="button-3" onclick="showDepositContent();">Deposit</button>
         <button id="balanceButtonFooter" class="button-3" onclick="showBalanceContent();">Check Balance</button>
     </div>
+    <!-- Scripts -->
     <script src="ATM.js"></script>
 </body>
 </html>

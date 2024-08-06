@@ -17,10 +17,6 @@ function loginF(){
                 if(userAccountPins[i] == accountPinInput){
                     showBalanceContent();
                     showLogoutButton();
-                    usernameFields = document.getElementsByClassName("username");
-                    for(let x = 0; x<usernameFields.length; x++){
-                        usernameFields[x].innerHTML = "Welcome "+userAccountUsername[i];
-                    }
                     break;
                 }else{
                     passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.");
@@ -41,7 +37,6 @@ function loginF(){
 //a function that runs when the user clicks the button Withdraw in the 'withdraw' section
 function withdrawF(){
     var totalNotesAvailableSum = 0;
-    var userAccountBalance = userAccountsBalance[localStorage.getItem("loggedInUser")];
     for(let i=0; i<RMNotes.length; i++){
         var noteValue = parseInt(RMNotes[i]);
         var notesAvailable = parseInt(RMNotesAvailable[i]);
@@ -56,12 +51,12 @@ function withdrawF(){
     }else if(totalNotesAvailableSum < withdrawAmount){
         passMessageToElement("withdrawP", "Sorry your request cannot be fullfilled at this time<br>Because this machine contains a total of RM"+totalNotesAvailableSum);
     } 
-    else if(userAccountBalance >= withdrawAmount){
+    else if(getAccountBalance() >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
         var notesToDispense = []; // store the number of notes to dispense for each note pass
         for (let x=RMNotes.length-1; x >= 0; x--) {
             if (RMNotesAvailable[x] > 0) {
-                //convert to the nearest lower integer (lower than the result of the division);
+                //convert to the nearest lower integer (lower [or equal to] than the result of the division);
                 var noteCount = Math.floor(withdrawAmount / RMNotes[x]);
                 if (noteCount > 0) {
                     if (noteCount > RMNotesAvailable[x]) {
@@ -74,9 +69,9 @@ function withdrawF(){
             }
         }
         if (withdrawAmount === 0) {
-            userAccountBalance -= ogWithdrawAmount;
+            updateAccountBalance(ogWithdrawAmount*(-1));
             passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount+" is successful<br><br> You will get:<br>"+
-            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+userAccountBalance); 
+            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+getAccountBalance()); 
             //refresh the view
             showWithdrawContent();
         } else {
@@ -85,7 +80,7 @@ function withdrawF(){
         }
     }
     else{
-        passMessageToElement("withdrawP", "Sorry your current balance ("+userAccountBalance+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
+        passMessageToElement("withdrawP", "Sorry your current balance ("+getAccountBalance()+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
     }
     return false;
 }
@@ -100,7 +95,6 @@ function depositF(){
         for(let x=RMNotes.length-1; x>= 0; x--){
             if(depositAmount > 0){
                 var noteCount = Math.floor(depositAmount / RMNotes[x]);
-
                 if (noteCount > 0) {
                     RMNotesAvailable[x] += noteCount;
                     depositAmount -= noteCount * RMNotes[x];
@@ -108,8 +102,8 @@ function depositF(){
             }
         }
         if(depositAmount == 0){
-            userAccountsBalance[localStorage.getItem("loggedInUser")] += ogDepositAmount;
-            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+userAccountsBalance[localStorage.getItem("loggedInUser")]);
+            updateAccountBalance(ogDepositAmount);
+            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance());
         }
         else{
             passMessageToElement("depositP", "Sorry This machine only accepts "+ getArrayContentsMessage(RMNotes, " ")+ "Notes")
@@ -119,7 +113,7 @@ function depositF(){
 }
 //funtion to show the current user's balance, it runs when the button "Reveal your balance" is clicked.
 function balanceF(){
-    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + userAccountsBalance[localStorage.getItem("loggedInUser")].toFixed(2)+"</b>")
+    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + getAccountBalance().toFixed(2)+"</b>")
     return false;
 }
 // shows the section "withdraw". if the user is logged in.
@@ -154,6 +148,8 @@ function showBalanceContent(){
         showContent("contentBalance");
         passMessageToElement("withdrawP", "");
         passMessageToElement("balanceAccountNoP","");
+        // Display the message Welcome (username); where username  = the name of the currently logged in user.
+        fillUsernameFields(userAccountUsername[localStorage.getItem("loggedInUser")]);
     }
     else{
         passMessageToElement("loginMessageP","Please login to view Balance...");
@@ -169,11 +165,8 @@ function showLoginMenu(){
     showContent("contentLogin");
     passMessageToElement("loginMessageP","");
     hideLogoutButton();
-    var usernameFields = document.getElementsByClassName("username");
-    //resetting all welcome messages.
-    for(let x = 0; x<usernameFields.length; x++){
-        usernameFields[x].innerHTML = "Welcome "+"(Username)";
-    }
+    //reset the message to default (basically no username)
+    fillUsernameFields("(Username)");
     }    
 }
 //hide all sections except that one passed as a parameter. using class names (content) in HTML.
@@ -225,4 +218,18 @@ function getArrayContentsMessage(arrayToLoop, afterTheArray){
         message +=  arrayToLoop[i]+afterTheArray;
         }
         return message;
+}
+function fillUsernameFields(username){
+    var usernameFields = document.getElementsByClassName("username");
+    for(let x = 0; x<usernameFields.length; x++){
+        usernameFields[x].innerHTML = "Welcome "+username;
+    }
+}
+
+function updateAccountBalance(amount) {
+    userAccountsBalance[localStorage.getItem("loggedInUser")] += amount;
+}
+
+function getAccountBalance(){
+    return userAccountsBalance[localStorage.getItem("loggedInUser")];
 }
