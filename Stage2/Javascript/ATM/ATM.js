@@ -37,10 +37,12 @@ function loginF(){
 //a function that runs when the user clicks the button Withdraw in the 'withdraw' section
 function withdrawF(){
     var totalNotesAvailableSum = 0;
+    var tempRMNotesAvailable = [];
     for(let i=0; i<RMNotes.length; i++){
         var noteValue = parseInt(RMNotes[i]);
         var notesAvailable = parseInt(RMNotesAvailable[i]);
         totalNotesAvailableSum += (noteValue * notesAvailable);
+        tempRMNotesAvailable.push(RMNotesAvailable[i]);
     }
     var withdrawAmount = parseInt(getValueById("withdrawInput"));
     //saving the variable in another one so that we can modify it's value freely
@@ -55,28 +57,34 @@ function withdrawF(){
         withdrawAmount = parseInt(withdrawAmount);
         var notesToDispense = []; // store the number of notes to dispense for each note pass
         for (let x=RMNotes.length-1; x >= 0; x--) {
-            if (RMNotesAvailable[x] > 0) {
+            if (tempRMNotesAvailable[x] > 0) {
                 //convert to the nearest lower integer (lower [or equal to] than the result of the division);
                 var noteCount = Math.floor(withdrawAmount / RMNotes[x]);
                 if (noteCount > 0) {
-                    if (noteCount > RMNotesAvailable[x]) {
-                        noteCount = RMNotesAvailable[x];
+                    if (noteCount > tempRMNotesAvailable[x]) {
+                        noteCount = tempRMNotesAvailable[x];
                     }
-                    RMNotesAvailable[x] -= noteCount;
+                    tempRMNotesAvailable[x] -= noteCount;
                     withdrawAmount -= noteCount * RMNotes[x];
                     notesToDispense.push("RM"+RMNotes[x]+": "+ +noteCount);
                 }
             }
         }
         if (withdrawAmount === 0) {
+            //applying changes to the user's account based on the original withdraw amount they entered.
             updateAccountBalance(ogWithdrawAmount*(-1));
             passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount+" is successful<br><br> You will get:<br>"+
-            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+getAccountBalance()); 
+            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+getAccountBalance());
+            //applying changes to the available note count based on the temp variable.
+            for(let x = 0; x<RMNotesAvailable.length;x++){
+                RMNotesAvailable[x] = tempRMNotesAvailable[x];
+            }
             //refresh the view
             showWithdrawContent();
         } else {
-            
             passMessageToElement("withdrawP", "Sorry, this machine doesn't support notes other than " + getArrayContentsMessage(RMNotes, " "));
+            //refresh the view (to make sure the note count did not change).
+            showWithdrawContent();
         }
     }
     else{
@@ -88,21 +96,29 @@ function withdrawF(){
 function depositF(){
     var depositAmount = getValueById("depositInput");
     var ogDepositAmount = parseInt(depositAmount);
+    var tempRMNotesAvailable = [];
     if(depositAmount <= 0 || depositAmount == "" || isNaN(depositAmount)){
         passMessageToElement("depositP", "<br>Amount specified is not valid<br>Try Again!");
     }
     else{
         for(let x=RMNotes.length-1; x>= 0; x--){
+            //using this loop to fill the temp variable to avoid creating another loop especially for it.
+            //did not use push because the array is being traversed in reverse
+            tempRMNotesAvailable[x] = RMNotesAvailable[x];
             if(depositAmount > 0){
                 var noteCount = Math.floor(depositAmount / RMNotes[x]);
                 if (noteCount > 0) {
-                    RMNotesAvailable[x] += noteCount;
+                    tempRMNotesAvailable[x] += noteCount;
                     depositAmount -= noteCount * RMNotes[x];
                 }
             }
         }
         if(depositAmount == 0){
             updateAccountBalance(ogDepositAmount);
+            //applying changes to the available note count based on the temp variable.
+            for(let x = 0; x<RMNotesAvailable.length;x++){
+                RMNotesAvailable[x] = tempRMNotesAvailable[x];
+            }
             passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance());
         }
         else{
