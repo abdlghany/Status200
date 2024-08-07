@@ -138,7 +138,7 @@ function balanceF(){
 // shows the section "withdraw". if the user is logged in.
 function showWithdrawContent(){
     if(loggedInUser()){
-        showContent(contents[1]);
+        showContent(1);
         document.getElementById("withdrawInput").value = "";
         passMessageToElement("availableNotesP", "");
         for(let x = 0; x<RMNotes.length; x++){
@@ -152,7 +152,7 @@ function showWithdrawContent(){
 //shows the section "deposit". if the user is logged in.
 function showDepositContent(){
     if(loggedInUser()){
-        showContent(contents[2]);
+        showContent(2);
         passMessageToElement("withdrawP", "");
         document.getElementById("depositInput").value = "";
         passMessageToElement("depositP","");
@@ -164,7 +164,7 @@ function showDepositContent(){
 //shows the section Check Balance. if the user is logged in.
 function showBalanceContent(){
     if(loggedInUser()){
-        showContent(contents[3]);
+        showContent(3);
         passMessageToElement("withdrawP", "");
         passMessageToElement("balanceAccountNoP","");
         // Display the message Welcome (username); where username  = the name of the currently logged in user.
@@ -181,7 +181,7 @@ function showLoginMenu(){
         showLogoutButton();
     }
     else{
-    showContent(contents[0]);
+    showContent(0);
     passMessageToElement("loginMessageP","");
     passMessageToElement("accountNoP","");
     hideLogoutButton();
@@ -191,10 +191,10 @@ function showLoginMenu(){
 }
 //hide all sections except that one passed as a parameter. using class names (content) in HTML.
 function showContent(contentID){
-    var ElementById = document.getElementById(contentID);
+    var ElementById = document.getElementById(contents[contentID]);
     for(let i =0; i<contents.length; i++){
-        if(i != contents.indexOf(contentID)){
-            document.getElementById(contents[i]).classList.add("displayNone");
+        if(i != contentID){
+        document.getElementById(contents[i]).classList.add("displayNone");
         document.getElementById(contents[i]).classList.remove("displayBlock");
     }
     }
