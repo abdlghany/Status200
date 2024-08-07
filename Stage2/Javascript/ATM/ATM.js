@@ -1,12 +1,20 @@
 // Variable declaration (dummy data that will be stored in a database later).
 var userAccountNos = [19586553566, 19568442322, 19568489352];
-var userAccountPins = [755960, 463899, 896327];
+//replaced the variable below with the dictionary.
+//var userAccountPins = [755960, 463899, 896327];
+//search user PIN by user account No.
+var userAccountsInfo = {
+    "19586553566":"755960",
+    "19568442322":"463899",
+    "19568489352":"896327"
+};
 var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
 var userAccountsBalance = [1500, 8900, 9999999];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
 // Main HTML Divisions'  IDs (Login, Withdraw, Deposit and Balance divs).
 var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"]
+
 //a function that runs when the login button is clicked.
 function loginF(){
     var accountNoInput = parseInt(getValueById("accountNoInput"));
@@ -17,7 +25,8 @@ function loginF(){
             if(accountNoInput == userAccountNos[i]){
                 //using local storage to set the currently logged in user.
                 localStorage.setItem("loggedInUser", i);
-                if(userAccountPins[i] == accountPinInput){
+                //OLD CODE before dictionary: if(userAccountPins[i] == accountPinInput){
+                if(userAccountsInfo[userAccountNos[i]] == accountPinInput){
                     showBalanceContent();
                     showLogoutButton();
                     break;

@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dictionary Examples</title>
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+<body>
+    <input type="text" id="userInput">
+    <button onclick="getFrench()">Translate to french</button>
+    <p id="output"></p>
+    <script>
+        var dictionaryEntoFr = {
+            "run":"courir",
+            "stop":"arrêt",
+            "oh no":"oh non",
+            "hello":"bonjour",
+            "flip":"retourner",
+            "start":"commencer",
+            "fly":"voler",
+            "jump":"saut/saute",
+            "i was going to":"j'allais"
+        };
+
+        function getFrench(){
+            var userInput = document.getElementById("userInput").value.trim().toLowerCase();
+            document.getElementById("output").innerHTML = "Your English word in french is: "+ dictionaryEntoFr[userInput];
+        }
+    </script>
+</body>
+</html>
