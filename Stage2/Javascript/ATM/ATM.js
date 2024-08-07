@@ -5,6 +5,8 @@ var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
 var userAccountsBalance = [1500, 8900, 9999999];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
+//Main Division's IDs (Login, Withdraw, Deposit and Balance pages).
+var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"]
 //a function that runs when the login button is clicked.
 function loginF(){
     var accountNoInput = parseInt(getValueById("accountNoInput"));
@@ -13,6 +15,7 @@ function loginF(){
     if(accountNoInput && accountPinInput){
         for(let i=0; i<userAccountNos.length; i++){
             if(accountNoInput == userAccountNos[i]){
+                //using local storage to set the currently logged in user.
                 localStorage.setItem("loggedInUser", i);
                 if(userAccountPins[i] == accountPinInput){
                     showBalanceContent();
@@ -103,7 +106,7 @@ function depositF(){
     else{
         for(let x=RMNotes.length-1; x>= 0; x--){
             //using this loop to fill the temp variable to avoid creating another loop especially for it.
-            //did not use push because the array is being traversed in reverse
+            //did not use push() because the array is being traversed in reverse
             tempRMNotesAvailable[x] = RMNotesAvailable[x];
             if(depositAmount > 0){
                 var noteCount = Math.floor(depositAmount / RMNotes[x]);
@@ -134,8 +137,8 @@ function balanceF(){
 }
 // shows the section "withdraw". if the user is logged in.
 function showWithdrawContent(){
-    if(localStorage.getItem("loggedInUser")){
-        showContent("contentWithdraw");
+    if(loggedInUser()){
+        showContent(contents[1]);
         document.getElementById("withdrawInput").value = "";
         passMessageToElement("availableNotesP", "");
         for(let x = 0; x<RMNotes.length; x++){
@@ -148,8 +151,8 @@ function showWithdrawContent(){
 }
 //shows the section "deposit". if the user is logged in.
 function showDepositContent(){
-    if(localStorage.getItem("loggedInUser")){
-        showContent("contentDeposit");
+    if(loggedInUser()){
+        showContent(contents[2]);
         passMessageToElement("withdrawP", "");
         document.getElementById("depositInput").value = "";
         passMessageToElement("depositP","");
@@ -160,12 +163,12 @@ function showDepositContent(){
 }
 //shows the section Check Balance. if the user is logged in.
 function showBalanceContent(){
-    if(localStorage.getItem("loggedInUser")){
-        showContent("contentBalance");
+    if(loggedInUser()){
+        showContent(contents[3]);
         passMessageToElement("withdrawP", "");
         passMessageToElement("balanceAccountNoP","");
         // Display the message Welcome (username); where username  = the name of the currently logged in user.
-        fillUsernameFields(userAccountUsername[localStorage.getItem("loggedInUser")]);
+        fillUsernameFields(userAccountUsername[loggedInUser()]);
     }
     else{
         passMessageToElement("loginMessageP","Please login to view Balance...");
@@ -173,13 +176,14 @@ function showBalanceContent(){
 }
 //shows login menu when the user logs out.
 function showLoginMenu(){
-    if(localStorage.getItem("loggedInUser")){
+    if(loggedInUser()){
         showBalanceContent();
         showLogoutButton();
     }
     else{
-    showContent("contentLogin");
+    showContent(contents[0]);
     passMessageToElement("loginMessageP","");
+    passMessageToElement("accountNoP","");
     hideLogoutButton();
     //reset the message to default (basically no username)
     fillUsernameFields("(Username)");
@@ -187,11 +191,12 @@ function showLoginMenu(){
 }
 //hide all sections except that one passed as a parameter. using class names (content) in HTML.
 function showContent(contentID){
-    var allContents = document.getElementsByClassName("content");
     var ElementById = document.getElementById(contentID);
-    for(let i =0; i<allContents.length; i++){
-        allContents[i].classList.remove("displayBlock");
-        allContents[i].classList.add("displayNone");
+    for(let i =0; i<contents.length; i++){
+        if(i != contents.indexOf(contentID)){
+            document.getElementById(contents[i]).classList.add("displayNone");
+        document.getElementById(contents[i]).classList.remove("displayBlock");
+    }
     }
     ElementById.classList.add("displayBlock");
     ElementById.classList.remove("displayNone");
@@ -243,9 +248,14 @@ function fillUsernameFields(username){
 }
 
 function updateAccountBalance(amount) {
-    userAccountsBalance[localStorage.getItem("loggedInUser")] += amount;
+    userAccountsBalance[loggedInUser()] += amount;
 }
 
 function getAccountBalance(){
-    return userAccountsBalance[localStorage.getItem("loggedInUser")];
+    return userAccountsBalance[loggedInUser()];
+}
+
+function loggedInUser(){
+    //return null if the item doesn't exist (user isn't logged in) and the user's index if the user is logged in.
+    return localStorage.getItem("loggedInUser");
 }
