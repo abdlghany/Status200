@@ -63,7 +63,7 @@ function withdrawF(){
     if(isNaN(withdrawAmount) || withdrawAmount == "" || withdrawAmount <= 0){
         passMessageToElement("withdrawP", "<br>Amount specified is not valid<br>Try Again!", "red");
     }else if(totalNotesAvailableSum < withdrawAmount){
-        passMessageToElement("withdrawP", "Sorry your request cannot be fullfilled at this time<br>Because this machine contains a total of RM"+totalNotesAvailableSum, "orange");
+        passMessageToElement("withdrawP", "Sorry your request cannot be fullfilled at this time<br>Because this machine contains a total of RM"+totalNotesAvailableSum.toLocaleString(), "orange");
     } 
     else if(getAccountBalance() >= withdrawAmount){
         withdrawAmount = parseInt(withdrawAmount);
@@ -85,7 +85,10 @@ function withdrawF(){
         if (withdrawAmount === 0) {
             //applying changes to the user's account based on the original withdraw amount they entered.
             updateAccountBalance(ogWithdrawAmount*(-1));
-            passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount+" is successful<br><br> You will get:<br>"+
+            //toLocaleString() converts a number to a string with comma seperators every 3 numbers
+            // (default machine behaviour since i didn't specifiy which locale it should use
+            //toLocaleString('en-US') for example will return US locale formatting on every machine that runs this code.) 
+            passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount.toLocaleString()+" is successful<br><br> You will get:<br>"+
             getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+getAccountBalance().toLocaleString(), "green");
             //applying changes to the available note count based on the temp variable.
             for(let x = 0; x<RMNotesAvailable.length;x++){
@@ -101,7 +104,7 @@ function withdrawF(){
         }
     }
     else{
-        passMessageToElement("withdrawP", "Sorry your current balance ("+getAccountBalance().toLocaleString()+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.", "red")
+        passMessageToElement("withdrawP", "Sorry your current balance ("+getAccountBalance().toLocaleString()+") is lower than the amount you're trying to withdraw ("+withdrawAmount.toLocaleString()+").<br>"+"stop being poor bro.", "red")
     }
     return false;
 }
@@ -134,7 +137,7 @@ function depositF(){
             }
             //refresh the view to show the user that notes' quantity have indeed changed in the ATM
             showDepositContent();
-            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance().toLocaleString(), "green");
+            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount.toLocaleString()+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance().toLocaleString(), "green");
         }
         else{
             //refresh the view (to make sure the note count did not change).
@@ -153,8 +156,8 @@ function balanceF(){
 function showWithdrawContent(){
     if(loggedInUser()){
         showContent(1);
-        document.getElementById("withdrawInput").value = "";
-        passMessageToElement("availableNotesWP", "");
+        changeValue("withdrawInput");
+        passMessageToElement("availableNotesWP");
         for(let x = 0; x<RMNotes.length; x++){
       document.getElementById("availableNotesWP").innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
         }
@@ -167,13 +170,13 @@ function showWithdrawContent(){
 function showDepositContent(){
     if(loggedInUser()){
         showContent(2);
-        passMessageToElement("withdrawP", "");
-        document.getElementById("depositInput").value = "";
-        passMessageToElement("availableNotesDP", "");
+        passMessageToElement("withdrawP");
+        changeValue("depositInput");
+        passMessageToElement("availableNotesDP");
         for(let x = 0; x<RMNotes.length; x++){
             document.getElementById("availableNotesDP").innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
               }
-        passMessageToElement("depositP","");
+        passMessageToElement("depositP");
     }
     else{
         passMessageToElement("loginMessageP","Please login to deposit cash...", "red");
@@ -183,8 +186,8 @@ function showDepositContent(){
 function showBalanceContent(){
     if(loggedInUser()){
         showContent(3);
-        passMessageToElement("withdrawP", "");
-        passMessageToElement("balanceAccountNoP","");
+        passMessageToElement("withdrawP");
+        passMessageToElement("balanceAccountNoP");
         // Display the message Welcome (username); where username  = the name of the currently logged in user.
         fillUsernameFields(userAccountUsername[loggedInUser()]);
     }
@@ -200,8 +203,8 @@ function showLoginMenu(){
     }
     else{
     showContent(0);
-    passMessageToElement("loginMessageP","");
-    passMessageToElement("accountNoP","");
+    passMessageToElement("loginMessageP");
+    passMessageToElement("accountNoP");
     hideLogoutButton();
     //reset the message to default (basically no username)
     fillUsernameFields("(Username)");
@@ -233,23 +236,24 @@ function hideLogoutButton(){
 function getValueById(ID){
     return document.getElementById(ID).value;
 }
-//changes an element's innerHTML to a specified user message. assign a default value to color 'white' because background is a dark color.
-function passMessageToElement(elementId, message, color = "white"){
-    document.getElementById(elementId).innerHTML = message;    
-    document.getElementById(elementId).style.color= color;    
-
+//changes an element's innerHTML to a specified user message. assign a default value to 'message' as none to easily empty them elements,
+// 'color' as 'white' because background is a dark color.
+function passMessageToElement(elementId, message = "", color = "white"){
+    var element = document.getElementById(elementId);
+    element.innerHTML = message;    
+    element.style.color= color;    
 }
 //resets all paragraph's innerHTML from a passed array that contains the id's of those paragraphs.
 function resetMessages(messageFieldIds){
     messageFieldIds.forEach(function resetMessage(messageFieldId){
-        passMessageToElement(messageFieldId,"");
+        passMessageToElement(messageFieldId);
     })
 }
-//Function that logs the user out when they click "logout".
+//Function that logs the user out when they click "logout". by removing the local storage key 'loggedInUser' and its value.
 function logoutF(){
     localStorage.removeItem("loggedInUser");
-    document.getElementById("accountNoInput").value = ""
-    document.getElementById("pinNoInput").value = ""
+    changeValue("accountNoInput");
+    changeValue("pinNoInput");
     showLoginMenu();
 }
 //loops through the array values and returns them along with whataver message is passed to the variable "afterTheArray".
@@ -279,4 +283,8 @@ function getAccountBalance(){
 function loggedInUser(){
     //return null if the item doesn't exist (user isn't logged in) and the user's index if the user is logged in.
     return localStorage.getItem("loggedInUser");
+}
+
+function changeValue(elementId, newValue = ""){
+    document.getElementById(elementId).value = newValue;
 }
