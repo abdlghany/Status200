@@ -43,7 +43,7 @@
     <div class="content" id="contentWithdraw">
         <h3 id="withdrawUsername"  class="username">Welcome (Username)</h3>
         <h2>Available Notes:</h2>
-        <p id="availableNotesP" class="center"></p>
+        <p id="availableNotesWP" class="center"></p>
 
         <form onsubmit="return withdrawF();">
             <table>
@@ -62,13 +62,15 @@
     <!-- Deposit screen -->
     <div class="content" id="contentDeposit">
         <h3 id="depositUsername"  class="username">Welcome (Username)</h3>
+        <h2>Available Notes:</h2>
+        <p id="availableNotesDP" class="center"></p>
+
         <form onsubmit="return depositF();">
             <table>
                 <tr>
                     <td><label for="depositInput">Enter the desired deposit amount:</label></td>
                     <td><input type="number" name="deposit" id="depositInput" placeholder="Amount" autofocus onfocus="this.select()">
                         <p id="depositHelper" class="helper">Numbers Only.</p></td>
-                   
                 </tr>
                 <tr>
                     <td colspan="2"><button id="depositButton" class="button-2">Deposit</button></td>
