@@ -77,7 +77,7 @@ function withdrawF(){
             //applying changes to the user's account based on the original withdraw amount they entered.
             updateAccountBalance(ogWithdrawAmount*(-1));
             passMessageToElement("withdrawP","Your withdrawl of RM"+ogWithdrawAmount+" is successful<br><br> You will get:<br>"+
-            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+getAccountBalance());
+            getArrayContentsMessage(notesToDispense, "<br><br>") + "Your balance is now: RM"+getAccountBalance().toLocaleString());
             //applying changes to the available note count based on the temp variable.
             for(let x = 0; x<RMNotesAvailable.length;x++){
                 RMNotesAvailable[x] = tempRMNotesAvailable[x];
@@ -91,7 +91,7 @@ function withdrawF(){
         }
     }
     else{
-        passMessageToElement("withdrawP", "Sorry your current balance ("+getAccountBalance()+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
+        passMessageToElement("withdrawP", "Sorry your current balance ("+getAccountBalance().toLocaleString()+") is lower than the amount you're trying to withdraw ("+withdrawAmount+").<br>"+"stop being poor bro.")
     }
     return false;
 }
@@ -122,7 +122,7 @@ function depositF(){
             for(let x = 0; x<RMNotesAvailable.length;x++){
                 RMNotesAvailable[x] = tempRMNotesAvailable[x];
             }
-            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance());
+            passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance().toLocaleString());
         }
         else{
             passMessageToElement("depositP", "Sorry This machine only accepts "+ getArrayContentsMessage(RMNotes, " ")+ "Notes")
@@ -132,7 +132,7 @@ function depositF(){
 }
 //funtion to show the current user's balance, it runs when the button "Reveal your balance" is clicked.
 function balanceF(){
-    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + getAccountBalance().toFixed(2)+"</b>")
+    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + getAccountBalance().toLocaleString()+"</b>")
     return false;
 }
 // shows the section "withdraw". if the user is logged in.
