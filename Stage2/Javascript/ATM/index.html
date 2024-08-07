@@ -17,7 +17,8 @@
     <div class="content" id="contentLogin">
         <h2>Welcome to U-Bank!</h2>
         <h3>Please login to continue</h3>
-        <form onsubmit="return loginF()">
+        <!-- using post for security (prevents data from being shown in the url) -->
+        <form onsubmit="return loginF()" method="post">
             <table>
                 <tr>
                     <td><label for="accountNoInput">Enter your Account Number:</label></td>

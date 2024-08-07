@@ -1,11 +1,11 @@
-// Variable declaration (dummy data).
+// Variable declaration (dummy data that will be stored in a database later).
 var userAccountNos = [19586553566, 19568442322, 19568489352];
 var userAccountPins = [755960, 463899, 896327];
 var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
 var userAccountsBalance = [1500, 8900, 9999999];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
-//Main Division's IDs (Login, Withdraw, Deposit and Balance pages).
+// Main HTML Divisions'  IDs (Login, Withdraw, Deposit and Balance divs).
 var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"]
 //a function that runs when the login button is clicked.
 function loginF(){
@@ -240,17 +240,18 @@ function getArrayContentsMessage(arrayToLoop, afterTheArray){
         }
         return message;
 }
+//a function that fills out the user's name in the welcome message after they login.
 function fillUsernameFields(username){
     var usernameFields = document.getElementsByClassName("username");
     for(let x = 0; x<usernameFields.length; x++){
         usernameFields[x].innerHTML = "Welcome "+username;
     }
 }
-
+//Updating the account's balance with (amount).
 function updateAccountBalance(amount) {
     userAccountsBalance[loggedInUser()] += amount;
 }
-
+//fetch the logged in user's balance from the array.
 function getAccountBalance(){
     return userAccountsBalance[loggedInUser()];
 }
