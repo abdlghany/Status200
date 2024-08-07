@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Centered Safari</title>
+    <style>
+        * {
+            line-height: 1.3rem;
+            font-size: 1.2rem;
+        }
+        
+        body, html {
+            padding: 0;
+            margin: 0;
+        }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #safari {
+            padding-top: 1rem;
+            text-align: center;
+            display: flex;
+            flex-direction: row;
+        }
+
+        img {
+            width: 300px;
+            object-fit: cover;
+            margin: 10px;
+            border-radius: 20px;
+            display: inline-block;
+        }
+
+        .showMoreB {
+            display: inline-block;
+            margin: 0 auto;
+            padding: 10px;
+            height: 50%;
+            width: 300px;
+        }
+
+        #leftDiv, #rightDiv {
+            display: flex;
+            flex-direction: column;
+            padding-bottom: 2rem;
+        }
+    </style>
+</head>
+<body>
+    <div id="safari">
+        <div id="leftDiv">
+            <img src="./images/safari1.jpg" alt="safari 1" class="dog">
+            <img src="./images/safari2.jpg" alt="safari 2" class="cat">
+            <img src="./images/safari1.jpg" alt="safari 1" class="dog">
+            <img src="./images/safari2.jpg" alt="safari 2" class="cat">
+            <button onclick="showContent(0)" class="showMoreB" id="catB">Hide cat</button>
+        </div>
+        <div id="rightDiv">
+            <img src="./images/safari1.jpg" alt="safari 5" class="dog">
+            <img src="./images/safari2.jpg" alt="safari 6" class="cat">
+            <img src="./images/safari1.jpg" alt="safari 7" class="dog">
+            <img src="./images/safari2.jpg" alt="safari 8" class="cat">
+            <button onclick="showContent(1)" class="showMoreB" id="dogB">Hide dog</button>
+        </div>
+    </div>
+    
+    <script>
+        var contents = ["cat", "dog"];
+        var contentsStatus = [1, 1];
+        function showContent(contentIndex) {
+            var elements = document.getElementsByClassName(contents[contentIndex]);
+            var buttonClicked = document.getElementById(contents[contentIndex] + "B");
+            if (contentsStatus[contentIndex] == 0) {
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].style.opacity = 1;
+                }
+                buttonClicked.innerText = "Hide " + contents[contentIndex];
+                contentsStatus[contentIndex] = 1;
+            } else {
+                for (let i = 0; i < elements.length; i++) {
+                    elements[i].style.opacity = 0;
+                }
+                buttonClicked.innerText = "Show " + contents[contentIndex];
+                contentsStatus[contentIndex] = 0;
+            }
+        }
+    </script>
+</body>
+</html>
