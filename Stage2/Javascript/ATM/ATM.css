@@ -43,13 +43,13 @@ label, input{
     display: flex;
     flex-direction:column;
     height: 87vh;
-    padding-top:6rem
+    padding-top:6rem;
 }
 .content h2, .content h3{
 text-align: center;
 margin-bottom: 2rem;
 }
-
+/* button-1 is in the navigation bar (header), button-2 is in the main body, button-3 is in the footer. */
 .button-3, .button-2, .button-1{
     border-radius: 5px;
     padding: 10px;
