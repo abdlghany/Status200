@@ -236,18 +236,13 @@
         function nextContent(){
         if(currentIndex < contents.length-1){
             showContent(currentIndex+1);
-        }else{
-            //DO NOTHING.
         }
         }
         function previousContent(){
             if(currentIndex > 0){
                 showContent(currentIndex-1);
-            }else{
-                //DO NOTHING.
             }
         }
-        
         
         function showMore(){
             if(moreIsShown){showLess()}
