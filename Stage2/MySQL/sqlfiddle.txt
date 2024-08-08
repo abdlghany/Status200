@@ -1,0 +1,29 @@
+CREATE TABLE customers (
+    customer_id INT AUTO_INCREMENT PRIMARY KEY,
+    surname VARCHAR(50),
+    first_name VARCHAR(50),
+    city VARCHAR(50),
+    date_of_birth DATE,
+    gender CHAR(1)
+);
+
+INSERT INTO customers (surname, first_name, city, date_of_birth, gender)
+VALUES
+('Smith', 'John', 'New York', '1985-04-12', 'M'),
+('Johnson', 'Emma', 'Los Angeles', '1990-06-25', 'F'),
+('Williams', 'Olivia', 'Chicago', '1988-09-15', 'F'),
+('Jones', 'Noah', 'Houston', '1992-11-05', 'M'),
+('Brown', 'Sophia', 'Phoenix', '1986-02-19', 'F'),
+('Davis', 'Liam', 'Philadelphia', '1983-03-22', 'M'),
+('Miller', 'Isabella', 'San Antonio', '1991-07-13', 'F'),
+('Wilson', 'James', 'San Diego', '1989-10-30', 'M'),
+('Moore', 'Mia', 'Dallas', '1993-01-14', 'F'),
+('Taylor', 'Lucas', 'San Jose', '1984-08-27', 'M');
+
+select customer_id, first_name, surname, city,date_of_birth,gender from customers where first_name='john';
+
+select * from customers;
+
+select DISTINCT city from customers;
+
+select concat(first_name, ' ',surname,' lives in ', city, ' he/she was born in ',YEAR(date_of_birth)) as "Customer Information" from customers where city IN("new york","chicago","lion") and gender = 'F';

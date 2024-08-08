@@ -9,7 +9,7 @@ var userAccountsInfo = {
     "19568489352":"896327"
 };
 var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
-var userAccountsBalance = [1500, 8900, 9999999];
+var userAccountsBalance = [1500, 8900, 1000000000000000];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
 // Main HTML Divisions'  IDs (Login, Withdraw, Deposit and Balance divs).
