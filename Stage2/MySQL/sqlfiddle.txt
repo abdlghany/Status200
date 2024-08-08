@@ -26,4 +26,9 @@ select * from customers;
 
 select DISTINCT city from customers;
 
-select concat(first_name, ' ',surname,' lives in ', city, ' he/she was born in ',YEAR(date_of_birth)) as "Customer Information" from customers where city IN("new york","chicago","lion") and gender = 'F';
+select concat(first_name, ' ',surname,' lives in ', city, ' he/she was born in ',YEAR(date_of_birth)) as "Customer Information" from customers where city IN("new york", "chicago", "lion") and gender = 'F';
+
+select count(*) as "Number of customers in Chicago" from customers where city = "chicago";
+
+select count(*) as "Number of Females born after 1986" from customers where gender = "F" and YEAR(date_of_birth) > 1986;
+
