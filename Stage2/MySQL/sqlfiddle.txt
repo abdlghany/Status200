@@ -26,9 +26,60 @@ select * from customers;
 
 select DISTINCT city from customers;
 
+
 select concat(first_name, ' ',surname,' lives in ', city, ' he/she was born in ',YEAR(date_of_birth)) as "Customer Information" from customers where city IN("new york", "chicago", "lion") and gender = 'F';
 
 select count(*) as "Number of customers in Chicago" from customers where city = "chicago";
 
-select count(*) as "Number of Females born after 1986" from customers where gender = "F" and YEAR(date_of_birth) > 1986;
+select count(*) as "Number of Females born after 1986", sum(date_of_birth) as "useless column" from customers where gender = "F" and YEAR(date_of_birth) > 1986;
+
+SELECT `date_of_birth` as "Birth date" FROM `customers` WHERE `first_name` = "James" OR `first_name` = "Mia";
+
+SELECT date_of_birth AS "Birth Date" FROM customers WHERE first_name IN ("MIA", "JAMES");
+
+SELECT CONCAT(first_name, " ", surname) as Name,
+city as Hometown,
+year(date_of_birth) as "Year Born" 
+FROM CUSTOMERS 
+WHERE year(date_of_birth) BETWEEN 1985 AND 1995
+AND city in("houston", "los angeles", "new york")
+ORDER BY date_of_birth DESC;
+
+SELECT count(*) as "Number of customers names Johnson" FROM CUSTOMERS where surname = 'Johnson';
+
+select count(*) as "Female clients",
+(SELECT COUNT(*) from customers where gender = "M") as "Male clients" 
+from customers where gender = "F";
+
+select count(*) as "number of people per gender", gender
+from customers
+group by gender;
+
+
+select count(*) as "number of people per gender", gender
+from customers
+group by gender
+having gender = "M";
+
+select count(*) as "number of people per gender", gender
+from customers 
+where gender = "M"
+group by gender;
+
+select count(*) as "countgender", gender
+from customers
+group by gender
+having countgender > 4 ;
+
+select city, count(*) as "number of customers"
+from customers
+group by city
+having "number of customers" < 3;
+
+select gender, year(date_of_birth) as "Year of birth", count(*) as Count
+from customers
+group by gender, year(date_of_birth)
+order by year(date_of_birth), gender;
+
+
 
