@@ -166,7 +166,7 @@ select prod_name as "Product Name", count(*) as "Sold count" from products
 where last_sold <= date(now()) and last_sold > date_add(now(), INTERVAL -1 MONTH)
 group by prod_name 
 having prod_name like "%camera%";
-
+"%ca_era%"; // will also work
 select * from products 
 where added_to_stock < "2024-07-28" 
 AND unitprice BETWEEN 299.99 and 499.99;
