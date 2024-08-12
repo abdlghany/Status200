@@ -13,7 +13,7 @@ var userAccountsBalance = [1500, 8900, 1000000000000000];
 const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
 // Main HTML Divisions'  IDs (Login, Withdraw, Deposit and Balance divs).
-var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"]
+var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"];
 var balanceRevealed = false;
 //a function that runs when the login button is clicked.
 function loginF(){
