@@ -199,6 +199,8 @@ function showBalanceContent(){
         passMessageToElement("balanceAccountNoP");
         // Display the message Welcome (username); where username  = the name of the currently logged in user.
         fillUsernameFields(userAccountUsername[loggedInUser()]);
+        passMessageToElement("balanceButton","Reveal Your Balance", "black");
+        balanceRevealed = false;
     }
     else{
         passMessageToElement("loginMessageP","Please login to view Balance...", "red");
