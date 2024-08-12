@@ -14,7 +14,7 @@ const RMNotes = [10, 20, 50, 100];
 var RMNotesAvailable = [10, 10, 10, 10];
 // Main HTML Divisions'  IDs (Login, Withdraw, Deposit and Balance divs).
 var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"]
-
+var balanceRevealed = false;
 //a function that runs when the login button is clicked.
 function loginF(){
     var accountNoInput = parseInt(getValueById("accountNoInput"));
@@ -149,7 +149,16 @@ function depositF(){
 }
 //funtion to show the current user's balance, it runs when the button "Reveal your balance" is clicked.
 function balanceF(){
-    passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + getAccountBalance().toLocaleString()+"</b>")
+    if(!balanceRevealed){
+        passMessageToElement("balanceAccountNoP", "Your Balance is: RM<b>" + getAccountBalance().toLocaleString()+"</b>")
+        passMessageToElement("balanceButton","Hide Your Balance","black");
+        balanceRevealed = true;
+    }else{
+        passMessageToElement("balanceAccountNoP",);
+        passMessageToElement("balanceButton","Reveal Your Balance", "black");
+        balanceRevealed = false;
+    }
+    
     return false;
 }
 // shows the section "withdraw". if the user is logged in.
