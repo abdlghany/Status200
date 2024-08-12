@@ -9,13 +9,13 @@ var userAccountsInfo = {
     "19568489352":"896327"
 };
 
+var db = require('databaseConnection.js');
+var username = '19568489352';
 
-//TESTING DB
-var username = 19568489352;
-var password = fetchPasswordFromDb(username);
-console.log(password);
-
-
+db.fetchPasswordFromDb(username, function(err, password) {
+  if (err) throw err;
+  console.log(password);
+});
 
 var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
 var userAccountsBalance = [1500, 8900, 1000000000000000];
