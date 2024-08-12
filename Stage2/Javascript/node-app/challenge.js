@@ -5,8 +5,6 @@ const readline = require("readline").createInterface({
 
 let firstOperand;
 let secondOperand;
-let operator;
-let result;
 let operators = {1:"+", 2:"-", 3:"/", 4:"*", 5:"%"};
 
 function getFirstOperand(){
@@ -42,11 +40,10 @@ function getOperation() {
                 console.error("Cannot divide by 0");
                 getSecondOperand();
             }else{
-                operator = input;
-                result = eval(firstOperand + operators[operator] + secondOperand);
-                printResult();
+                var result = eval(firstOperand + operators[input] + secondOperand);
+                console.log("Result: " + firstOperand.toFixed(2) + operators[input] + secondOperand.toFixed(2) + " = "+(result).toFixed(2));
+                readline.close();
             }
-            
         }
         else{
             console.error("Please enter a valid operator!")
@@ -55,17 +52,14 @@ function getOperation() {
     });
 }
 
-function printResult(){
-    var message = "Result: " + firstOperand.toFixed(2) + operators[operator] + secondOperand.toFixed(2) + " = "+(result).toFixed(2);
-    console.log(message);
-    readline.close();
-}
 function validateInput(input){
-    if(!isNaN(input) && input <= 1000 && input > -1000 && input != "")return true;
+    if(!isNaN(input) && input <= 1000 && input > -1000 && input != "") return true;
     else return false;
 }
+
 function initiate(){
     console.log("Welcome to my calculator app\n----------------------");
 }
+
 initiate();
 getFirstOperand();
