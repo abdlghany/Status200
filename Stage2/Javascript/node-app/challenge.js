@@ -7,6 +7,8 @@ let firstOperand;
 let secondOperand;
 let operator;
 let result;
+let operators = {1:"+", 2:"-", 3:"/", 4:"*", 5:"%"};
+
 function getFirstOperand(){
     readline.question("Enter the first Operand: ", function (input) {
         if(validateInput(input)){
@@ -34,39 +36,17 @@ function getSecondOperand(){
 }
 
 function getOperation() {
-    readline.question("Select one of the available operations (+ - * / %) by writing it: ", function (input) {
-        var message;
-        if (input == "+"){
-            operator = input;
-            result = firstOperand + secondOperand;
-            printResult();
-        }
-        else if(input == "-"){
-            operator = input;
-            result = firstOperand - secondOperand;
-            printResult();
-        }
-        else if(input == "/"){
-            if(secondOperand == 0){
-                console.error("You cannot divide by zero.")
+    readline.question("Select one of the available operations\n1 for: +\n2 for: -\n3 for: /\n4 for: *\n5 for: %\n", function (input) {
+        if(operators[input]){
+            if(operators[input] == "/" && secondOperand == 0){
+                console.error("Cannot divide by 0");
                 getSecondOperand();
-            }
-            else{
+            }else{
                 operator = input;
-                result = firstOperand / secondOperand;
+                result = eval(firstOperand + operators[operator] + secondOperand);
                 printResult();
             }
-        }
-        else if(input == "*"){
-            operator = input;
-            result = firstOperand * secondOperand;
-            printResult();
             
-        }
-        else if(input == "%"){
-            operator = input;
-            result = firstOperand % secondOperand;
-            printResult();
         }
         else{
             console.error("Please enter a valid operator!")
@@ -76,17 +56,16 @@ function getOperation() {
 }
 
 function printResult(){
-    var message = "Result: " + firstOperand.toFixed(2) + operator + secondOperand.toFixed(2) + " = "+(result).toFixed(2);
+    var message = "Result: " + firstOperand.toFixed(2) + operators[operator] + secondOperand.toFixed(2) + " = "+(result).toFixed(2);
     console.log(message);
     readline.close();
 }
 function validateInput(input){
-    if(!isNaN(input) && input <= 1000 && input > -1000)return true;
+    if(!isNaN(input) && input <= 1000 && input > -1000 && input != "")return true;
     else return false;
 }
 function initiate(){
-    console.log("Welcome to my calculator app");
-    console.log("----------------------");
+    console.log("Welcome to my calculator app\n----------------------");
 }
 initiate();
 getFirstOperand();
