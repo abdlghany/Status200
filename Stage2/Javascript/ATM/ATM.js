@@ -8,6 +8,15 @@ var userAccountsInfo = {
     "19568442322":"463899",
     "19568489352":"896327"
 };
+
+
+//TESTING DB
+var username = 19568489352;
+var password = fetchPasswordFromDb(username);
+console.log(password);
+
+
+
 var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
 var userAccountsBalance = [1500, 8900, 1000000000000000];
 const RMNotes = [10, 20, 50, 100];
