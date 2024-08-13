@@ -352,22 +352,29 @@ having Quantity >4
 order by Quantity DESC;
 
 
+
 -- List all orders with a total order value.
-select orders.order_id as "Order ID", orders.order_date as "Order Date", orders.cust_id as "Customer ID", orders.voucher as Voucher, orders.shipper_id as "Shipper ID", sum(orderdetail.price) as "Order Total Value"
+select orders.order_id as "Order ID", orders.order_date as "Order Date", orders.cust_id as "Customer ID",
+orders.voucher as Voucher, orders.shipper_id as "Shipper ID", sum(orderdetail.price * orderdetail.quantity) as "Order Total Value",
+sum(orderdetail.price * orderdetail.quantity * (1-orders.voucher/100)) as "Order Total Value With voucher"
 from orders join orderdetail on orders.order_id = orderdetail.order_id
 GROUP by orders.order_id;
+
 -- products that have been ordered at least twice
-select product.prod_id as "Product ID", product.prod_name as "Product Name" , product.unit_price as "Unit Price", sum(orderdetail.quantity) as "Total Quantity Ordered"
+select product.prod_id as "Product ID", product.prod_name as "Product Name" , product.unit_price as "Unit Price", sum(orderdetail.quantity) as "Total Quantity Ordered",
+count(DISTINCT orderdetail.order_id) as "No. of orders"
 from product join orderdetail on product.prod_id = orderdetail.prod_id
-WHERE orderdetail.quantity > 1
 group by product.prod_id
+having count(DISTINCT orderdetail.order_id) > 1
 order by product.prod_id;
+
 -- poducts with over a $200 value that have been ordered in Amsterdam or Rome
 select product.prod_id as "Product ID", product.prod_name as "Product Name", orderdetail.price as "Unit Ordered Price", customer.cust_city as "City Sold in"
 from product join orderdetail on product.prod_id = orderdetail.prod_id
 join orders on orderdetail.order_id = orders.order_id
 join customer on orders.cust_id = customer.cust_id
 where customer.cust_city IN ("Amsterdam", "Rome") and product.unit_price > 200;
+
 -- Number of Sales by country
 select customer.cust_country as Country, sum(orderdetail.quantity) as "Number of Sales"
 from customer join orders on orders.cust_id = customer.cust_id
@@ -378,12 +385,14 @@ order by sum(orderdetail.quantity) DESC;
 select customer.cust_country as Country, count(orders.order_id) as "Number of Orders"
 from customer join orders on orders.cust_id = customer.cust_id
 group by customer.cust_country;
+
 -- total value of orders per city (over $1000)
-select customer.cust_city as City, sum(orderdetail.quantity * orderdetail.price) as "Total Value of orders over 1000"
+select customer.cust_city as City, sum(orderdetail.quantity * orderdetail.price ) as "Total Value of orders over 1000 (discounted)"
 from orderdetail join orders on orderdetail.order_id = orders.order_id
 join customer on orders.cust_id = customer.cust_id
 group by customer.cust_city
-having  sum(orderdetail.quantity * orderdetail.price) > 1000;
+having  sum(orderdetail.quantity * orderdetail.price) > 1000
+order by sum(orderdetail.quantity * orderdetail.price ) DESC;
 
 
 -- COLUMN NAMES:
