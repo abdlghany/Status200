@@ -328,12 +328,67 @@ INSERT INTO orderdetail (order_id, prod_id, quantity, price) VALUES
 (20, 20, 1, 59.99);
 
 
-SELECT customer.cust_name as "Customer Name", product.prod_name as "Product Name" from customer 
-JOIN orders on customer.cust_id = orders.cust_id
-JOIN orderdetail on orders.order_id = orderdetail.order_id
-join product on orderdetail.prod_id = product.prod_id
-where price > 500
-;
+SELECT customer.cust_name AS "Customer Name", 
+product.prod_name AS "Product Name",
+orderdetail.price AS "Price at the time of the sale",
+-- product.unit_price as "Unit Original Price", 
+orderdetail.quantity AS Quantity, 
+orderdetail.price * orderdetail.quantity AS "Total Price" 
+from customer 
+JOIN orders ON customer.cust_id = orders.cust_id
+JOIN orderdetail ON orders.order_id = orderdetail.order_id
+JOIN product ON orderdetail.prod_id = product.prod_id
+WHERE orderdetail.quantity > 1
+ORDER BY orderdetail.quantity DESC;
 
 
+SELECT product.prod_name AS "Product Name",
+sum(orderdetail.quantity) AS Quantity
+from product
+join orderdetail ON product.prod_id = orderdetail.prod_id
+WHERE orderdetail.quantity >= 2
+group by product.prod_id
+having Quantity >4
+order by Quantity DESC;
+
+
+-- List all orders with a total order value.
+select orders.order_id as "Order ID", orders.order_date as "Order Date", orders.cust_id as "Customer ID", orders.voucher as Voucher, orders.shipper_id as "Shipper ID", sum(orderdetail.price) as "Order Total Value"
+from orders join orderdetail on orders.order_id = orderdetail.order_id
+GROUP by orders.order_id;
+-- products that have been ordered at least twice
+select product.prod_id as "Product ID", product.prod_name as "Product Name" , product.unit_price as "Unit Price", sum(orderdetail.quantity) as "Total Quantity Ordered"
+from product join orderdetail on product.prod_id = orderdetail.prod_id
+WHERE orderdetail.quantity > 1
+group by product.prod_id
+order by product.prod_id;
+-- poducts with over a $200 value that have been ordered in Amsterdam or Rome
+select product.prod_id as "Product ID", product.prod_name as "Product Name", orderdetail.price as "Unit Ordered Price", customer.cust_city as "City Sold in"
+from product join orderdetail on product.prod_id = orderdetail.prod_id
+join orders on orderdetail.order_id = orders.order_id
+join customer on orders.cust_id = customer.cust_id
+where customer.cust_city IN ("Amsterdam", "Rome") and product.unit_price > 200;
+-- Number of Sales by country
+select customer.cust_country as Country, sum(orderdetail.quantity) as "Number of Sales"
+from customer join orders on orders.cust_id = customer.cust_id
+join orderdetail on orderdetail.order_id = orders.order_id
+group by customer.cust_country
+order by sum(orderdetail.quantity) DESC;
+-- Number of Orders by country
+select customer.cust_country as Country, count(orders.order_id) as "Number of Orders"
+from customer join orders on orders.cust_id = customer.cust_id
+group by customer.cust_country;
+-- total value of orders per city (over $1000)
+select customer.cust_city as City, sum(orderdetail.quantity * orderdetail.price) as "Total Value of orders over 1000"
+from orderdetail join orders on orderdetail.order_id = orders.order_id
+join customer on orders.cust_id = customer.cust_id
+group by customer.cust_city
+having  sum(orderdetail.quantity * orderdetail.price) > 1000;
+
+
+-- COLUMN NAMES:
+-- orderdetail (order_id, prod_id, quantity, price)
+-- orders (order_id, order_date, cust_id, voucher, shipper_id)
+-- product (prod_id, prod_name, unit_price)
+-- customer (cust_id, cust_name, cust_city, cust_country)
 
