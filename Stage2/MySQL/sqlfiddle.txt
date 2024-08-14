@@ -352,7 +352,7 @@ having Quantity >4
 order by Quantity DESC;
 
 
-
+-- ------------------------------------------------------------
 -- List all orders with a total order value.
 select orders.order_id as "Order ID", orders.order_date as "Order Date", orders.cust_id as "Customer ID",
 orders.voucher as Voucher, orders.shipper_id as "Shipper ID", sum(orderdetail.price * orderdetail.quantity) as "Order Total Value",
@@ -415,7 +415,7 @@ where orderdetail.prod_id is NULL AND product.prod_name LIKE "%web%";
 
 
 
-
+-- ------------------------------------------------------------
 -- orders (order_id, order_date, cust_id, voucher, shipper_id)
 insert into orders values (NULL,date(now()), 6, 10.00,2 );
 

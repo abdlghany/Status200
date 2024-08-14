@@ -9,10 +9,10 @@ var userAccountsInfo = {
     "19568489352":"896327"
 };
 
-var db = require('databaseConnection.js');
+var db = require('databaseConnection');
 var username = '19568489352';
 
-db.fetchPasswordFromDb(username, function(err, password) {
+db.fetchUserPassword(username, function(err, password) {
   if (err) throw err;
   console.log(password);
 });
