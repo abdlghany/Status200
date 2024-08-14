@@ -1,0 +1,93 @@
+-- list of tables:
+-- Teachers (TeacherID, FirstName, LastName, Subject)
+-- Students (StudentID, FirstName, LastName, Email)
+-- Courses (CourseID, CourseName, Description, TeacherID)
+-- Enrollments (EnrollmentID, StudentID, CourseID, EnrollmentDate)
+
+-- 1. A list of teachers that don't teach any courses.
+
+select teachers.teacherID as "Teacher ID", teachers.firstname as "First name", teachers.lastname as "Last name", teachers.subject as "Subject", courses.teacherID as "Courses Teaching" from teachers 
+left join courses on courses.teacherID = teachers.teacherID
+HAVING courses.teacherID is NULL;
+
+-- ------------------------------------
+
+-- 2. A list of students enrolled in any computer science course
+
+
+select students.studentid as "Student ID", CONCAT(students.FirstName," ", students.lastName) as "Student's Full name", students.email as Email, teachers.subject as Subject from students
+join Enrollments  on Enrollments .studentid = students.studentid
+join courses on Courses.courseid = Enrollments.courseid
+join teachers on teachers.teacherid = courses.teacherid
+having teachers.subject in ("computer science");
+
+-- ------------------------------------
+
+-- 3. A list of courses with a minimal of 2 enrollments
+
+select courses.courseID as "Course ID", courses.courseName as "Course Name",courses.Description,  count(Enrollments.CourseID) as "Enrollments" from Enrollments
+join courses on Enrollments.CourseID = courses.CourseID
+group by courses.courseName, courses.Description, courses.courseID
+having count(Enrollments.CourseID) > 1;
+
+-- 4. The number of students that didn't sign up for a course.
+
+select count(students.StudentID) as "Students that didn't sign up for a course"
+from students
+left join enrollments on students.StudentID = enrollments.StudentID
+where enrollments.EnrollmentID is null;
+
+
+-- 5. All courses scheduled for last year up till now.
+
+select courses.CourseID, courses.CourseName, courses.Description, enrollments.EnrollmentDate
+from courses
+join enrollments ON courses.CourseID = enrollments.CourseID
+where enrollments.EnrollmentDate between date_add(CURDATE(), INTERVAL -1 YEAR) and date(now());
+
+
+-- 6. A list of all students per teacher! that are in their classes.
+
+SELECT teachers.TeacherID as "Teacher ID", CONCAT(teachers.FirstName, " ", teachers.LastName) AS "Teacher's full name", courses.CourseName as Course,
+    CONCAT(students.FirstName, " ", students.LastName) AS "Students's full name"
+FROM teachers
+join courses on teachers.teacherid = courses.teacherid
+join enrollments on courses.courseid = enrollments.courseid
+join students on enrollments.studentid = students.studentid
+order by teachers.teacherid;
+
+
+
+-- dbdiagram.io code used:
+TABLE Students {
+    StudentID integer [primary key]
+    FirstName varchar
+    LastName varchar
+    Email varchar
+}
+
+
+Table Teachers {
+    TeacherID integer [primary key]
+    FirstName varchar
+    LastName varchar
+    Subject varchar
+}
+
+TABLE Courses {
+    CourseID integer [primary key]
+    CourseName varchar
+    Description varchar
+    TeacherID integer
+}
+
+TABLE Enrollments {
+    EnrollmentID integer [primary key]
+    StudentID integer
+    CourseID integer
+    EnrollmentDate date
+}
+
+ref: Teachers.TeacherID > Courses.TeacherID
+ref: Courses.CourseID < Enrollments.CourseID
+ref: Students.StudentID < Enrollments.StudentID
