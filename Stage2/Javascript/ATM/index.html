@@ -18,26 +18,24 @@
         <h2>Welcome to U-Bank!</h2>
         <h3>Please login to continue</h3>
         <!-- using post for security (prevents data from being shown in the url) -->
-        <form onsubmit="return loginF()" method="post">
+        <form onsubmit="loginF(event)" method="POST">
             <table>
                 <tr>
                     <td><label for="accountNoInput">Enter your Account Number:</label></td>
-                    <td><input type="number" name="accountNo" id="accountNoInput" placeholder="Account No." autofocus onfocus="this.select()">
-                        <p id="accountNoHelper" class="helper">Numbers Only.</p></td>
-                    <td><p id="accountNoP" class="message"></p></td>
+                    <td><input type="number" name="accountNo" id="accountNoInput" required autofocus onfocus="this.select()">
+                        <p id="accountNoHelper" class="helper">Account No. (Numbers Only)</p></td>
                 </tr>
                 <tr>
                     <td><label for="pinNoInput">Enter your PIN Number:</label></td>
-                    <td><input type="password" name="pinNo" id="pinNoInput" placeholder="PIN No.">
-                        <p id="pinNoHelper" class="helper">Numbers Only.</p></td>
-                    <td><p id="pinNoP" class="message"></p></td>
+                    <td><input type="password" name="pinNo" id="pinNoInput" required>
+                        <p id="pinNoHelper" class="helper">Account PIN No. (Numbers Only)</p></td>
                 </tr>
                 <tr>
-                    <td colspan="3"><button id="loginButton" class="button-2">Login</button></td>
+                    <td colspan="2"><button id="loginButton" class="button-2">Login</button></td>
                 </tr>
-                <tr><td colspan="3"><p id="loginMessageP" class="message"></p></td></tr>
+                <tr><td colspan="2"><p id="loginMessageP" class="message"></p></td></tr>
             </table>
-        </form>
+        </form>        
     </div>
     <!-- Withdraw Screen -->
     <div class="content" id="contentWithdraw">

@@ -1,60 +1,53 @@
-// Variable declaration (dummy data that will be stored in a database later).
-var userAccountNos = [19586553566, 19568442322, 19568489352];
-//replaced the variable below with the dictionary.
-//var userAccountPins = [755960, 463899, 896327];
-//search user PIN by user account No.
-var userAccountsInfo = {
-    "19586553566":"755960",
-    "19568442322":"463899",
-    "19568489352":"896327"
-};
-
-var db = require('databaseConnection');
-var username = '19568489352';
-
-db.fetchUserPassword(username, function(err, password) {
-  if (err) throw err;
-  console.log(password);
-});
-
-var userAccountUsername = ["John Doe", "Doe Johnny", "Infinite money"];
-var userAccountsBalance = [1500, 8900, 1000000000000000];
-const RMNotes = [10, 20, 50, 100];
-var RMNotesAvailable = [10, 10, 10, 10];
+// const RMNotes = [10, 20, 50, 100];
+// var RMNotesAvailable = [10, 10, 10, 10];
+const URL="http://atm.local:3000";
+var RMNotesId = [];
+var RMNotes = [];
+var RMNotesAvailable = [];
 // Main HTML Divisions'  IDs (Login, Withdraw, Deposit and Balance divs).
 var contents = ["contentLogin", "contentWithdraw", "contentDeposit", "contentBalance"];
 var balanceRevealed = false;
 //a function that runs when the login button is clicked.
-function loginF(){
-    var accountNoInput = parseInt(getValueById("accountNoInput"));
-    var accountPinInput= getValueById("pinNoInput");
-    resetMessages(["pinNoP","accountNoP", "balanceAccountNoP", "withdrawP"]);
-    if(accountNoInput && accountPinInput){
-        for(let i=0; i<userAccountNos.length; i++){
-            if(accountNoInput == userAccountNos[i]){
-                //using local storage to set the currently logged in user.
-                localStorage.setItem("loggedInUser", i);
-                //OLD CODE before dictionary: if(userAccountPins[i] == accountPinInput){
-                if(userAccountsInfo[userAccountNos[i]] == accountPinInput){
-                    showBalanceContent();
-                    showLogoutButton();
-                    break;
-                }else{
-                    passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.", "red");
-                }
-            }else{
-        passMessageToElement("accountNoP","Please verify that your account No. and PIN are correct.", "red");
+function loginF(event) {
+    event.preventDefault(); // Prevent the form from submitting and reloading the page
+    var accountNoInput = getValueById("accountNoInput");
+    var accountPinInput = getValueById("pinNoInput");
+    resetMessages(["balanceAccountNoP", "withdrawP"]);
+
+    if (accountNoInput && accountPinInput) {
+        fetch(URL+'/api/fetch-user', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                userAccountNo: accountNoInput,
+                userAccountPin: accountPinInput,
+            }),
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.customerName) {
+                // Using local storage to set the currently logged in user
+                localStorage.setItem("loggedInUser", data.customerName);
+                localStorage.setItem("loggedInUserId",data.customerId);
+                showLogoutButton();
+                setBalance(data.customerBalance);
+                fillRMNotesArrays();
+                showBalanceContent();
+            } else {
+                passMessageToElement("loginMessageP", "Please verify that your account No. and PIN are correct.", "red");
             }
-        }
+        })
+        .catch(error => {
+            console.error('Error fetching user data:', error);
+            passMessageToElement("loginMessageP", "We're having a problem connecting to the database<br>Please try again later.", "red");
+        });
     }
-    else if(accountNoInput){
-            passMessageToElement("pinNoP","PIN No. field cannot be empty.", "orange");
-    }
-    else{
-            passMessageToElement("accountNoP","Account No. field cannot be empty.", "orange");
-    }
-    return false;
+    return false; // Ensure the form does not submit
 }
+
+
 //a function that runs when the user clicks the button Withdraw in the 'withdraw' section
 function withdrawF(){
     var totalNotesAvailableSum = 0;
@@ -80,7 +73,7 @@ function withdrawF(){
         for (let x=RMNotes.length-1; x >= 0; x--) {
             if (tempRMNotesAvailable[x] > 0) {
                 //convert to the nearest lower integer (lower [or equal to] than the result of the division);
-                var noteCount = Math.floor(withdrawAmount / RMNotes[x]);
+                var noteCount = parseInt(Math.floor(withdrawAmount / RMNotes[x]));
                 if (noteCount > 0) {
                     if (noteCount > tempRMNotesAvailable[x]) {
                         noteCount = tempRMNotesAvailable[x];
@@ -104,10 +97,15 @@ function withdrawF(){
                 RMNotesAvailable[x] = tempRMNotesAvailable[x];
             }
             //refresh the view to show the user that notes' quantity have indeed changed in the ATM
-            showWithdrawContent();
+            setTimeout(function (){
+                showWithdrawContent();
+              }, 1000);
+            
         } else {
             //refresh the view (to make sure the note count did not change).
-            showWithdrawContent();
+            setTimeout(function (){
+                showWithdrawContent();
+              }, 1000);
             passMessageToElement("withdrawP", "Sorry, this machine doesn't support notes other than " + getArrayContentsMessage(RMNotes, " "), "orange");
             
         }
@@ -131,7 +129,7 @@ function depositF(){
             //did not use push() because the array is being traversed in reverse
             tempRMNotesAvailable[x] = RMNotesAvailable[x];
             if(depositAmount > 0){
-                var noteCount = Math.floor(depositAmount / RMNotes[x]);
+                var noteCount = parseInt(Math.floor(depositAmount / RMNotes[x]));
                 if (noteCount > 0) {
                     tempRMNotesAvailable[x] += noteCount;
                     depositAmount -= noteCount * RMNotes[x];
@@ -144,13 +142,18 @@ function depositF(){
             for(let x = 0; x<RMNotesAvailable.length;x++){
                 RMNotesAvailable[x] = tempRMNotesAvailable[x];
             }
-            //refresh the view to show the user that notes' quantity have indeed changed in the ATM
-            showDepositContent();
+            //refresh the view to show the user that notes' quantity have indeed changed in the ATM after 1 second of waiting.
+            setTimeout(function (){
+                showDepositContent();
+              }, 1000);
+            
             passMessageToElement("depositP","Your deposit of RM"+ogDepositAmount.toLocaleString()+" has been added to your account funds.<br><br>Your current balance is: "+ getAccountBalance().toLocaleString(), "green");
         }
         else{
             //refresh the view (to make sure the note count did not change).
-            showDepositContent();
+            setTimeout(function (){
+                showDepositContent();
+              }, 1000);
             passMessageToElement("depositP", "Sorry This machine only accepts "+ getArrayContentsMessage(RMNotes, " ")+ "Notes", "orange"); 
         }
     }
@@ -176,6 +179,7 @@ function showWithdrawContent(){
         showContent(1);
         changeValue("withdrawInput");
         passMessageToElement("availableNotesWP");
+        fillRMNotesArrays();
         for(let x = 0; x<RMNotes.length; x++){
       document.getElementById("availableNotesWP").innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
         }
@@ -191,6 +195,7 @@ function showDepositContent(){
         passMessageToElement("withdrawP");
         changeValue("depositInput");
         passMessageToElement("availableNotesDP");
+        fillRMNotesArrays();
         for(let x = 0; x<RMNotes.length; x++){
             document.getElementById("availableNotesDP").innerHTML += "There are: "+RMNotesAvailable[x] + " of RM"+ RMNotes[x]+"<br><br>";
               }
@@ -207,7 +212,7 @@ function showBalanceContent(){
         passMessageToElement("withdrawP");
         passMessageToElement("balanceAccountNoP");
         // Display the message Welcome (username); where username  = the name of the currently logged in user.
-        fillUsernameFields(userAccountUsername[loggedInUser()]);
+        fillUsernameFields(loggedInUser());
         passMessageToElement("balanceButton","Reveal Your Balance", "black");
         balanceRevealed = false;
     }
@@ -224,7 +229,6 @@ function showLoginMenu(){
     else{
     showContent(0);
     passMessageToElement("loginMessageP");
-    passMessageToElement("accountNoP");
     hideLogoutButton();
     //reset the message to default (basically no username)
     fillUsernameFields("(Username)");
@@ -293,13 +297,43 @@ function fillUsernameFields(username){
 }
 //Updating the account's balance with (amount).
 function updateAccountBalance(amount) {
-    userAccountsBalance[loggedInUser()] += amount;
+    var newAmount = parseInt(parseInt(localStorage.getItem("Balance"))+parseInt(amount));
+    localStorage.setItem("Balance", newAmount);
+    var customerId = localStorage.getItem("loggedInUserId");
+    if(!customerId){
+        console.log("Customer ID was not fond in local storage. ATM.js error");
+    }
+    fetch(URL+'/api/update-balance', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },body: JSON.stringify({
+                customerId: customerId,
+                customerBalance: newAmount,
+            }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data){
+            //do nothing, Balance update was successful.
+        }
+        else{
+            console.error('Error updating user balance in the database: ', error);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating user balance in the database: ', error);
+    });
+    updateRMNoteCount();
 }
 //fetch the logged in user's balance from the array.
 function getAccountBalance(){
-    return userAccountsBalance[loggedInUser()];
+    return localStorage.getItem("Balance");
 }
 
+function setBalance(balance){
+    localStorage.setItem("Balance", balance);
+}
 function loggedInUser(){
     //return null if the item doesn't exist (user isn't logged in) and the user's index if the user is logged in.
     return localStorage.getItem("loggedInUser");
@@ -307,4 +341,62 @@ function loggedInUser(){
 
 function changeValue(elementId, newValue = ""){
     document.getElementById(elementId).value = newValue;
+}
+
+function fillRMNotesArrays(){
+    fetch(URL+'/api/fetch-notes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.cash_id) {
+            RMNotesId = [];
+            RMNotes = [];
+            RMNotesAvailable = [];
+            for(let i = 0; i<data.cash_id.length; i++){
+                //saving the values to a local variable to use easily
+                RMNotesId.push(data.cash_id[i]);
+                RMNotes.push(data.notes[i]);
+                RMNotesAvailable.push(data.count[i]);
+            }
+        } else {
+            passMessageToElement("availableNotesWP", "Error fetching Notes' data from the database", "red");            
+            passMessageToElement("availableNotesDP", "Error fetching Notes' data from the database", "red");            
+
+        }
+    })
+    .catch(error => {
+        console.error('Error fetching notes data:', error);
+        passMessageToElement("availableNotesWP", "We're having a problem connecting to the database<br>Please try again later.", "red");
+        passMessageToElement("availableNotesDP", "We're having a problem connecting to the database<br>Please try again later.", "red");
+    });
+}
+function updateRMNoteCount(){
+    for(let i = 0; i<RMNotesId.length;i++){
+
+    fetch(URL+'/api/update-notes', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },body: JSON.stringify({
+                RMNotesId: RMNotesId[i],
+                RMNotesAvailable: RMNotesAvailable[i],
+            }),
+    })
+    .then(response => response.json())
+    .then(data => {
+        if(data){
+            //do nothing, RM Note count update was successful.
+        }
+        else{
+            console.error('Error updating RM Note count in the database: ', error);
+        }
+    })
+    .catch(error => {
+        console.error('Error updating RM Note count in the database: ', error);
+    });
+}
 }
