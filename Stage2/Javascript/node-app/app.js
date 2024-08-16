@@ -12,6 +12,5 @@ const readline = require("readline").createInterface({
 readline.question("What is your name? ", function (name) {
     console.log("Hello, " + name + "!");
 
-    // Close the input interface
     readline.close();
 });
