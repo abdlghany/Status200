@@ -1,0 +1,14 @@
+{
+  "name": "projectinclass",
+  "version": "1.0.0",
+  "description": "Oh no this is a project in class",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "ohit's me",
+  "license": "ISC",
+  "dependencies": {
+    "mysql2": "^3.11.0"
+  }
+}

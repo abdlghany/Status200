@@ -1,30 +1,35 @@
 const mysql = require("mysql2");
-var selectCustPin = "SELECT customerpin FROM customers WHERE customeraccountno = ?";
-
+var query = "SELECT * from teachers order by TeacherID DESC";
+var query2 = "INSERT INTO `teachers` VALUES (NULL,?,?,?)";
+var query3 = "DELETE FROM TEACHERS WHERE TeacherID = 28"
+var lastid;
+var firstName = "First Name is: ";
+var lastName = "Last Name is: ";
+var subject = "Subject is: "
 const con = mysql.createConnection({
     host: "localhost",
     user: "abdalghany",
     password: "ohitsme",
-    database:"atm"
+    database:"status200college"
   });
-
-function connectToDB(){
-    con.connect(function(err) {
-      if (err) return err;
-      // console.log("Connected!");
-    });
-}
-
-function fetchPasswordFromDb2(userAccountNo, callback){
-    con.query(selectCustPin, [userAccountNo], function(err, result, fields) {
-        if (err) return callback(err, null);
-        if (result && result.length > 0) {
-          callback(null, result[0].customerpin);
-        } else {
-          callback(null, "User does not exist");
-        }
-    });
-}
-
-module.exports.fetchUserPassword2 = fetchPasswordFromDb2;
-module.exports.connectToDB = connectToDB;
+  con.query(query ,function(err, results) {
+    if (results) {
+      console.log(results);
+      lastid = results[0].TeacherID;
+      firstName += lastid;
+      lastName += lastid;
+      subject += lastid;
+      console.log("Last ID: "+lastid);
+    }
+  });
+  con.query(query2, [firstName, lastName, subject], function(err, results) {
+    if (results) {
+      console.log(results);
+    }
+  });
+  con.query(query3, function(err, results) {
+    if (results) {
+      console.log(results);
+    }
+  });
+  con.end();
