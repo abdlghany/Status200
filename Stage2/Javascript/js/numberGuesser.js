@@ -1,3 +1,11 @@
+const mysql = require("mysql2");
+const connection = mysql.createConnection({
+    host: "localhost",
+    user: "abdalghany",
+    password: "ohitsme",
+    database:"numberGuesser"
+});
+
 const readline = require("readline").createInterface({
     input: process.stdin,
     output: process.stdout,

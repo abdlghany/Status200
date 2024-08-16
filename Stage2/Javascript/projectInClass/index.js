@@ -152,7 +152,7 @@ function deleteARecord(){
 }
 function runApp(){
 // Ask the user a question
-readline.question("\nWould you like to play a game? (Y/N/)\nOR I to view past scores\nOR D to delete an existing score\n", function (answer) {
+readline.question("\nWould you like to play a game? (Y/N/)\nOR (I) to view past scores\nOR (D) to delete an existing score\n", function (answer) {
     if(answer.toLocaleLowerCase() == "yes" || answer == "y" || answer == "Y" ){
         showPlayerNames();
     }
@@ -169,7 +169,14 @@ readline.question("\nWould you like to play a game? (Y/N/)\nOR I to view past sc
 });
 }
 
+//  runApp();
 
-runApp();
+var name = "Abd";
+var age = 16;
+var isStudent = true;
+var subject = ["Subject 1", "Subject 2"];
 
-
+var jasonString = '{"name": "'+name+'","age": '+age+',"isStudent": '+isStudent+',"subject": "'+subject+'"}';
+console.log("as a String: "+jasonString);
+var jasonObject = JSON.parse(jasonString);
+console.log("as a json object: ", jasonObject);
