@@ -8,8 +8,8 @@ const connection = mysql.createConnection({
 });
 var NAME = "";
 var CITY = "";
-
 var IDS = [];
+
 /* var create_table_players = "CREATE TABLE players (player_id INT NOT NULL AUTO_INCREMENT , player_name VARCHAR(30) NOT NULL , player_city VARCHAR(20) NOT NULL , PRIMARY KEY (`player_id`))";
 var create_table_games = "CREATE TABLE games (game_id INT NOT NULL AUTO_INCREMENT , player_id INT NOT NULL , score INT NOT NULL , PRIMARY KEY (game_id), FOREIGN KEY (player_id) REFERENCES players(player_id)); ";
 //create the players table
