@@ -121,19 +121,6 @@ function getLoginInformation(username){
             
     });
 }
-/* 
-function loginPassword(username){
-    readline.question("Please enter your password: ", function (input) {
-        input = input.trim();
-        if(validateInputString(input) || validateInputNumber(input)){
-            login(username, input);
-        }
-        else{
-            console.log("Please enter a valid password (50 characters or less).");
-            loginPassword();
-        }
-    });
-} */
 
 function login(username, password){
     connection.query("SELECT user_id as id, user_name as username, password, nickname from users where user_name = ? AND password = ?",[username, password], function(err, results){
@@ -165,7 +152,7 @@ function summary(userId){
                     totalPlaytime  += parseInt(results[i].difference_in_seconds);
                 }
                 averageScore /= results.length;
-                console.log("\n--------------------------Summary--------------------------\nTotal games played: "+results.length + " game(s).\nYour average overall score: "+ averageScore.toFixed(2) + " attempt(s).");
+                console.log("\n-------------------------- Summary --------------------------\nTotal games played: "+results.length + " game(s).\nYour average overall score: "+ averageScore.toFixed(2) + " attempt(s).");
                 if(totalPlaytime > 60){
                     console.log("Total Playtime: "+ parseFloat(totalPlaytime/60).toFixed(2) + " minutes");
                 }
@@ -187,11 +174,11 @@ function summary(userId){
 function  mainMenu(userId){
     //wait for scoreboard to finish printing before showing the main menu.
     scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, games.score as score from users join games on games.user_id = users.user_id ORDER BY score, nickname ASC",
-        "\n--------------------------Scoreboard (lower is better)--------------------------\n", function(){
+        "\n-------------------------- Scoreboard (lower is better) --------------------------\n", function(){
             scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, AVG(games.score) as score from users join games on games.user_id = users.user_id group by id, name, nickname ORDER BY score, nickname ASC",
-                "\n--------------------------Averages Scoreboard (lower is better)--------------------------\n", function(){  
+                "\n-------------------------- Averages Scoreboard (lower is better) --------------------------\n", function(){  
         readline.question(
-            `\n--------------------------Main Menu--------------------------\n1: Summary of your past games\n2: Start new game\nu: Update account information\nd: Delete account\nc: Clear screen\nx: Quit\n--------------------------\nYour selection: `, function (input) {
+            `\n-------------------------- Main Menu --------------------------\n1: Summary of your past games\n2: Start new game\nu: Update account information\nd: Delete account\nc: Clear screen\nx: Quit\n--------------------------\nYour selection: `, function (input) {
                 input = input.trim().toLowerCase();
                 if(validateInputString(input) || validateInputNumber(input)){
                     if(input == 1){
@@ -209,8 +196,9 @@ function  mainMenu(userId){
                             if(gamesStatus){
                               changeAccountStatus(userId, "users", function(usersStatus){
                                 if(usersStatus){
-                                    console.log("Account deleted successfully.");
-                                    console.log("Sorry to see you go...Hope you enjoyed, Goodbye\n");
+                                    console.clear();
+                                    console.log("\nAccount deleted successfully.");
+                                    console.log("Sorry to see you go...Hope you enjoyed, Goodbye.\n");
                                     greet();
                                 }
                                 else{
@@ -348,6 +336,7 @@ function again(userId){
             initiateGame(userId);
         }
         else {
+            console.clear();
             mainMenu(userId);
         }
 });
@@ -384,7 +373,7 @@ function validateInputNumber(stringToValidate){
 }
 
 function greet(){
-    readline.question("\nWould you like to register a new account? (register/R)\nOr Login? (login/L):\n", function (input) {
+    readline.question("\nWould you like to register a new account? (Register/R)\nOr Login? (Login/L)\nYour slection:\n", function (input) {
         input = input.toLowerCase().trim();
         if(validateInputString(input)){
             if(input == "register" || input == "r"){
@@ -432,7 +421,7 @@ connection.query(query, function(err, results){
 });
 }
 console.clear();
-console.log("--------------------\nWelcome to the number guessing Game!--------------------\n");
+console.log("-------------------- Welcome to the number guessing Game! --------------------\n");
 greet();
 
 // Below commented code is to test the Math.random() limits, to select a valid formula for min-max based on variables
