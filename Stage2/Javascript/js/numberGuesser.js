@@ -12,9 +12,7 @@ games(int, int, int, datetime,datetime);
 MYSQL datetime format YYYY-MM-DD HH:MI:SS
 */
 
-const { connect } = require("http2");
 const mysql = require("mysql2");
-const { clearScreenDown } = require("readline");
 const connection = mysql.createConnection({
     host: "localhost",
     user: "abdalghany",
@@ -29,12 +27,12 @@ const readline = require("readline").createInterface({
 var max = 100;
 var min = 1;
 var NumberToGuess = 0;
-var numberOfGuesses = [];
+var numberOfGuesses = 0;
+var gameStartDateTime;
 //to start at index 0;
-var numberOfGamesPlayed = -1;
-var LoggedInUserID = -1;
+
 function registerUsername(){
-    readline.question("Please enter your username: ", function (input) {
+    readline.question("Please enter a username: ", function (input) {
         input = input.trim();
         if(validateInputString(input)){
             registerPassword(input);
@@ -47,7 +45,7 @@ function registerUsername(){
 }
 
 function registerPassword(username){
-    readline.question("Please enter your password: ", function (input) {
+    readline.question("Please enter a password: ", function (input) {
         input = input.trim();
         if(validateInputString(input) || validateInputNumber(input)){
             connection.query("SELECT user_name as username, password from users where user_name = ? AND password = ?",[username, input], function(err, results){
@@ -55,6 +53,7 @@ function registerPassword(username){
                     console.error("Error while connecting to the database!");
                 }
                 else if(results[0]){
+                    console.clear();
                     console.error("Your account already exists, please use the login function, or register using a new username.");
                     greet();
                 }//account does not exist and no errors happened when querying the user details.
@@ -71,7 +70,7 @@ function registerPassword(username){
 }
 
 function registerNickName(username, password){
-    readline.question("Please enter your nickname: ", function (input) {
+    readline.question("Please enter a nickname: ", function (input) {
         input = input.trim();
         if(validateInputString(input)){
             registerToDB(username, password, input);
@@ -84,7 +83,7 @@ function registerNickName(username, password){
 }
 
 function registerToDB(username, password, nickname){
-connection.query("INSERT INTO users VALUES (NULL,?,?,?,1)",[username, nickname, password], function(err, results){
+connection.query("INSERT INTO users VALUES (NULL,?,?,?)",[username, nickname, password], function(err, results){
     if(err){
         console.error("Something went wrong when accessing the database! " + err);
     }
@@ -96,19 +95,33 @@ connection.query("INSERT INTO users VALUES (NULL,?,?,?,1)",[username, nickname, 
 });
 }
 
-function loginUsername(){
-    readline.question("Please enter your username: ", function (input) {
+function getLoginInformation(username){
+    var message = "Please enter your username: ";
+    if(username){
+        message = "Please enter your password: ";
+    }
+    readline.question(message, function (input) {
         input = input.trim();
-        if(validateInputString(input)){
-            loginPassword(input);
+        // if the input is not username, means it's password, so if username does not exist, means the input is "password"
+        if( (!username && validateInputString(input)) || (username && (validateInputNumber(input) || validateInputString(input)))){
+            if(username){
+                login(username, input);
+            }else{
+                getLoginInformation(input);
+            }
+        }
+        else if(username){
+            console.log("Please enter a valid password (50 characters or less).");
+            getLoginInformation(username);
         }
         else{
             console.log("Please enter a valid username (50 characters or less).");
-            loginUsername();
+            getLoginInformation();
         }
+            
     });
 }
-
+/* 
 function loginPassword(username){
     readline.question("Please enter your password: ", function (input) {
         input = input.trim();
@@ -120,7 +133,7 @@ function loginPassword(username){
             loginPassword();
         }
     });
-}
+} */
 
 function login(username, password){
     connection.query("SELECT user_id as id, user_name as username, password, nickname from users where user_name = ? AND password = ?",[username, password], function(err, results){
@@ -130,13 +143,15 @@ function login(username, password){
             mainMenu(parseInt(results[0].id));
         }
         else{
+            console.clear();
             console.error("Wrong username or password, plaese try again or register a new account.");
             greet();
         }
     });
 }
+
 function summary(userId){
-    connection.query("SELECT score, TIMESTAMPDIFF(MINUTE, start_time, end_time) AS difference_in_minutes from games where user_id = ?", [userId], function (err, results){
+    connection.query("SELECT score, TIMESTAMPDIFF(SECOND, start_time, end_time) AS difference_in_seconds from games where user_id = ?", [userId], function (err, results){
         if(err){console.error("Error while fetching your summary data. ", err);}
         else if(results){
             var averageScore = 0;
@@ -147,94 +162,102 @@ function summary(userId){
             else{
                 for(let i = 0; i< results.length; i++){
                     averageScore += parseInt(results[i].score);
-                    totalPlaytime  += parseInt(results[i].difference_in_minutes);
+                    totalPlaytime  += parseInt(results[i].difference_in_seconds);
                 }
                 averageScore /= results.length;
-                console.log("\nTotal games you've played: "+results.length + "\nYour average overall score: "+ averageScore + " attempts.");
+                console.log("\n--------------------------Summary--------------------------\nTotal games played: "+results.length + " game(s).\nYour average overall score: "+ averageScore.toFixed(2) + " attempt(s).");
                 if(totalPlaytime > 60){
-                    console.log("Total Playtime: "+ parseFloat(totalPlaytime/60).toFixed(2) + " hours");
+                    console.log("Total Playtime: "+ parseFloat(totalPlaytime/60).toFixed(2) + " minutes");
+                }
+                else if(totalPlaytime > 3600){
+                    console.log("Total Playtime: "+ parseFloat(totalPlaytime/60/60).toFixed(2) + " hours");
                 }
                 else{
-                    console.log("Total Playtime: "+totalPlaytime + " minutes");
+                    console.log("Total Playtime: "+totalPlaytime + " seconds");
                 }
             }
-            
         }
         else{
             console.error("Seems like you have no game history, please play a game first then view summary!");
         }
-        mainMenu();
+        mainMenu(userId);
     });
 }
 
 function  mainMenu(userId){
-    readline.question(
-        `\n--------------------\nMain Menu\n--------------------
-1: Summary of your past games
-2: Start new game
-u: Update account information
-d: Delete account
-x: Quit
---------------------\nYour selection: `, function (input) {
-            input = input.trim().toLowerCase();
-            if(validateInputString(input) || validateInputNumber(input)){
-                if(input == 1){
-                    summary(userId);
-                }
-                else if(input == 2){
-
-                }
-                else if(input == "u"){
-                    updateAccountDetails(userId);
-                }
-                else if(input == "d"){
-                    changeAccountStatus(userId, "GAMES", function (gamesStatus){
-                        if(gamesStatus){
-                          changeAccountStatus(userId, "users", function(usersStatus){
-                            if(usersStatus){
-                                console.log("Account deleted successfully.");
-                                console.log("Sorry to see you go...Hope you enjoyed, Goodbye\n");
-                                greet();
+    //wait for scoreboard to finish printing before showing the main menu.
+    scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, games.score as score from users join games on games.user_id = users.user_id ORDER BY score, nickname ASC",
+        "\n--------------------------Scoreboard (lower is better)--------------------------\n", function(){
+            scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, AVG(games.score) as score from users join games on games.user_id = users.user_id group by id, name, nickname ORDER BY score, nickname ASC",
+                "\n--------------------------Averages Scoreboard (lower is better)--------------------------\n", function(){  
+        readline.question(
+            `\n--------------------------Main Menu--------------------------\n1: Summary of your past games\n2: Start new game\nu: Update account information\nd: Delete account\nc: Clear screen\nx: Quit\n--------------------------\nYour selection: `, function (input) {
+                input = input.trim().toLowerCase();
+                if(validateInputString(input) || validateInputNumber(input)){
+                    if(input == 1){
+                        console.clear();
+                        summary(userId);
+                    }
+                    else if(input == 2){
+                        initiateGame(userId);
+                    }
+                    else if(input == "u"){
+                        updateAccountDetails(userId);
+                    }
+                    else if(input == "d"){
+                        changeAccountStatus(userId, "GAMES", function (gamesStatus){
+                            if(gamesStatus){
+                              changeAccountStatus(userId, "users", function(usersStatus){
+                                if(usersStatus){
+                                    console.log("Account deleted successfully.");
+                                    console.log("Sorry to see you go...Hope you enjoyed, Goodbye\n");
+                                    greet();
+                                }
+                                else{
+                                    console.error("Failed to delete your account, try again later.");
+                                    mainMenu(userId);
+                                }
+                              });
                             }
                             else{
                                 console.error("Failed to delete your account, try again later.");
-                                mainMenu();
+                                mainMenu(userId);
                             }
-                          });
-                        }
-                        else{
-                            console.error("Failed to delete your account, try again later.");
-                            mainMenu();
-                        }
-                    });  
+                        });  
+                    }
+                    else if(input == "c"){
+                        console.clear();
+                        mainMenu(userId);
+                    }
+                    else if(input == "x"){
+                        console.log("Hope you enjoyed, Goodbye!");
+                        connection.end();
+                        readline.close();
+                    }
                 }
-                else if(input == "x"){
-                    console.log("Hope you enjoyed, Goodbye!");
-                    connection.end();
-                    readline.close();
+                else{
+                    console.error("Please select a valid option!");
+                    mainMenu(userId);
                 }
-            }
-            else{
-                console.error("Please select a valid option!");
-                mainMenu();
-            }
-    });
+        });
+    });});
+
 }
 function updateAccountDetails(userId){
-    readline.question("Select which of your account information you'd like to change: \nu: Username\nn: Nickname\np: Password\nx: Back to Main Menu", function(input){
+    readline.question("Select which of your account information you'd like to change: \nu: Username\nn: Nickname\np: Password\nx: Back to Main Menu\nYour selection: ", function(input){
         input = input.trim().toLowerCase();
         if(validateInputString(input)){
             if(input == "u"){
-                newAccountInfo(userId, "user_name", "Username");
+                updateAccountInfo(userId, "user_name", "Username");
             }
             else if(input == "n"){
-                newAccountInfo(userId, "nickname", "Nickname");
+                updateAccountInfo(userId, "nickname", "Nickname");
             }
             else if(input == "p"){
-                newAccountInfo(userId, "password", "Password");
+                updateAccountInfo(userId, "password", "Password");
             }
             else if(input == "x"){
-                mainMenu();
+                mainMenu(userId);
             }
             else{console.error("Please select a valid option.");}
         }
@@ -244,20 +267,27 @@ function updateAccountDetails(userId){
     });
 }
 
-function newAccountInfo(userId, dbColumnName, columnName){
-    readline.question("Enter your new "+columnName+": ", function(newUsername){
-        newUsername = newUsername.trim().toLowerCase();
+function updateAccountInfo(userId, dbColumnName, columnName){
+    readline.question("Enter your new "+columnName+": ", function(newRowValue){
+        newRowValue = newRowValue.trim().toLowerCase();
         if(validateInputString(username)){
             connection.query("UPDATE USERS SET "+dbColumnName+" = ? where user_id = ?",[username, userId], function(err, results){
-                if(err){console.error("An error happened while updating your "+columnName+", please try again later. " + err);}
-                else if(results){console.log(columnName+" updated successfully");}
-                else{}
+                if(err){
+                    console.error("An error happened while updating your "+columnName+", please try again later. " + err);
+                }
+                else if(results){
+                    console.log(columnName+" updated successfully.\nYour new "+columnName+" is "+newRowValue+".");
+                }
+                else{
+                    console.error("Something went wrong, please try again later.");
+                }
             });
         }else{
             console.log("Please enter a valid username (50 characters or less).");
         }
     });
 }
+
 function changeAccountStatus(userId, table, callback){
     connection.query("DELETE FROM "+table+" WHERE user_id = ?",[userId], function (err, results){
         if(err){
@@ -274,67 +304,67 @@ function changeAccountStatus(userId, table, callback){
     });
 }
 
-function getNumber(){
+function getNumber(userId){
     readline.question("Your guess: ", function (input) {
         if(validateInput(input)){
             input = parseInt(input);
-            numberOfGuesses[numberOfGamesPlayed]++;
+            numberOfGuesses++;
             if(input == NumberToGuess){
-                console.log("Correct! Congratulations You won after "+numberOfGuesses[numberOfGamesPlayed]+" attempts.\nThe correct answer is: "+NumberToGuess);
-                again();
+                console.log("Correct! Congratulations You won after "+numberOfGuesses+" attempts.\nThe correct answer is: "+NumberToGuess);
+                //stop the timer.
+               const gameEndDateTime = getCurrentDateTime();
+                connection.query("INSERT INTO GAMES VALUES (NULL, ?, ?,?,?)", [userId, numberOfGuesses, gameStartDateTime, gameEndDateTime], function(err, results){
+                    if(err){
+                        console.error("Error while saving your progress. "+err);
+                    }
+                    else if(results){
+                        console.log("Progress saved successfully!");
+                    }
+                    else{
+                        console.error("Error while saving your progress. "+err);
+                    }
+                    again(userId);
+                });
             }
             else if(input > NumberToGuess){
-                console.error("Try Lower!");
-                getNumber();
+                console.error("Lower!");
+                getNumber(userId);
             }
             else if (input < NumberToGuess){
-                console.error("Try Higher!");
-                getNumber();
+                console.error("Higher!");
+                getNumber(userId);
             }
         }
         else{
             console.error("Please enter a valid number between "+min+" and "+max);
-            getNumber();
+            getNumber(userId);
         }
     });
 }
 
-function again(){
-    var averageNoOfAttempts = 0;
-    var numberOfGuessesMessage = "(";
-            for(let i = 0; i< numberOfGuesses.length;i++){
-                if(i == numberOfGuesses.length-1){
-                    numberOfGuessesMessage += numberOfGuesses[i];
-                }
-                else{
-                    numberOfGuessesMessage += numberOfGuesses[i]+", ";
-                }
-                averageNoOfAttempts += numberOfGuesses[i];
-            }
-    console.log("\nNumber of attempts it took you to win each past try: " + numberOfGuessesMessage+")" + " Total games played: "+(numberOfGamesPlayed+1));
-    console.log("Average attempt count for all of your games so far: " + (averageNoOfAttempts / numberOfGuesses.length).toFixed(2));
-    readline.question("\nWould you like to play again or to change min/max values? \nOptions are (yes/no/min/max) or anything else to Exit.\nYour choice: ", function (input) {
+function again(userId){
+    readline.question("\nWould you like to play again\n(yes/no)\nYour selection: ", function (input) {
         if(input.toLowerCase() =="yes" || input =="y" || input =="Y"){
-            generateNumber();
-            getNumber();
-        }
-        else if(input.toLowerCase() == "min"){
-            newMin();
-        }
-        else if(input.toLowerCase() == "max"){
-            newMax();
+            initiateGame(userId);
         }
         else {
-            console.log("Thanks for playing, see you soon!");
-            readline.close();
+            mainMenu(userId);
         }
 });
 }
-
+function initiateGame(userId){
+     //reset the number of guesses.
+    numberOfGuesses = 0;
+    console.clear();
+    //generate a new "random" number.
+    generateNumber();
+    //start the timer.
+    gameStartDateTime = getCurrentDateTime();
+    //get the input from the user.
+    getNumber(userId);
+}
 function generateNumber(){
      NumberToGuess = Math.floor(Math.random()* (max - min + 1)) + min;
-     numberOfGamesPlayed++;
-     numberOfGuesses[numberOfGamesPlayed] = 0;
      console.log("I have selected a number between "+min+" and "+max+"\nCan you guess what it is?");
 }
 
@@ -353,49 +383,27 @@ function validateInputNumber(stringToValidate){
     else return false
 }
 
-function newMin(){
-    readline.question("Enter a new \"min\" value: ", function (newMin) {
-        if(validateInputNumber(newMin)){
-            min = parseInt(newMin);
-        }
-        else{
-            console.error("Please enter a valid number");
-            newMin();
-        }
-    });
-}
-
-function newMax(){
-    readline.question("Enter a new \"max\" value: ", function (newMax) {
-        if(validateInputNumber(newMax)){
-            max = parseInt(newMax);
-        }
-        else{
-            console.error("Please enter a valid number");
-            newMax();
-        }
-    });
-}
-
 function greet(){
-    readline.question("--------------------\nWelcome to the number guessing Game!\n\nWould you like to register a new account? (register/R)\nOr Login? (login/L):\n", function (input) {
+    readline.question("\nWould you like to register a new account? (register/R)\nOr Login? (login/L):\n", function (input) {
         input = input.toLowerCase().trim();
         if(validateInputString(input)){
             if(input == "register" || input == "r"){
                 registerUsername();
             }
             else if(input == "login" || input == "l"){
-                loginUsername();
+                getLoginInformation();
+            }else{
+                console.error("Please select a valid option");
+                greet();
             }
         }else{
-            console.error("Please enter a valid option");
+            console.error("Please select a valid option");
             greet();
         }
     });
 }
-
+//return DateTime MYSQL formatted and ready to be inserted:
 function getCurrentDateTime(){
-    //return DateTime MYSQL formatted and ready to be inserted:
     const now = new Date();
     const year = now.getFullYear();
     //console.log(year);
@@ -406,36 +414,26 @@ function getCurrentDateTime(){
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
     //console.log(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds);
-
     return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds
 }
-
-greet();
-
-function testDateTime(){
-    const currentDatetime = getCurrentDateTime();
-    const pastDateTime = "2024-08-16 23:08:15"
-
-    //console.log(currentDate ,currentTime, pastDate, pastTime );
-    connection.query("INSERT INTO GAMES VALUES (NULL, 1, ?,?,?)", [6,pastDateTime, currentDatetime], function(err, results){
-        if(err){
-            console.error("Error ", err);
+function scoreBoard(query, message, callback){
+connection.query(query, function(err, results){
+    if(results[0]){
+        var noOfLoops = 5;
+        if(results.length < noOfLoops){ noOfLoops = results.length;}
+        for(let i = 0; i < noOfLoops; i++){
+            var score = parseInt(results[i].score).toFixed(2);
+            message += parseInt(i+1) +". "+results[i].name + " (" +results[i].nickname + "): "+score + "\n"
         }
-        if(results){
-            console.log("Progress saved successfully!");
-        }
-        
-    });
-    
+        console.log(message);
+    }
+    else{/* Do not show anything if there's no data. */}
+    callback(true);
+});
 }
-
-// testDateTime();
-
-
-/* //generate a new "random" number.
-generateNumber();
-//get the input from the user.
-getNumber(); */
+console.clear();
+console.log("--------------------\nWelcome to the number guessing Game!--------------------\n");
+greet();
 
 // Below commented code is to test the Math.random() limits, to select a valid formula for min-max based on variables
 /* Note to future self: Comment the 3 function calls above this comment and uncomment 
