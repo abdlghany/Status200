@@ -308,7 +308,7 @@ function getNumber(userId){
                 console.log("\nCorrect!\nCongratulations, You won after "+numberOfGuesses+" attempts.\nThe correct answer is: "+NumberToGuess);
                 //stop the timer.
                const gameEndDateTime = getCurrentDateTime();
-                connection.query("INSERT INTO GAMES VALUES (NULL, ?, ?,?,?)", [userId, numberOfGuesses, gameStartDateTime, gameEndDateTime], function(err, results){
+                connection.query("INSERT INTO GAMES VALUES (NULL, ?, ?, ?, ?)", [userId, numberOfGuesses, gameStartDateTime, gameEndDateTime], function(err, results){
                     if(err){
                         console.error("Error while saving your progress. "+err);
                     }
