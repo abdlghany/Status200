@@ -14,6 +14,7 @@ MYSQL datetime format YYYY-MM-DD HH:MI:SS
 
 const { connect } = require("http2");
 const mysql = require("mysql2");
+const { clearScreenDown } = require("readline");
 const connection = mysql.createConnection({
     host: "localhost",
     user: "abdalghany",
@@ -50,9 +51,11 @@ function registerPassword(username){
         input = input.trim();
         if(validateInputString(input) || validateInputNumber(input)){
             connection.query("SELECT user_name as username, password from users where user_name = ? AND password = ?",[username, input], function(err, results){
-                if(err){console.error("Error while connecting to the database!");}
+                if(err){
+                    console.error("Error while connecting to the database!");
+                }
                 else if(results[0]){
-                    console.error("Your account already exists, please use the login function.");
+                    console.error("Your account already exists, please use the login function, or register using a new username.");
                     greet();
                 }//account does not exist and no errors happened when querying the user details.
                 else{
@@ -81,8 +84,10 @@ function registerNickName(username, password){
 }
 
 function registerToDB(username, password, nickname){
-connection.query("INSERT INTO users VALUES (NULL,?,?,?)",[username, nickname, password], function(err, results){
-    if(err){console.error("Something went wrong when accessing the database!");}
+connection.query("INSERT INTO users VALUES (NULL,?,?,?,1)",[username, nickname, password], function(err, results){
+    if(err){
+        console.error("Something went wrong when accessing the database! " + err);
+    }
     else if(results){
         console.log("Your account has been registered successfully.");
         //automatically login the user when they create an account for seamless experience.
@@ -136,18 +141,24 @@ function summary(userId){
         else if(results){
             var averageScore = 0;
             var totalPlaytime  = 0;
-            for(let i = 0; i< results.length; i++){
-                averageScore += parseInt(results[i].score);
-                totalPlaytime  += parseInt(results[i].difference_in_minutes);
-            }
-            averageScore /= results.length;
-            console.log("\nTotal games you've played so far: "+results.length + "\nYour average overall score: "+ averageScore + " attempts.");
-            if(totalPlaytime > 60){
-                console.log("Total Playtime: "+ parseFloat(totalPlaytime/60).toFixed(2) + " hours");
+            if(results.length == 0){
+                console.error("You have no game history yet, please play a game first then view summary!");
             }
             else{
-                console.log("Total Playtime: "+totalPlaytime + " minutes");
+                for(let i = 0; i< results.length; i++){
+                    averageScore += parseInt(results[i].score);
+                    totalPlaytime  += parseInt(results[i].difference_in_minutes);
+                }
+                averageScore /= results.length;
+                console.log("\nTotal games you've played: "+results.length + "\nYour average overall score: "+ averageScore + " attempts.");
+                if(totalPlaytime > 60){
+                    console.log("Total Playtime: "+ parseFloat(totalPlaytime/60).toFixed(2) + " hours");
+                }
+                else{
+                    console.log("Total Playtime: "+totalPlaytime + " minutes");
+                }
             }
+            
         }
         else{
             console.error("Seems like you have no game history, please play a game first then view summary!");
@@ -158,7 +169,7 @@ function summary(userId){
 
 function  mainMenu(userId){
     readline.question(
-        `--------------------\nMain Menu\n--------------------
+        `\n--------------------\nMain Menu\n--------------------
 1: Summary of your past games
 2: Start new game
 u: Update account information
@@ -174,10 +185,28 @@ x: Quit
 
                 }
                 else if(input == "u"){
-
+                    updateAccountDetails(userId);
                 }
                 else if(input == "d"){
-
+                    changeAccountStatus(userId, "GAMES", function (gamesStatus){
+                        if(gamesStatus){
+                          changeAccountStatus(userId, "users", function(usersStatus){
+                            if(usersStatus){
+                                console.log("Account deleted successfully.");
+                                console.log("Sorry to see you go...Hope you enjoyed, Goodbye\n");
+                                greet();
+                            }
+                            else{
+                                console.error("Failed to delete your account, try again later.");
+                                mainMenu();
+                            }
+                          });
+                        }
+                        else{
+                            console.error("Failed to delete your account, try again later.");
+                            mainMenu();
+                        }
+                    });  
                 }
                 else if(input == "x"){
                     console.log("Hope you enjoyed, Goodbye!");
@@ -191,6 +220,60 @@ x: Quit
             }
     });
 }
+function updateAccountDetails(userId){
+    readline.question("Select which of your account information you'd like to change: \nu: Username\nn: Nickname\np: Password\nx: Back to Main Menu", function(input){
+        input = input.trim().toLowerCase();
+        if(validateInputString(input)){
+            if(input == "u"){
+                newAccountInfo(userId, "user_name", "Username");
+            }
+            else if(input == "n"){
+                newAccountInfo(userId, "nickname", "Nickname");
+            }
+            else if(input == "p"){
+                newAccountInfo(userId, "password", "Password");
+            }
+            else if(input == "x"){
+                mainMenu();
+            }
+            else{console.error("Please select a valid option.");}
+        }
+        else{
+        console.error("Please select a valid option.");
+        }
+    });
+}
+
+function newAccountInfo(userId, dbColumnName, columnName){
+    readline.question("Enter your new "+columnName+": ", function(newUsername){
+        newUsername = newUsername.trim().toLowerCase();
+        if(validateInputString(username)){
+            connection.query("UPDATE USERS SET "+dbColumnName+" = ? where user_id = ?",[username, userId], function(err, results){
+                if(err){console.error("An error happened while updating your "+columnName+", please try again later. " + err);}
+                else if(results){console.log(columnName+" updated successfully");}
+                else{}
+            });
+        }else{
+            console.log("Please enter a valid username (50 characters or less).");
+        }
+    });
+}
+function changeAccountStatus(userId, table, callback){
+    connection.query("DELETE FROM "+table+" WHERE user_id = ?",[userId], function (err, results){
+        if(err){
+            console.error("An error happened while connecting to the database. " + err);
+            callback(false); // callback will return a value once the query has finished executing, return will not work here because of async -abd
+        }
+        else if(results){
+            callback(true);
+        }
+        else{
+            console.log("An error happened while deleting your account, please try again later.");
+            callback(false);
+        }
+    });
+}
+
 function getNumber(){
     readline.question("Your guess: ", function (input) {
         if(validateInput(input)){
@@ -248,11 +331,6 @@ function again(){
 });
 }
 
-function validateInput(input){
-    if(!isNaN(input) && input <= max && input >= min && input != "") return true;
-    else return false;
-}
-
 function generateNumber(){
      NumberToGuess = Math.floor(Math.random()* (max - min + 1)) + min;
      numberOfGamesPlayed++;
@@ -260,14 +338,24 @@ function generateNumber(){
      console.log("I have selected a number between "+min+" and "+max+"\nCan you guess what it is?");
 }
 
-function validateNumber(number){
-    if(!isNaN(number)&& number != "") return true;
+function validateInput(input){
+    if(!isNaN(input) && input <= max && input >= min && input != "") return true;
     else return false;
+}
+
+function validateInputString(stringToValidate){
+    if(stringToValidate != "" && stringToValidate.length <= 50 && isNaN(stringToValidate)){return true}
+    else return false
+}
+
+function validateInputNumber(stringToValidate){
+    if(stringToValidate != "" && stringToValidate.length <= 50 && !isNaN(stringToValidate)){return true}
+    else return false
 }
 
 function newMin(){
     readline.question("Enter a new \"min\" value: ", function (newMin) {
-        if(validateNumber(newMin)){
+        if(validateInputNumber(newMin)){
             min = parseInt(newMin);
         }
         else{
@@ -279,7 +367,7 @@ function newMin(){
 
 function newMax(){
     readline.question("Enter a new \"max\" value: ", function (newMax) {
-        if(validateNumber(newMax)){
+        if(validateInputNumber(newMax)){
             max = parseInt(newMax);
         }
         else{
@@ -288,18 +376,9 @@ function newMax(){
         }
     });
 }
-function validateInputString(stringToValidate){
-    if(stringToValidate != "" && stringToValidate.length <= 50 && isNaN(stringToValidate)){return true}
-    else return false
-}
-
-function validateInputNumber(stringToValidate){
-    if(stringToValidate != "" && stringToValidate.length <= 50 && !isNaN(stringToValidate)){return true}
-    else return false
-}
 
 function greet(){
-    readline.question("--------------------\nWelcome to the number guessing Game!\n\nWould you like to create an account? (register/R)\nOr Login? (login/L):\n", function (input) {
+    readline.question("--------------------\nWelcome to the number guessing Game!\n\nWould you like to register a new account? (register/R)\nOr Login? (login/L):\n", function (input) {
         input = input.toLowerCase().trim();
         if(validateInputString(input)){
             if(input == "register" || input == "r"){
@@ -314,6 +393,7 @@ function greet(){
         }
     });
 }
+
 function getCurrentDateTime(){
     //return DateTime MYSQL formatted and ready to be inserted:
     const now = new Date();
@@ -329,6 +409,7 @@ function getCurrentDateTime(){
 
     return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds
 }
+
 greet();
 
 function testDateTime(){
@@ -347,6 +428,7 @@ function testDateTime(){
     });
     
 }
+
 // testDateTime();
 
 
@@ -379,4 +461,3 @@ readline.close();
 
 testRandoms();
  */
-
