@@ -88,7 +88,7 @@ connection.query("INSERT INTO users VALUES (NULL,?,?,?)",[username, nickname, pa
         console.error("Something went wrong when accessing the database! " + err);
     }
     else if(results){
-        console.warn("Your account has been registered successfully.", "color: #11ff11");
+        console.warn("Your account has been registered successfully.");
         //automatically login the user when they create an account for seamless experience.
         login(username, password);
     }
@@ -412,6 +412,7 @@ function getCurrentDateTime(){
     //console.log(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds);
     return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds
 }
+
 function scoreBoard(query, message, callback){
 connection.query(query, function(err, results){
     if(results[0]){
