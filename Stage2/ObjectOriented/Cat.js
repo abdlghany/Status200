@@ -31,10 +31,10 @@ class Cat{
         }
         else if(!this.isAlive)
             {
-                console.error(this.name + " is dead :( can't sleep.");
+                console.error(this.name + " is dead :( can't bite.");
             }
             else{
-                console.error(this.name + " is sleeping, can't sleep.");
+                console.error(this.name + " is sleeping, can't bite.");
             }
     }
     eat(){
@@ -57,7 +57,7 @@ class Cat{
         }
         else if(!this.isAlive)
         {
-            console.error(this.name + " is dead :( can't eat.");
+            console.error(this.name + " is dead :( can't sleep.");
         }
         else{
             console.error(this.name + " is already sleeping, can't sleep again.");
@@ -83,7 +83,8 @@ class Cat{
             const ageInSeconds = Math.floor(ageInMilliseconds / 1000);
            
             console.log(this.name + " has died at the age of: " + (ageInSeconds) + " seconds");
-        }
+        }else{}
+        console.log(this.name + " is already dead... lifespan: " +ageInSeconds + " seconds" );
     }
     play(){
         if(!this.isAsleep && this.isAlive){
@@ -291,7 +292,7 @@ function catCommands(index){
             }
             else if(input == 6){
                 console.clear();
-                Cats[index].die();
+                Cats[index].die(getCurrentDateTime());
                 catCommands(index);
             }
             else if(input == 7){
