@@ -189,6 +189,7 @@ function  mainMenu(userId){
                         initiateGame(userId);
                     }
                     else if(input == "u"){
+                        console.clear();
                         updateAccountDetails(userId);
                     }
                     else if(input == "d"){
@@ -238,7 +239,6 @@ function  mainMenu(userId){
 
 }
 function updateAccountDetails(userId){
-    console.clear();
     readline.question("Select which of your account information you'd like to change:\n\nu: Username\nn: Nickname\np: Password\nx: Back to Main Menu\n--------------------------\nYour selection: ", function(input){
         input = input.trim().toLowerCase();
         if(validateInputString(input)){
@@ -265,24 +265,66 @@ function updateAccountDetails(userId){
 function updateAccountInfo(userId, dbColumnName, columnName){
     readline.question("Enter your new "+columnName+": ", function(newRowValue){
         newRowValue = newRowValue.trim().toLowerCase();
-        if(validateInputString(username)){
-            connection.query("UPDATE USERS SET "+dbColumnName+" = ? where user_id = ?",[username, userId], function(err, results){
-                if(err){
-                    console.error("An error happened while updating your "+columnName+", please try again later. " + err);
-                }
-                else if(results){
-                    console.log(columnName+" updated successfully.\nYour new "+columnName+" is "+newRowValue+".");
-                }
-                else{
-                    console.error("Something went wrong, please try again later.");
-                }
-            });
+        if( (dbColumnName == "user_name" && validateInputString(newRowValue)) || (dbColumnName == "password" && (validateInputNumber(newRowValue) || validateInputString(newRowValue)))){
+            if(dbColumnName == "user_name"){
+                connection.query("select user_name from users where user_name = ? AND password IN (select password from users where user_name = ?)",
+                    [newRowValue, newRowValue], function(err, results){
+                        if(err){
+                            console.clear();
+                            console.error("An error happened while updating your "+columnName+", please try again later. " + err);
+                            updateAccountDetails(userId);
+                        }
+                        if(results[0]){
+                            console.clear();
+                            console.error("This username already exists, Please select a different username.");
+                            updateAccountDetails(userId);
+                        }
+                        else{
+                            updateAccountInfoQuery(dbColumnName,columnName,newRowValue,userId);
+                        }
+                });
+            }
+            else if(dbColumnName == "password"){
+                connection.query("select password from users where password = ? AND user_name IN (select user_name from users where password = ?)",
+                    [newRowValue, newRowValue], function(err, results){
+                        if(err){
+                            console.error("An error happened while updating your "+columnName+", please try again later. " + err);
+                            updateAccountDetails(userId);
+                        }
+                        if(results[0]){
+                            console.error("An error happened while updating your "+columnName+", please choose a different " + columnName+".");
+                            updateAccountDetails(userId);
+
+                        }else{
+                            updateAccountInfoQuery(dbColumnName,columnName,newRowValue,userId);
+                        }
+                });
+            }       
         }else{
-            console.log("Please enter a valid username (50 characters or less).");
+            console.log("Please enter a valid "+columnName+" (50 characters or less).");
+            updateAccountInfo(userId, dbColumnName, columnName);
         }
     });
 }
-
+function updateAccountInfoQuery(dbColumnName,columnName,newRowValue,userId){
+    connection.query("UPDATE USERS SET "+dbColumnName+" = ? where user_id = ?",[newRowValue, userId], function(err, results){
+        if(err){
+            console.clear();
+            console.error("An error happened while updating your "+columnName+", please try again later. " + err);
+            updateAccountDetails(userId);
+        }
+        else if(results){
+            console.clear();
+            console.log(columnName+" updated successfully.\nYour new "+columnName+" is "+newRowValue+".");
+            mainMenu(userId);
+        }
+        else{
+            console.clear();
+            console.error("Something went wrong, please try again later.");
+            updateAccountDetails(userId);
+        }
+    }); 
+}
 function changeAccountStatus(userId, table, callback){
     connection.query("DELETE FROM "+table+" WHERE user_id = ?",[userId], function (err, results){
         if(err){
@@ -433,7 +475,7 @@ console.warn("\n-------------------- Welcome to the number guessing Game! ------
 greet();
 
 // Below commented code is to test the Math.random() limits, to select a valid formula for min-max based on variables
-/* Note to future self: Comment the 3 function calls above this comment and uncomment 
+/* Note to future self: Comment the 1 function call above this comment and uncomment 
 the code below to test, change the values of min-max from the top as needed. */
 
 /* var biggestNumber = min-1;
