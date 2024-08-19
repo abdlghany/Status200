@@ -173,9 +173,9 @@ function summary(userId){
 
 function  mainMenu(userId){
     //wait for scoreboard to finish printing before showing the main menu.
-    scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, games.score as score from users join games on games.user_id = users.user_id ORDER BY score, nickname ASC",
+    scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, games.score as score from users join games on games.user_id = users.user_id ORDER BY score, nickname ASC LIMIT 5",
         "\n-------------------------- Scoreboard (lower is better) --------------------------\n", function(){
-            scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, AVG(games.score) as score from users join games on games.user_id = users.user_id group by id, name, nickname ORDER BY score, nickname ASC",
+            scoreBoard("SELECT users.user_id as id, users.user_name as name, users.nickname as nickname, AVG(games.score) as score from users join games on games.user_id = users.user_id group by id, name, nickname ORDER BY score, nickname ASC LIMIT 5",
                 "\n-------------------------- Averages Scoreboard (lower is better) --------------------------\n", function(){  
         readline.question(
             `\n-------------------------- Main Menu --------------------------\nPlease choose one of of the available options:\n1: Summary of your past games\n2: Start new game\nu: Update account information\nd: Delete account\nc: Clear screen\nx: Quit\n--------------------------\nYour selection: `, function (input) {
@@ -470,6 +470,7 @@ connection.query(query, function(err, results){
     callback(true);
 });
 }
+
 console.clear();
 console.warn("\n-------------------- Welcome to the number guessing Game! --------------------\n");
 greet();
