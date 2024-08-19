@@ -20,9 +20,9 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is sleeping, can't meow.");
         } else if (this.isAngry) {
-            console.log(this.name + " is meowing angrily, do be careful!");
+            console.warn(this.name + " is meowing angrily, do be careful!");
         } else {
-            console.log(this.name + " is meowing.");
+            console.warn(this.name + " is meowing.");
         }
     }
 
@@ -32,9 +32,9 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is sleeping, can't bite.");
         } else if (this.isAngry) {
-            console.log(this.name + " is biting angrily, I'd tred lightly if I were you!");
+            console.warn(this.name + " is biting angrily, I'd tred lightly if I were you!");
         } else {
-            console.log(this.name + " is biting.");
+            console.warn(this.name + " is biting.");
         }
     }
 
@@ -44,9 +44,9 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is sleeping, can't eat.");
         } else if (this.isAngry) {
-            console.log(this.name + " is too angry to eat.");
+            console.warn(this.name + " is too angry to eat.");
         } else {
-            console.log(this.name + " is eating.");
+            console.warn(this.name + " is eating.");
             this.isEating = true;
         }
     }
@@ -57,12 +57,12 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is already sleeping.");
         } else if (this.isAngry) {
-            console.log(this.name + " is too angry to sleep, but tries to anyway...you got lucky this time buddy.");
+            console.warn(this.name + " is too angry to sleep, but tries to anyway...you got lucky this time buddy.");
             this.isAsleep = true;
             this.isAngry = false;
             this.isEating = false;
         } else {
-            console.log(this.name + " is sleeping.");
+            console.warn(this.name + " is sleeping.");
             this.isAsleep = true;
             this.isEating = false;
         }
@@ -72,52 +72,53 @@ class Cat {
         if (this.isAlive) {
             if (this.isAsleep) {
                 this.isAsleep = false;
-                console.log(this.name + " is now awake!");
+                console.warn(this.name + " is now awake!");
             } else {
                 console.error(this.name + " is already awake, can't be more awake.");
             }
+        }else{
+            console.error(this.name + "is dead :( can't wake up from that...");
         }
     }
 
     die(DateOfDeath) {
         if (this.isAlive) {
             this.isAlive = false;
-            const birthDate = new Date(this.dateOfBirth);
             this.dateofDeath = DateOfDeath;
-            const ageInMilliseconds = Math.abs(deathDate - birthDate);
+            const ageInMilliseconds = Math.abs(this.dateofDeath - this.dateOfBirth);
             const ageInSeconds = Math.floor(ageInMilliseconds / 1000);
             if(ageInSeconds > 60){
-                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60) + " minute(s)");
+                console.warn(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60) + " minute(s)");
             }else if(ageInSeconds > 3600){
-                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60) + " hour(s)");
+                console.warn(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60) + " hour(s)");
             }
             else if(ageInSeconds > 86400){
-                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24) + " day(s)");
+                console.warn(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24) + " day(s)");
             }
             else if(ageInSeconds > 2592000){
-                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30) + " month(s)");
+                console.warn(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30) + " month(s)");
             }
             else if(ageInSeconds > 31104000){
-                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30/12) + " year(s)");
+                console.warn(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30/12) + " year(s)");
             }else{
-                console.log(this.name + " has died :( at the age of: " + ageInSeconds + " second(s)");
+                console.warn(this.name + " has died :( at the age of: " + ageInSeconds + " second(s)");
             }
         } else {
             if(ageInSeconds > 60){
-                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60) + " minute(s)");
+                console.warn(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60) + " minute(s)");
             }else if(ageInSeconds > 3600){
-                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60) + " hour(s)");
+                console.warn(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60) + " hour(s)");
             }
             else if(ageInSeconds > 86400){
-                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24) + " day(s)");
+                console.warn(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24) + " day(s)");
             }
             else if(ageInSeconds > 2592000){
-                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30) + " month(s)");
+                console.warn(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30) + " month(s)");
             }
             else if(ageInSeconds > 31104000){
-                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30/12) + " year(s)");
+                console.warn(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30/12) + " year(s)");
             }else{
-                console.log(this.name + " has already died :( at the age of: " + ageInSeconds + " second(s)");
+                console.warn(this.name + " has already died :( at the age of: " + ageInSeconds + " second(s)");
             }
         }
     }
@@ -128,9 +129,9 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is sleeping, can't play.");
         } else if (this.isAngry) {
-            console.log(this.name + " is too angry to play and might scratch you!");
+            console.warn(this.name + " is too angry to play and might scratch you!");
         } else {
-            console.log(this.name + " is playing with you...");
+            console.warn(this.name + " is playing with you...");
         }
     }
 
@@ -140,9 +141,9 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is sleeping, can't purr.");
         } else if (this.isAngry) {
-            console.log(this.name + " is too angry to purr.");
+            console.warn(this.name + " is too angry to purr.");
         } else {
-            console.log(this.name + " is purring.");
+            console.warn(this.name + " is purring.");
         }
     }
 
@@ -150,12 +151,12 @@ class Cat {
         if (!this.isAlive) {
             console.error(this.name + " is dead :( can't get hurt anymore.");
         } else if (this.isAngry) {
-            console.log("OH YOU'VE DONE IT NOW...." + this.name + " IS EVEN ANGRIER! RUN!");
+            console.warn("OH YOU'VE DONE IT NOW...." + this.name.toUpperCase() + " IS EVEN ANGRIER! RUN!");
         } else {
             this.isAngry = true;
             this.isAsleep = false;
             this.isEating = false;
-            console.log(this.name + " is now angry.");
+            console.warn(this.name + " is now angry.");
         }
     }
 }
