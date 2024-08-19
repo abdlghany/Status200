@@ -391,7 +391,7 @@ function again(userId){
 });
 }
 function initiateGame(userId){
-     //reset the number of guesses.
+    //reset the number of guesses.
     numberOfGuesses = 0;
     console.clear();
     //generate a new "random" number.
