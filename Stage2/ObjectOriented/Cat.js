@@ -1,146 +1,169 @@
 const { fchown, read } = require("fs");
 
-class Cat{
-    constructor(name, gender, breed, color, dateOfBirth){
+class Cat {
+    constructor(name, gender, breed, color, dateOfBirth) {
         this.name = name;
         this.gender = gender;
         this.breed = breed;
         this.color = color;
         this.dateOfBirth = dateOfBirth;
+        this.dateofDeath = "";
         this.isAlive = true;
         this.isAsleep = false;
         this.isEating = false;
         this.isAngry = false;
     }
 
-    meow(){
-        if(!this.isAsleep && this.isAlive){
+    meow() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't meow.");
+        } else if (this.isAsleep) {
+            console.error(this.name + " is sleeping, can't meow.");
+        } else if (this.isAngry) {
+            console.log(this.name + " is meowing angrily, do be careful!");
+        } else {
             console.log(this.name + " is meowing.");
         }
-        else if(!this.isAlive)
-            {
-                console.error(this.name + " is dead :( can't meow.");
-            }
-            else{
-                console.error(this.name + " is sleeping, can't meow.");
-            }
     }
-    bite(){
-        if(!this.isAsleep && this.isAlive){
+
+    bite() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't bite.");
+        } else if (this.isAsleep) {
+            console.error(this.name + " is sleeping, can't bite.");
+        } else if (this.isAngry) {
+            console.log(this.name + " is biting angrily, I'd tred lightly if I were you!");
+        } else {
             console.log(this.name + " is biting.");
         }
-        else if(!this.isAlive)
-            {
-                console.error(this.name + " is dead :( can't bite.");
-            }
-            else{
-                console.error(this.name + " is sleeping, can't bite.");
-            }
     }
-    eat(){
-        if(!this.isAsleep && this.isAlive){
+
+    eat() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't eat.");
+        } else if (this.isAsleep) {
+            console.error(this.name + " is sleeping, can't eat.");
+        } else if (this.isAngry) {
+            console.log(this.name + " is too angry to eat.");
+        } else {
             console.log(this.name + " is eating.");
             this.isEating = true;
         }
-        else if(!this.isAlive)
-        {
-            console.error(this.name + " is dead :( can't eat.");
-        }
-        else{
-            console.error(this.name + " is sleeping, can't eat.");
-        }
     }
-    sleep(){
-        if(!this.isAsleep && this.isAlive){
+
+    sleep() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't sleep.");
+        } else if (this.isAsleep) {
+            console.error(this.name + " is already sleeping.");
+        } else if (this.isAngry) {
+            console.log(this.name + " is too angry to sleep, but tries to anyway...you got lucky this time buddy.");
+            this.isAsleep = true;
+            this.isAngry = false;
+            this.isEating = false;
+        } else {
             console.log(this.name + " is sleeping.");
             this.isAsleep = true;
-        }
-        else if(!this.isAlive)
-        {
-            console.error(this.name + " is dead :( can't sleep.");
-        }
-        else{
-            console.error(this.name + " is already sleeping, can't sleep again.");
+            this.isEating = false;
         }
     }
-    wakeUp(){
-        if(this.isAlive){
-            if(this.isAsleep){
+
+    wakeUp() {
+        if (this.isAlive) {
+            if (this.isAsleep) {
                 this.isAsleep = false;
                 console.log(this.name + " is now awake!");
-            }
-            else{
-                console.error(this.name + " is already awake, can't wake up more.");
+            } else {
+                console.error(this.name + " is already awake, can't be more awake.");
             }
         }
     }
-    die(dateOfDeath){
-        if(this.isAlive){
+
+    die(DateOfDeath) {
+        if (this.isAlive) {
             this.isAlive = false;
             const birthDate = new Date(this.dateOfBirth);
-            const deathDate = new Date(dateOfDeath);
+            this.dateofDeath = DateOfDeath;
             const ageInMilliseconds = Math.abs(deathDate - birthDate);
             const ageInSeconds = Math.floor(ageInMilliseconds / 1000);
-           
-            console.log(this.name + " has died at the age of: " + (ageInSeconds) + " seconds");
-        }else{}
-        console.log(this.name + " is already dead... lifespan: " +ageInSeconds + " seconds" );
+            if(ageInSeconds > 60){
+                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60) + " minute(s)");
+            }else if(ageInSeconds > 3600){
+                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60) + " hour(s)");
+            }
+            else if(ageInSeconds > 86400){
+                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24) + " day(s)");
+            }
+            else if(ageInSeconds > 2592000){
+                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30) + " month(s)");
+            }
+            else if(ageInSeconds > 31104000){
+                console.log(this.name + " has died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30/12) + " year(s)");
+            }else{
+                console.log(this.name + " has died :( at the age of: " + ageInSeconds + " second(s)");
+            }
+        } else {
+            if(ageInSeconds > 60){
+                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60) + " minute(s)");
+            }else if(ageInSeconds > 3600){
+                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60) + " hour(s)");
+            }
+            else if(ageInSeconds > 86400){
+                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24) + " day(s)");
+            }
+            else if(ageInSeconds > 2592000){
+                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30) + " month(s)");
+            }
+            else if(ageInSeconds > 31104000){
+                console.log(this.name + " has already died :( at the age of: " + parseInt(ageInSeconds/60/60/24/30/12) + " year(s)");
+            }else{
+                console.log(this.name + " has already died :( at the age of: " + ageInSeconds + " second(s)");
+            }
+        }
     }
-    play(){
-        if(!this.isAsleep && this.isAlive){
+
+    play() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't play.");
+        } else if (this.isAsleep) {
+            console.error(this.name + " is sleeping, can't play.");
+        } else if (this.isAngry) {
+            console.log(this.name + " is too angry to play and might scratch you!");
+        } else {
             console.log(this.name + " is playing with you...");
         }
-        else if(!this.isAlive)
-        {
-            console.error(this.name + " is dead :( can't play.");
-        }
-        else if(this.inAngry){
-            console.log(this.name + " is Angry and refuses to play. You got scratched.");
-        }
-        else{
-            console.error(this.name + " is sleeping, can't play.");
-        }
     }
-    purr(){
-        if(!this.isAsleep && this.isAlive){
+
+    purr() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't purr.");
+        } else if (this.isAsleep) {
+            console.error(this.name + " is sleeping, can't purr.");
+        } else if (this.isAngry) {
+            console.log(this.name + " is too angry to purr.");
+        } else {
             console.log(this.name + " is purring.");
         }
-        else if(!this.isAlive)
-        {
-            console.error(this.name + " is dead :( can't purr.");
-        }
-        else if(this.inAngry){
-            console.log(this.name + " is Angry and refusing to purr.");
-        }
-        else{
-            console.error(this.name + " is sleeping, can't purr.");
-        }
     }
-    hurt(){
-        if(this.inAngry){
-            this.inAngry = true;
-            console.log("OH YOU'VE DONE IT NOW....THE CAT IS NOW ANGRIER!!!!!!!!!!!!!!! RUN BRUV.");
-        }
-        else{
-            this.inAngry = true;
+
+    hurt() {
+        if (!this.isAlive) {
+            console.error(this.name + " is dead :( can't get hurt anymore.");
+        } else if (this.isAngry) {
+            console.log("OH YOU'VE DONE IT NOW...." + this.name + " IS EVEN ANGRIER! RUN!");
+        } else {
+            this.isAngry = true;
             this.isAsleep = false;
-            console.log("The cat is now angry.");
+            this.isEating = false;
+            console.log(this.name + " is now angry.");
         }
     }
 }
 
+
 var Cats = [];
-function getCurrentDateTime(){
-    const now = new Date();
-    const year = now.getFullYear();
-    const month = String(now.getMonth() + 1).padStart(2, "0");
-    const day = String(now.getDate()).padStart(2, "0");
-    const hours = String(now.getHours()).padStart(2, '0');
-    const minutes = String(now.getMinutes()).padStart(2, '0');
-    const seconds = String(now.getSeconds()).padStart(2, '0');
-    //console.log(year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds);
-    return year+"-"+month+"-"+day+" "+hours+":"+minutes+":"+seconds
-}
+
+
 
 const readline = require("readline").createInterface({
     input: process.stdin,
@@ -148,27 +171,27 @@ const readline = require("readline").createInterface({
 });
 
 function getName(){
-    readline.question("What would you like your cat's name to be?", function(input){
+    readline.question("What would you like your cat's name to be? ", function(input){
         input = input.trim().toLowerCase();
-        if(input && input != ""){
+        if(input && input != "" && input.length <= 10){
             getGender(input);
         }
         else{
-            console.error("Please enter a valid name");
+            console.error("Please enter a valid name, Maximun of 10 characters allowed.");
             getName();
         }
     });
 }
 
 function getGender(name){
-    readline.question("What is your cat's gender? (Male/Female)", function(input){
+    readline.question("What is your cat's gender? (Male/Female) ", function(input){
         input = input.trim().toLowerCase();
         if(input && input != ""){
             if(input == "m" || input == "male" ){
-                getBreed(name, "Male");
+                getBreed(name, "M");
             }
             else if(input == "f" || input == "female"){
-                getBreed(name, "Female");
+                getBreed(name, "F");
             }else{
                 console.error("Please enter a valid gender!");
                 getGender(name)
@@ -176,34 +199,35 @@ function getGender(name){
             
         }
         else{
+            console.error("Please enter a valid gender!");
             getGender(name);
         }
     });
 }
 
 function getBreed(name, gender){
-    readline.question("What is your cat's breed?", function(input){
+    readline.question("What is your cat's breed? ", function(input){
         input = input.trim().toLowerCase();
-        if(input && input != ""){
+        if(input && input != "" && input.length <= 20){
             getColor(name, gender, input);
         }
         else{
-            console.error("Please enter a valid breed");
+            console.error("Please enter a valid breed, Maximum of 20 characters allowed.");
             getBreed(name, gender);
         }
     });
 }
 
 function getColor(name, gender, breed){
-    readline.question("What is your cat's color?", function(input){
+    readline.question("What is your cat's color? ", function(input){
         input = input.trim().toLowerCase();
-        if(input && input != ""){
-            Cats.push(new Cat(name, gender, breed, input, getCurrentDateTime()));
+        if(input && input != "" && input.length <= 10){
+            Cats.push(new Cat(name, gender, breed, input, new Date()));
             console.log("Cat has been registered successfully!!");
             mainMenu();
         }
         else{
-            console.error("Please enter a valid color");
+            console.error("Please enter a valid color, Maximum of 10 characters allowed.");
             getColor(name, gender, breed);
         }
     });
@@ -211,7 +235,7 @@ function getColor(name, gender, breed){
 function mainMenu(){
     readline.question("What Would you like to do?\n 1. Add new cat \n 2. Command an existing cat.\n x. Quit\nYour selection: ", function(input){
         input = input.trim().toLowerCase();
-        if(input && input != ""){
+         if(input && input != ""){
             if(input == 1){
                 console.clear();
                 getName();
@@ -221,8 +245,10 @@ function mainMenu(){
                 playWithCat();
             }
             else if(input == "x"){
-                console.log("See you soon!  ");
+                console.log("See you soon!");
+                readline.terminal = false;
                 readline.close();
+                
             }
             else{
                 console.clear();
@@ -236,6 +262,7 @@ function mainMenu(){
         }
     });
 }
+
 function playWithCat(){
     if(Cats.length != 0){
     var existingCatsMessage = "";
@@ -292,7 +319,7 @@ function catCommands(index){
             }
             else if(input == 6){
                 console.clear();
-                Cats[index].die(getCurrentDateTime());
+                Cats[index].die(new Date());
                 catCommands(index);
             }
             else if(input == 7){
@@ -319,9 +346,12 @@ function catCommands(index){
                 console.error("Please select a valid option...");
                 catCommands(index);
             }
+        }else{
+            console.clear();
+            console.error("Please select a valid option");
+            catCommands(index);
         }
     });
 }
-
 
 mainMenu();
