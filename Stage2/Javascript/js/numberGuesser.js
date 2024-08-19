@@ -458,6 +458,7 @@ function getCurrentDateTime(){
 function scoreBoard(query, message, callback){
 connection.query(query, function(err, results){
     if(results[0]){
+        //instead of using forEach (forEach would be much easier here....)
         var noOfLoops = 5;
         if(results.length < noOfLoops){ noOfLoops = results.length;}
         for(let i = 0; i < noOfLoops; i++){
@@ -467,6 +468,7 @@ connection.query(query, function(err, results){
         console.log(message);
     }
     else{/* Do not show anything if there's no data. */}
+    //return true AFTER the query executes (no matter the result)
     callback(true);
 });
 }
