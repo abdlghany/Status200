@@ -4,7 +4,7 @@ class AccountHolder {
     #identityCardNo;
     #pinCode;
     #authorized = [];
-
+    #isWealthy;
     constructor(name, gender, accountNo, currency){
         this.name = name;
         this.gender = gender;
@@ -15,20 +15,20 @@ class AccountHolder {
         this.#pinCode = "951753";
         this.#authorized = ["Ferry", "Karel"];
         this.isActive = true;
-        this.isWealthy = false;
         this.genderMessage = "";
+
         if(this.gender == "M"){
             this.genderMessage = "Mr. ";
          }
          else{
             this.genderMessage = "Mrs. ";
          }
+
+         this.#isWealthy = this.getWealthyStatus();
     }
 
-    isWealthy(){
-        if(balance > 1000000){
-            this.isWealthy = true;
-        }
+    getWealthyStatus(){
+        return this.#balance > 1000000;
     }
 
     get balance(){
@@ -40,7 +40,7 @@ class AccountHolder {
     get pinCode(){
         return this.#pinCode;
     }
-
+    
     set pinCode(pincode){
         this.#pinCode = pincode;
         console.warn("Success!\nYour new pin code is: "+ this.#pinCode);
