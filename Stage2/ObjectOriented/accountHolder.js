@@ -5,12 +5,13 @@ class AccountHolder {
     #pinCode;
     #authorized = [];
     #isWealthy;
-    constructor(name, gender, accountNo, currency){
+    
+    constructor(name, gender, accountNo, currency, balance){
         this.name = name;
         this.gender = gender;
         this.accountNo = accountNo;
         this.currency = currency;
-        this.#balance = 0;
+        this.#balance = balance;
         this.#identityCardNo = "1859635205252";
         this.#pinCode = "951753";
         this.#authorized = ["Ferry", "Karel"];
@@ -32,11 +33,13 @@ class AccountHolder {
     }
 
     get balance(){
-        return this.#balance;
+        return this.currency + this.#balance;
     }
+
     get identityCardNo(){
         return this.#identityCardNo;
     }
+
     get pinCode(){
         return this.#pinCode;
     }
@@ -47,9 +50,8 @@ class AccountHolder {
     }
 
     showAccount(){
-        return "Name: " + this.genderMessage + this.name + "\nGender: "+this.gender +"\nAccount No.: "+this.accountNo + "\nCurrency: " + this.currency;
+        return "Name: " + this.genderMessage + this.name + "\nAccount No.: "+this.accountNo + "\nCurrency: " + this.currency;
     }
-
 
     showPrivateAccount(personAccessing){
         if(this.#authorized.includes(personAccessing)){
@@ -61,7 +63,6 @@ class AccountHolder {
             return "Access denied: You do not have access to view private account information."
         }
     }
-
 }
 
 export default AccountHolder;

@@ -1,7 +1,4 @@
 import accountHolder from './accountHolder.js'
-
-const accountholder = new accountHolder("abdalghany", "M", "18500085966", "RM");
-
 import rl from "readline";
 const readline = rl.createInterface({
     input: process.stdin,
@@ -84,7 +81,6 @@ function changePinCode(){
         }
     });
 }
-
-
+const accountholder = new accountHolder("Dada", "M", "18500085966", "RM", 15000);
 
 start();
