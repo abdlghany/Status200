@@ -1,3 +1,4 @@
+//Start the server.js before changing anything here...this file is not the problem
 // const RMNotes = [10, 20, 50, 100];
 // var RMNotesAvailable = [10, 10, 10, 10];
 const URL="http://atm.local:3000";
