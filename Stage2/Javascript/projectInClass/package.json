@@ -1,6 +1,7 @@
 {
   "name": "projectinclass",
   "version": "1.0.0",
+  "type":"module",
   "description": "Oh no this is a project in class",
   "main": "index.js",
   "scripts": {

@@ -37,7 +37,8 @@ class Cat {
         } else if (this.isAsleep) {
             console.error(this.name + " is sleeping, can't bite.");
         } else if (this.isAngry) {
-            console.warn(this.name + " is biting angrily, I'd tred lightly if I were you!");
+            console.warn(this.name + " is biting angrily, it bites your finger off....ouch");
+            this.isAngry = false;
         } else {
             console.warn(this.name + " is biting.");
         }
