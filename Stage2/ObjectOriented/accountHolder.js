@@ -5,7 +5,7 @@ class AccountHolder {
     #pinCode;
     #authorized = [];
     #isWealthy;
-    
+
     constructor(name, gender, accountNo, currency, balance){
         this.name = name;
         this.gender = gender;
