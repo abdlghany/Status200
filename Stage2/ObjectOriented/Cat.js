@@ -1,4 +1,9 @@
 const { fchown, read } = require("fs");
+var Cats = [];
+const readline = require("readline").createInterface({
+    input: process.stdin,
+    output: process.stdout,
+});
 
 class Cat {
     constructor(name, gender, breed, color, dateOfBirth) {
@@ -160,16 +165,6 @@ class Cat {
         }
     }
 }
-
-
-var Cats = [];
-
-
-
-const readline = require("readline").createInterface({
-    input: process.stdin,
-    output: process.stdout,
-});
 
 function getName(){
     readline.question("What would you like your cat's name to be? ", function(input){
