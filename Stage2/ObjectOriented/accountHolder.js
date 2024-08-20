@@ -58,7 +58,7 @@ class AccountHolder {
             return "Name: " + this.genderMessage + this.name + "\nGender: "+this.gender +
                    "\nAccount No.: "+this.accountNo + "\nCurrency: " + this.currency + 
                    "\nBalance: "+this.#balance + "\nIdentity Card No: "+this.#identityCardNo +
-                   "\nPIN Code: "+this.#pinCode;
+                   "\nPIN Code: "+this.#pinCode + "\nIs the account holder wealthy: "+ this.#isWealthy;
         } else {
             return "Access denied: You do not have access to view private account information."
         }
