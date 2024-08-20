@@ -16,9 +16,7 @@ class Book {
             console.error('You\'ve already finished reading "' + this.title + '".');
             return;
         }
-        
         this.currentPage += pagesRead;
-        
         if (this.currentPage >= this.pages) {
             this.currentPage = this.pages;
             this.isFinished = true;
@@ -99,25 +97,19 @@ const nonFictionBooks = [
 function start() {
     readline.question("What would you like to do?\n1. View Fiction Books\n2. View Non-Fiction Books\n3. Read a Book\n4. Add a Character (Fiction)\n5. Bookmark a book (Non-Fiction)\nx. Quit\nYour selection: ", function(input) {
         input = input.trim().toLowerCase();
+        console.clear();
         if (input == '1') {
             fictionBooks.forEach(function (book) {
-                console.log(book.getBookInfo())
+                console.warn(book.getBookInfo())
             });
             start();
         } else if (input == '2') {
             nonFictionBooks.forEach( function(book) {
-                console.log(book.getBookInfo())
+                console.warn(book.getBookInfo())
             });
             start();
         } else if (input == '3') {
-            var books = [];
-            for(let i = 0; i< fictionBooks.length; i++){
-                books.push(fictionBooks[i]);
-            }
-            for(let i = 0; i< nonFictionBooks.length; i++){
-                books.push(nonFictionBooks[i]);
-            }
-            selectBook(books);
+            selectBook(allAvailableBooks());
         } else if (input == '4') {
            addCharacter();
         } else if (input == '5') {
@@ -133,9 +125,10 @@ function start() {
 }
 
 function selectBook(books) {
+    console.clear();
     console.log('Available Books:');
     books.forEach(function (book, index){
-        console.log((index + 1) + '. ' + book.title + ' by ' + book.author);
+        console.log((index+1) + '. ' + book.title + ' by ' + book.author);
     });
     readline.question('Enter the number of the book you want to read: ', function(bookChoice) {
         bookChoice = parseInt(bookChoice) - 1;
@@ -143,16 +136,28 @@ function selectBook(books) {
         if (bookChoice >= 0 && bookChoice < books.length) {
             const book = books[bookChoice];
             console.log('You selected: ' + book.title + ' by ' + book.author);
-            book.read();
+            book.read(book.pages);
             start();
         } else {
-            console.clear();
             console.error('Invalid book selection.');
             selectBook(books);
         }
     });
 }
+
+function allAvailableBooks(){
+    var books = [];
+    for(let i = 0; i< fictionBooks.length; i++){
+        books.push(fictionBooks[i]);
+    }
+    for(let i = 0; i< nonFictionBooks.length; i++){
+        books.push(nonFictionBooks[i]);
+    }
+    return books
+}
+
 function bookMarkNonFiction(){
+    console.clear();
     var message = "";
     var nonFictionBooksIndexes = [];
     nonFictionBooks.forEach(function (value, index){
@@ -172,10 +177,10 @@ function bookMarkNonFiction(){
 }
 
 function boookMarkNonFictionPageNumber(bookIndex){
+    console.clear();
     readline.question("Enter the page number to bookmark it: ", function(pageNumber) {
         if(pageNumber <= nonFictionBooks[bookIndex].pages)
     if(nonFictionBooks[bookIndex].bookmark(pageNumber)){
-        console.log("Successfully bookmarked page "+pageNumber + " of "+nonFictionBooks[bookIndex].title);
         start();
     }else{
         console.error("An error happened please try again later.");
@@ -185,6 +190,7 @@ function boookMarkNonFictionPageNumber(bookIndex){
 }
 
 function addCharacter(){
+    console.clear();
     var message = "";
     var fictionBooksIndexes = [];
     fictionBooks.forEach(function (value, index){
@@ -195,7 +201,8 @@ function addCharacter(){
         index-=1;
         if (fictionBooksIndexes.includes(index)) {
             readline.question("Enter the character's name: ", function(character) {
-                book.addCharacter(character);
+                //Skipped validation cause it's 11:20PM.
+                fictionBooks[index].addCharacter(character);
                 start();
             });
         } else {
