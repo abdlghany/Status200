@@ -1,4 +1,5 @@
 import rl from "readline";
+import author from './author.js';
 
 class Book {
     constructor(title, author, ISBN, publicationDate, pages) {
@@ -38,7 +39,15 @@ class Book {
     }
 
     getBookInfo() {
-        return this.title + " by " + this.author + ", ISBN: " + this.ISBN + ", Published on: " + this.publicationDate.toDateString() + ", Pages: " + this.pages;
+        try{
+            var messageAuthorsNames = "";
+            this.author.forEach(function(author){messageAuthorsNames += author.getDetails() + " "})
+
+        return this.title + " by " + messageAuthorsNames + ", ISBN: " + this.ISBN + ", Published on: " + this.publicationDate.toDateString() + ", Pages: " + this.pages;
+        }
+        catch(e){
+            return this.title + " by " + this.author.getDetails()+ ", ISBN: " + this.ISBN + ", Published on: " + this.publicationDate.toDateString() + ", Pages: " + this.pages;
+        }
     }
 }
 
@@ -79,19 +88,23 @@ class NonFictionBook extends Book {
         }
     }
 }
+
+
 const readline = rl.createInterface({
     input: process.stdin,
     output: process.stdout
 });
 
 // (books information are auto generated becuase I do not know the details of many books and didn't want to waste much time researching it.)
+const scottFitzgerald = new author("F. Scott Fitzgerald", "American");
+const georgeOrwell = new author("George Orwell", "British");
 const fictionBooks = [
-    new FictionBook('The Great Gatsby', 'F. Scott Fitzgerald', '9780743273565', '1925-04-10', 180, 'Novel'),
-    new FictionBook('1984', 'George Orwell', '9780451524935', '1949-06-08', 328, 'Dystopian')
+    new FictionBook('The Great Gatsby', scottFitzgerald, '9780743273565', '1925-04-10', 180, 'Novel'),
+    new FictionBook('1984', georgeOrwell, '9780451524935', '1949-06-08', 328, 'Dystopian')
 ];
 const nonFictionBooks = [
-    new NonFictionBook('Sapiens', 'Yuval Noah Harari', '9780062316097', '2014-09-04', 443, 'History'),
-    new NonFictionBook('Educated', 'Tara Westover', '9780399590504', '2018-02-20', 352, 'Memoir')
+    new NonFictionBook('Sapiens', [georgeOrwell, scottFitzgerald], '9780062316097', '2014-09-04', 443, 'History'),
+    new NonFictionBook('Educated', scottFitzgerald, '9780399590504', '2018-02-20', 352, 'Memoir')
 ];
 
 function start() {
