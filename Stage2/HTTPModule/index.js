@@ -22,6 +22,10 @@ const products = [
         id: 3,
         name: "Product 3",
     },
+    {
+        id: 4,
+        name:"Product 4",
+    },
 ];
 
 const server = http.createServer(function (request, response)  {
@@ -33,7 +37,8 @@ const server = http.createServer(function (request, response)  {
         response.end();
     }
     else if (pathname.startsWith(URLS["productsURL"])) {
-        const id = parseInt(pathname.split("/")[3]);
+        const id = parseInt(pathname.split("/")[2]);
+
         if(id){
             var returnedProduct;
             products.forEach(function(product){
