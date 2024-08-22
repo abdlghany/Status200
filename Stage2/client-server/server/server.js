@@ -1,23 +1,9 @@
 import http from "http";
 import { URL } from "url";
+import MysqlQueries  from "./mysqlQueries.js";
 
-// Categories - dummy data
-// For demonstration purposes, in real-world applications,
-// this data would be fetched from a database.
-const categories = [
-    {
-        id: 1,
-        name: "Category 1",
-    },
-    {
-        id: 2,
-        name: "Category 2",
-    },
-    {
-        id: 3,
-        name: "Category 3",
-    },
-];
+const db = new MysqlQueries();
+db.connect();
 
 const products = {
     category1:[{
@@ -60,6 +46,7 @@ const products = {
     },]
 };
 const server = http.createServer((request, response) => {
+
     // Set CORS headers
     response.setHeader("Access-Control-Allow-Origin", "*");
     response.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
@@ -76,15 +63,27 @@ const server = http.createServer((request, response) => {
     }
     // Route - GET all categories
     else if (pathname.startsWith("/api/categories")) {
-        const id = parseInt(pathname.split("/")[3]);
-        if(!isNaN(id)){
-            response.writeHead(200, { "Content-Type": "application/json" });
-            response.write(JSON.stringify(products["category"+id]));
-        }
-        else{
-            response.writeHead(200, { "Content-Type": "application/json" });
-            response.write(JSON.stringify(categories));
-        }
+        var categories = "";
+        db.select("SELECT category_id, category_name, category_description from categories",function(err, results){
+            if(results){
+                categories = results;
+            }
+            else{
+                categories = "Server error, could not fetch categories.";
+            }
+            const id = parseInt(pathname.split("/")[3]);
+            if(!isNaN(id)){
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.write(JSON.stringify(products["category"+id]));
+                response.end();
+            }
+            else{
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.write(JSON.stringify(categories));
+                response.end();
+            }
+        });
+       
     }
     // Route - invalid
     else {
@@ -93,10 +92,8 @@ const server = http.createServer((request, response) => {
 
         // Response
         response.write("Not Found");
-    }
-
-    // Close response
-    response.end();
+    } 
+    //db.disconnect();
 });
 
 server.listen(3000);

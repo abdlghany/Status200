@@ -5,6 +5,11 @@
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <title>Axios Example</title>
         <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+        <style>
+            li{
+                margin-bottom: 10px;
+            }
+        </style>
     </head>
     <body>
         <h1>Categories</h1>
@@ -29,9 +34,9 @@
                     const categories = response.data;
                     categories.forEach((category) => {
                         const li = document.createElement("li");
-                        li.textContent = category.name;
+                        li.innerHTML = "<b>"+category.category_name+"</b></br>"+ " Description: "+category.category_description;
                         li.style.cursor = "pointer";
-                        li.onclick = () => fetchProducts(category.id);
+                        li.onclick = () => fetchProducts(category.category_id);
                         categoriesList.appendChild(li);
                     });
                 })
