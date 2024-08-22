@@ -2,7 +2,12 @@
 //example URL to use in browser: http://localhost:3000/api/products?id=1
 import http from "http";
 import { URL } from "url";
+
 const port = 3000;
+const URLS = {
+    homepageURL:"/",
+    productsURL: "/products"
+};
 
 const products = [
     {
@@ -23,10 +28,11 @@ const server = http.createServer(function (request, response)  {
     const url = new URL(request.url, `http://${request.headers.host}`);
     const pathname = url.pathname;
     
-    if (pathname === "/") {
+    if (pathname === URLS["homepageURL"]) {
         response.write('Hello World!');
         response.end();
-    } else if (pathname.startsWith("/api/products")) {
+    }
+    else if (pathname.startsWith(URLS["productsURL"])) {
         const id = parseInt(pathname.split("/")[3]);
         if(id){
             var returnedProduct;
@@ -50,10 +56,14 @@ const server = http.createServer(function (request, response)  {
             response.end();
         }
         response.end();
-    } else {
+    }
+    else {
         response.statusCode = 404;
-        response.write("Not Found");
-        response.end();
+        response.write("Not Found", function(){
+            response.write("Click back to go back.");
+            response.end();
+        });
+       
     }
 });
 
