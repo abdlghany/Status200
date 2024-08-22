@@ -27,7 +27,6 @@ const server = http.createServer(function (request, response)  {
         response.write('Hello World!');
         response.end();
     } else if (pathname.startsWith("/api/products")) {
-        console.log(pathname.split("/")[3]);
         const id = parseInt(pathname.split("/")[3]);
         if(id){
             var returnedProduct;
@@ -38,7 +37,6 @@ const server = http.createServer(function (request, response)  {
             });
             
             if(returnedProduct){
-                console.log("product: ", returnedProduct);
                 response.write(JSON.stringify(returnedProduct));
                 response.end();
             }else{
