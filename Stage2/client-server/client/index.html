@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Axios Example</title>
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Categories</h1>
+        <ul id="categories"></ul>
+
+        <div id="products">
+            <h2>Products in Selected Category</h2>
+            <ul id="products"></ul>
+        </div>
+
+        <div id="product">
+            <h2>Product Details</h2>
+            <div id="product-details"></div>
+        </div>
+
+        <script>
+            const categoriesList = document.getElementById("categories");
+            // Fetch categories
+            axios
+                .get("http://localhost:3000/api/categories")
+                .then((response) => { 
+                    const categories = response.data;
+                    categories.forEach((category) => {
+                        const li = document.createElement("li");
+                        li.textContent = category.name;
+                        li.style.cursor = "pointer";
+                        li.onclick = () => fetchProducts(category.id);
+                        categoriesList.appendChild(li);
+                    });
+                })
+                .catch((error) => {
+                    console.error(
+                        "There was an error fetching the categories:",
+                        error
+                    );
+                });
+
+            // Fetch products in a category
+            function fetchProducts(categoryId) {
+                axios
+                    .get(
+                        "http://localhost:3000/api/categories/"+categoryId+"/products"
+                    )
+                    .then((response) => {
+                        const products = response.data;
+                        const productsList =
+                            document.getElementById("products");
+                        productsList.innerHTML = ""; // Clear previous products
+
+                        products.forEach((product) => {
+                            const li = document.createElement("li");
+                            li.textContent = product.name;
+                            li.style.cursor = "pointer";
+                            li.onclick = () => fetchProductDetails(product.id);
+                            productsList.appendChild(li);
+                        });
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "There was an error fetching the products:",
+                            error
+                        );
+                    });
+            }
+
+            // Fetch details of a specific product
+            function fetchProductDetails(productId) {
+                axios
+                    .get(`http://localhost:3000/api/products/${productId}`)
+                    .then((response) => {
+                        const product = response.data;
+                        const productDetails =
+                            document.getElementById("product-details");
+                        productDetails.innerHTML = `<p>Product ID: ${product.id}</p>
+                                                <p>Product Name: ${product.name}</p>`;
+                    })
+                    .catch((error) => {
+                        console.error(
+                            "There was an error fetching the product details:",
+                            error
+                        );
+                    });
+            }
+        </script>
+    </body>
+</html>
+
+
