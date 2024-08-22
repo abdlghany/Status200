@@ -59,7 +59,7 @@ var listeners = ["dog", "cat", "chicken", "narrator"];
 // red, green, blue, white
 var colors = ['\x1b[34m', '\x1b[31m', '\x1b[32m', '\x1b[0m']
 for(let i = 0; i< colors.length; i++){
-    animalFarm.addListener(listeners[i], function(argument){console.log(colors[i] + listeners[i]+": "+argument + colors[colors.length-1]);});
+    animalFarm.addListener(listeners[i], function(argument){console.log(listeners[i]+": "+colors[i] + argument + colors[colors.length-1]);});
 }
 
 animalFarm.log("narrator","It's a ridiculously sunny summer afternoon in the middle of nowhere... A chicken, a cat, and a dog are somehow stuck together in the same chaotic neighborhood.");
