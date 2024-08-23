@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<style>
+			.clickables div {
+				cursor: pointer;
+			}
+			.clickables div:hover {
+				color: green;
+			}
+		</style>
+	</head>
+	<body>
+		<button onclick="startProgram()">Start</button>
+
+		<div id="categoriesContainer" style="display: none">
+			<h1>Categories</h1>
+			<div id="categories" class="clickables"></div>
+		</div>
+
+		<script>
+			function startProgram() {
+				axios
+					.get("http://localhost:3000/api/categories")
+					.then(function (response) {
+						// handle success
+						console.log(response);
+
+						const categories = response.data;
+
+						let output = "";
+						for (let i = 0; i < categories.length; i++) {
+							output += "<div onclick='fetchProducts(" + categories[i].id + ")'>" + categories[i].name + "</div>";
+						}
+						document.getElementById("categoriesContainer").style.display = "block";
+						document.getElementById("categories").innerHTML = output;
+					})
+					.catch(function (error) {
+						// handle error
+						console.log(error);
+					});
+			}
+		</script>
+	</body>
+</html>

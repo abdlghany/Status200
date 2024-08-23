@@ -20,16 +20,11 @@
             <ul id="products"></ul>
         </div>
 
-        <div id="product">
-            <h2>Product Details</h2>
-            <div id="product-details"></div>
-        </div>
-
         <script>
             const categoriesList = document.getElementById("categories");
             // Fetch categories
             axios
-                .get("http://localhost:3000/api/categories")
+                .get("http://localhost:3000/categories")
                 .then((response) => { 
                     const categories = response.data;
                     categories.forEach((category) => {
@@ -51,7 +46,7 @@
             function fetchProducts(categoryId) {
                 axios
                     .get(
-                        "http://localhost:3000/api/categories/"+categoryId+"/products"
+                        "http://localhost:3000/categories/"+categoryId+"/products"
                     )
                     .then((response) => {
                         const products = response.data;
@@ -61,9 +56,9 @@
 
                         products.forEach((product) => {
                             const li = document.createElement("li");
-                            li.textContent = product.name;
+                            li.innerHTML = "<b>"+product.product_name+"</b><br> Quantity: "+product.product_quantity+"<br><div id='product-details"+product.product_id+"'></div>";
                             li.style.cursor = "pointer";
-                            li.onclick = () => fetchProductDetails(product.id);
+                            li.onclick = () => fetchProductDetails(product);
                             productsList.appendChild(li);
                         });
                     })
@@ -75,23 +70,12 @@
                     });
             }
 
-            // Fetch details of a specific product
-            function fetchProductDetails(productId) {
-                axios
-                    .get(`http://localhost:3000/api/products/${productId}`)
-                    .then((response) => {
-                        const product = response.data;
+            // display details of a specific product
+            function fetchProductDetails(product) {
                         const productDetails =
-                            document.getElementById("product-details");
-                        productDetails.innerHTML = `<p>Product ID: ${product.id}</p>
-                                                <p>Product Name: ${product.name}</p>`;
-                    })
-                    .catch((error) => {
-                        console.error(
-                            "There was an error fetching the product details:",
-                            error
-                        );
-                    });
+                            document.getElementById("product-details"+product.product_id);
+                        productDetails.innerHTML = `<p>Price: ${product.product_price}</p>
+                                                <p>Description: ${product.product_description}</p>`;
             }
         </script>
     </body>

@@ -61,16 +61,6 @@ class MysqlQueries{
             }
         });
     }
-    select(query, callback) {
-        this.#connection.query(query, function(err, results) {
-            if (err) {
-                console.error("Error selecting data:", err.message);
-                callback(err, null);
-            } else {
-                callback(null, results);
-            }
-        });
-    }
 
     update(query, values) {
         this.#connection.query(query, values, function(err, result) {
@@ -95,6 +85,7 @@ class MysqlQueries{
 
 export default MysqlQueries;
 /* 
+//database name: shoppractice
 -- creating the table:
 CREATE TABLE categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
