@@ -73,8 +73,7 @@
 
             // display details of a specific product
             function fetchProductDetails(product) {
-                        const productDetails =
-                            document.getElementById("product-details"+product.product_id);
+                        const productDetails = document.getElementById("product-details"+product.product_id);
                         productDetails.innerHTML = `<p>Price: ${product.product_price}</p>
                                                 <p>Description: ${product.product_description}</p>`;
             }
