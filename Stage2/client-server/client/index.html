@@ -13,26 +13,30 @@
     </head>
     <body>
         <h1>Categories</h1>
-        <ul id="categories"></ul>
+        <ul id="categories-u"></ul>
 
         <div id="products">
-            <h2>Products in Selected Category</h2>
-            <ul id="products"></ul>
+            <h2 id="products-h2">Products in Selected Category</h2>
+            <ul id="products-u"></ul>
         </div>
 
         <script>
-            const categoriesList = document.getElementById("categories");
-            const productsList = document.getElementById("products");
+            const categoriesList = document.getElementById("categories-u");
+            const productsList = document.getElementById("products-u");
+            const productListHeader = document.getElementById("products-h2");
             // Fetch categories
-            axios
-                .get("http://localhost:3000/categories")
+            axios.get("http://localhost:3000/categories")
                 .then(function(response) { 
                     const categories = response.data;
                     categories.forEach(function(category){
                         const li = document.createElement("li");
                         li.innerHTML = "<b>"+category.category_name+"</b></br>"+ " Description: "+category.category_description;
                         li.style.cursor = "pointer";
-                        li.onclick = function() {fetchProducts(category.category_id)};
+                        li.onclick = function() {
+                            productListHeader.innerText = "Products in "+category.category_name;
+                            fetchProducts(category.category_id)
+                            
+                        };
                         categoriesList.appendChild(li);
                     });
                 })
@@ -45,13 +49,10 @@
 
             // Fetch products in a category
             function fetchProducts(categoryId) {
-                axios
-                    .get(
-                        "http://localhost:3000/categories/"+categoryId+"/products"
-                    )
+    
+                axios.get("http://localhost:3000/categories/"+categoryId+"/products")
                     .then(function(response) {
                         const products = response.data;
-                        
                         productsList.innerHTML = ""; // Clear previous products
 
                         products.forEach(function(product){

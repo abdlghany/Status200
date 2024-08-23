@@ -143,9 +143,11 @@ INSERT INTO products (product_name, product_description, product_price, category
 ('Car Battery', 'Maintenance-free car battery', 129.99, 10, 25),
 ('Smartwatch', 'Fitness tracker with heart rate monitor', 199.99, 1, 60);
 
+-- TABLE products Structure:
 products (product_id, product_name, product_description, product_price, category_id, product_quantity, created_at, updated_at)
 products (AUTO, VARCHAR, text, decimal, int, int, timestamp (auto), timestamp (auto));
 
+-- TABLE categories Structure:
 categories (category_id, category_name, category_description, parent_id, created_at, updated_at)
 categories (AUTO, VARCHAR, text, int, timestamp (auto), timestamp (auto))
 */
