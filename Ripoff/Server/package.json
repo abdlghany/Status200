@@ -1,0 +1,16 @@
+{
+  "name": "ripoff",
+  "version": "1.0.0",
+  "description": "Ripoff is a webshop designed for status200 stage 2 final project.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "abdlghany",
+  "license": "ISC",
+  "dependencies": {
+    "email-validator": "^2.0.4",
+    "mysql2": "^3.11.0",
+    "pdfkit": "^0.15.0"
+  }
+}
