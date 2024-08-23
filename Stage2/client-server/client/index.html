@@ -27,7 +27,7 @@
                 .get("http://localhost:3000/categories")
                 .then((response) => { 
                     const categories = response.data;
-                    categories.forEach((category) => {
+                    categories.forEach(function(category){
                         const li = document.createElement("li");
                         li.innerHTML = "<b>"+category.category_name+"</b></br>"+ " Description: "+category.category_description;
                         li.style.cursor = "pointer";
@@ -54,7 +54,7 @@
                             document.getElementById("products");
                         productsList.innerHTML = ""; // Clear previous products
 
-                        products.forEach((product) => {
+                        products.forEach(function(product){
                             const li = document.createElement("li");
                             li.innerHTML = "<b>"+product.product_name+"</b><br> Quantity: "+product.product_quantity+"<br><div id='product-details"+product.product_id+"'></div>";
                             li.style.cursor = "pointer";
