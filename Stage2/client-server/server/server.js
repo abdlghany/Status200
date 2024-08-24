@@ -43,13 +43,13 @@ const server = http.createServer((request, response) => {
         else{
             var categories = "";
             db.select("SELECT category_id, category_name, category_description from categories",function(err, results){
-                response.writeHead(200, { "Content-Type": "application/json" });
                 if(results){
                     categories = results;
                 }
                 else{
                     categories = "Server error, could not fetch categories.";
                 }
+                response.writeHead(200, { "Content-Type": "application/json" });
                 response.write(JSON.stringify(categories));
                 response.end();
             });

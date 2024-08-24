@@ -1,6 +1,7 @@
 {
   "name": "ripoff",
   "version": "1.0.0",
+  "type":"module",
   "description": "Ripoff is a webshop designed for status200 stage 2 final project.",
   "main": "server.js",
   "scripts": {

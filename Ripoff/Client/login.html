@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ripoff</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body onload="loadNavigationBar()">
+    <nav id="navigationBar"></nav>
+
+    <div id="mainContent">
+        <div id="signup">
+            <table>
+                <thead>
+                    <tr>
+                        <td colspan="2">
+                            <h1>Login to your account</h1>
+                        </td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Username -->
+                    <tr>
+                        <td>
+                            <label for="username">Username / Email</label>
+                        </td>
+                        <td>
+                            <input type="text" id="username" name="username"  placeholder="Enter your username or email..." autofocus onfocus="this.select()">
+                        </td>
+                        <td>
+                            <span class="errorMessage" id="usernameError">Filler text that's invisible</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td><p class="helperText">Letters and spaces only.</p></td>
+                        <td colspan="1"></td>
+                    </tr>
+                    <!-- Password -->
+                    <tr>
+                        <td>
+                            <label for="password">Password</label>
+                        </td>
+                        <td>
+                            <input type="password" id="password" name="password" placeholder="Enter your password...">
+                        </td>
+                        <td>
+                            <p class="errorMessage" id="passwordError"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td><p class="helperText">Letters, spaces and numbers only.</p></td>
+                        <td colspan="1"></td>
+                    </tr>
+                    <!-- Submit button -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button>Login</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="./js/functions.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>

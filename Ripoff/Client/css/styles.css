@@ -2,62 +2,80 @@
 body, html{
     padding: 0;
     margin: 0;
+    background-color:#1C1C1C;
 }
-/* Sticky navigation bar */
 nav {
     display: flex;
-    justify-content: center;
-    background-color: black;
-    position:fixed;
-    top:0;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #0D0D0D;
+    position: fixed;
+    top: 0;
     right: 0;
     left: 0;
     max-height: 5rem;
-    font-size: 1.3rem;
     z-index: 1;
-}
-/* Navigation bar's list items */
-.nav-li  a, #category a {
-    text-decoration: none;
-    color: white;
-    vertical-align: middle;
+    padding: 0 1rem;
 }
 
-.nav-li a:hover{
-    color: #DDDDDD;
-}
-
-.nav-ul{
+.nav-ul {
     list-style: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin: 0;
+    padding: 0;
 }
 
 .nav-li {
-    display: inline-block;
-    vertical-align: middle;
+    display: flex;
+    align-items: center;
 }
-.nav-li img{
+
+.nav-li a, #category a, .nav-li p {
+    text-decoration: none;
+    color: #E0E0E0;
+}
+
+.nav-li a:hover {
+    color: #DDDDDD;
+}
+
+#logoDiv {
+    display: flex;
+    align-items: center;
+    margin-right: 1.5rem;
+    font-size: 1.3rem;
+}
+
+#searchDiv, #cartDiv{
+    display: flex;
+    align-items: center;
+}
+
+#navigationSearch {
+    height: 2.5rem;
+    width: 16rem;
+    border-radius: 0.25rem;
+    padding: 0 0.5rem;
+}
+
+.nav-li img, #cartButton {
     height: 50px;
     width: 50px;
-    vertical-align: middle;
 }
 
-#logo{
-    margin-left:0;
-    margin-right: 1.5rem;
-    vertical-align: auto;
-    display: inline-block;
+#searchButton {
+    height: 40px;
+    width: 40px;
+    margin-left: 0.5rem;
 }
 
-#navigationSearch{
-    height: 2rem;
-    width: 14rem;
-    margin-right:0;
-}
 
 #mainContent{
-    background-color:#121212;
-    min-height: 93vh;
-    margin-top: 5rem;
+    background-color:#1C1C1C;
+    margin-top: 3rem;
     display: flex;
 }
 
@@ -65,9 +83,8 @@ nav {
     margin: 0 auto;
     margin-top: 2rem;
     margin-bottom: 2rem;
-    background-color:  #191919;
+    background-color:  #292929;
     border-radius: 2rem;
-    min-height: 250px;
     width: 80%;
     max-width: 1600px;
     padding: 20px;
@@ -99,10 +116,75 @@ nav {
 #category img{
     height: 250px;
 }
-#category img:hover{
-    transform: scale(1.03);
-    animation-duration: 500ms;
+#category:hover{
+    transform: scale(1.05);
 }
 #category a{
     font-size: 1.2rem;
+}
+.helperText{
+    font-size: 0.8rem;
+    margin: 0;
+    margin-top:1px;
+    margin-bottom: 1rem;
+    color: #A0A0A0;
+    padding-left: 10px;
+}
+table{
+    color: #E0E0E0;
+}
+td {
+    padding: 0 15px;
+}
+table input, label{
+    width: 100%;
+    padding-left:0.3rem ;
+    line-height:2.5rem;
+    vertical-align: middle;
+    font-size: 1.5rem;
+}
+table input{
+    width: 350px;
+    background-color: #202020;
+    color: #E0E0E0;
+    border-radius: 10px;
+}
+.errorMessage{
+    opacity: 0;
+    font-size: 0.9rem;
+}
+#signup{
+    margin: 0 auto;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    background-color:  #292929;
+    border-radius: 2rem;
+    width: 80%;
+    max-width: 1600px;
+    padding: 50px 20px;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+
+}
+#signup h1, #signup button{
+    text-align: center;
+    display: block;
+    margin: 2rem auto;
+}
+#signup button{
+    width: 60%;
+    height: 40px;
+}
+/* Remove arrows from input type number for Chrome, Safari, Edge, and Opera */
+input[type=number]::-webkit-inner-spin-button,
+input[type=number]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Remove arrows from input type number for Firefox */
+input[type=number] {
+    -moz-appearance: textfield;
 }
