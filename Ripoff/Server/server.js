@@ -53,13 +53,17 @@ const server = http.createServer(function(request, response) {
                             } else {
                                 // if nothing was found, return 404 not found with an appropriate message.
                                 response.writeHead(500, { "Content-Type": "application/json" });
-                                response.end(JSON.stringify({ message: "An error happened while regitering your account to the database." }));
+                                response.end(JSON.stringify({ message: "An error happened while registering your account to the database, please try again." }));
                             }
                     });
                 }
                 else if(result == "email"){
                     response.writeHead(200, { "Content-Type": "application/json" });
                     response.end(JSON.stringify({ message: "Email is already in use." }));
+                }
+                else if(result == "DBError"){
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "An error happened while registering your account to the database, please try again." }));
                 }
                 else{
                     response.writeHead(200, { "Content-Type": "application/json" });
@@ -77,7 +81,7 @@ const server = http.createServer(function(request, response) {
 
 function doesAccountExist(username, email = "", callback){
     db.select("SELECT * FROM USERS WHERE user_name = ? OR email = ? LIMIT 1", [username, email], function(err, results){
-        if(err){}
+        if(err){callback("DBError")}
         else if(results.length > 0){
            // console.log(results);
             if (username == results[0].user_name){
