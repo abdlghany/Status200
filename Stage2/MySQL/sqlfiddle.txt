@@ -413,8 +413,6 @@ select count(product.prod_id) as "COUNT OF PRODUCTS THAT HAVEN'T BEEN ORDERED AN
 where orderdetail.prod_id is NULL AND product.prod_name LIKE "%web%";
 
 
-
-
 -- ------------------------------------------------------------
 -- orders (order_id, order_date, cust_id, voucher, shipper_id)
 insert into orders values (NULL,date(now()), 6, 10.00,2 );
@@ -439,15 +437,10 @@ join orderdetail on orders.order_id = orderdetail.order_id
 join product on orderdetail.prod_id = product.prod_id
 group by customer.cust_name, orders.order_id, orders.order_date
 having orders.order_id = 21;
-
-
-
+ 
 
 -- COLUMN NAMES:
 -- orderdetail (order_id, prod_id, quantity, price)
 -- orders (order_id, order_date, cust_id, voucher, shipper_id)
 -- product (prod_id, prod_name, unit_price)
 -- customer (cust_id, cust_name, cust_city, cust_country)
-
-
-

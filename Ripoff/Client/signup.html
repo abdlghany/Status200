@@ -31,7 +31,7 @@
                             <input type="text" id="username" name="username"  placeholder="Enter your username..." autofocus onfocus="this.select()">
                         </td>
                         <td>
-                            <span class="errorMessage" id="usernameError">Filler text that's invisible</span>
+                            <span class="errorMessage" id="usernameError">Filler text that's invisible to the naked eye</span>
                         </td>
                     </tr>
                     <tr>
@@ -70,7 +70,7 @@
                     </tr>
                     <tr>
                         <td colspan="1"></td>
-                        <td><p class="helperText">Letters numbers @ . only.</p></td>
+                        <td><p class="helperText">Letters numbers . _ % + - @ only.</p></td>
                         <td colspan="1"></td>
                     </tr>
                     <!-- Phone Number -->
@@ -131,6 +131,9 @@
                             <button onclick="javascript:signup()">Sign Up</button>
                         </td>
                         <td></td>
+                    </tr>
+                    <tr>
+                        <td><p id="errorMessage">All information are correct</p></td>
                     </tr>
                 </tbody>
             </table>

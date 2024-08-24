@@ -42,7 +42,7 @@ class MysqlQueries{
     }
 
     insert(query, values) {
-        this.#connection.query(query, values, function(result) {
+        this.#connection.query(query, values, function(err, result) {
             if (err) {
                 console.error("Error inserting data:", err.message);
             } else {
