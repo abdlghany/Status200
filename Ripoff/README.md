@@ -26,33 +26,36 @@ Notes: CSS design matters, "do not design an ugly website".
 // validator.validate("test@email.com"); // true
 
 
-// PDF Example (documentation)
-
+# PDF Example (documentation)
+```js
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
-
-// Create a document
+```
+### Create a document
+```js
 const doc = new PDFDocument();
-
-// Pipe its output somewhere, like to a file or HTTP response
-// See below for browser usage
+```
+- Pipe its output somewhere, like to a file or HTTP response
+```js
 doc.pipe(fs.createWriteStream('output.pdf'));
-
-// Embed a font, set the font size, and render some text
+```
+- Embed a font, set the font size, and render some text
+```js
 doc
   .font('fonts/PalatinoBold.ttf')
   .fontSize(25)
   .text('Some text with an embedded font!', 100, 100);
-
-// Add an image, constrain it to a given size, and center it vertically and horizontally
+```
+- Add an image, constrain it to a given size, and center it vertically and horizontally
+```js
 doc.image('path/to/image.png', {
   fit: [250, 300],
   align: 'center',
   valign: 'center'
 });
-
-// Add some text with annotations
 ```
+- Add some text with annotations
+```js
 doc
   .addPage()
   .fillColor('blue')
@@ -60,15 +63,15 @@ doc
   .underline(100, 100, 160, 27, { color: '#0000FF' })
   .link(100, 100, 160, 27, 'http://google.com/');
 ```
-// Finalize PDF file
+- Finalize PDF file
 ```js
 doc.end();
 ```
-// Simulate a mouse click:
-```
+- Simulate a mouse click:
+```js
 window.location.href = "http://www.w3schools.com";
 ```
-// Simulate an HTTP redirect:
-```
+- Simulate an HTTP redirect:
+```js
 window.location.replace("http://www.w3schools.com");
 ```
