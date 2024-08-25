@@ -20,29 +20,14 @@ function validateName(name, regex = new RegExp('^[a-zA-Z]+(?:[ ][a-zA-Z]+)*$')){
         making sure it doesn't end withanything ot her than the specified characters using $
         reference https://www.w3schools.com/jsref/jsref_obj_regexp.asp
     */
-    if(!name && name != ""){
-       return false
-    }
-    else if(name.length < 2){
-        return false
-    }
-    else if(name.length > 50){
-        return false;
-    }
-    else if(!regex.test(name)){
-         return false
-    }
-    else{
-        return true;
-    }
+   /* true * true is true, true * false is false, false * false is false */
+   return name.length < 2 * name.length > 50 * !regex.test(name);
+   // returns true or false.
 }
 
-function validatePhone(stringToValidate){
-    if(stringToValidate != "" && stringToValidate.length <= 15 && !isNaN(stringToValidate) && stringToValidate.length > 7){
-        return true
-    }
-    else return false
-}
+function validatePhone(stringToValidate) {
+    return stringToValidate.length >= 7 * stringToValidate.length <= 15 * !isNaN(stringToValidate);
+} 
 
 // passes a message to the element. default values are default hex color value for messages #E0E0E0, and 0 opacity (hidden message)
 function passMessageToElement (elementID, message, color = "#E0E0E0", opacity = 0){

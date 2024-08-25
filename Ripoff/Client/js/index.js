@@ -19,9 +19,9 @@ function loadNavigationBar(){
                '<li class="nav-li"><a href="javascript:search()"><img src="./img/search.png" alt="Search Button" id="searchButton"></a></li>'+
           '</div>'+
            '<div id="cartDiv">';
-            if(localStorage.getItem("userId")){
+            if(localStorage.getItem("id")){
                 navigationBarContents += 
-              '<li class="nav-li"><span>Welcome&nbsp;</span><a href="./user.html" title="My Profile"> '+localStorage.getItem("firstName")+'</li>'+
+              '<li class="nav-li"><span>Welcome&nbsp;</span><a href="./user.html" title="My Profile"> '+localStorage.getItem("first_name")+'</li>'+
               ' <li class="nav-li"><p class="separator"> | </p></li>'+
                ' <li class="nav-li"><a href="javascript:logout()" title="Logout of your account">Logout</a></li>';
             }
@@ -74,7 +74,7 @@ function search(){
 // When the cart is clicked.
 function cart(){
     // check if user is logged in then open the cart.
-    if(localStorage.getItem("userId")){
+    if(localStorage.getItem("id")){
 
     }
     // if not logged in, redirect them to the login screen.
@@ -84,13 +84,8 @@ function cart(){
 }
 //function when the user clicks the button logout in the navigation bar
 function logout(){
-    // remove user data from local storage.
-    localStorage.removeItem("userId");
-    localStorage.removeItem("firstName");
-    localStorage.removeItem("userName");
-    localStorage.removeItem("email");
-    localStorage.removeItem("phone");
-    localStorage.removeItem("lastName");
+    // remove all user data from local storage.
+    localStorage.clear();
     // redirect the user to the homepage when they logout
     window.location.assign("./index.html");
 }
@@ -99,123 +94,104 @@ function login(){
     // Get all relevant element's values.
     const username = getValueOfElementById("username");
     const password = getValueOfElementById("password");
-    // set isEsername and isEmail false.
-    var isUsername = false;
-    var isEmail = false;
+    let isEmail = false;
+    let isUsername = false;
 
-    resetMessages(["usernameError","passwordError", "errorMessage"]);
+    resetMessages(["usernameError", "passwordError", "errorMessage"]);
+
     // First check if the format matches an email format
-    if(username.includes("@"))
-       // Validate using the E-mail Regex.
-       isEmail = validateName(username, new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'))
-    // if Username does not contain @ (means it's not an email) validate using normal name regex (default to the function validateName regex)
-    else isUsername = validateName(username);
-    if(isEmail || isUsername) {if(validateName(password, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))){
-        axios.get(domain+"/login", {
-            params: {
-            username: username,
-            password: password,
-            isEmail: isEmail
-          }
+    if (username.includes("@")) {
+        // Validate using the E-mail Regex.
+        isEmail = validateName(username, /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/);
+    } else {
+        // Validate using the default name regex
+        isUsername = validateName(username);
+    }
+
+    if ((isEmail || isUsername) && validateName(password, /^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$/)) {
+        axios.get(domain + "/login", {
+            params: { username, password, isEmail }
         })
-          .then(function (response) {
+        .then(function(response) {
             const userData = response.data;
-            if(userData.message){
+            if (userData.message) {
                 passMessageToElement("errorMessage", userData.message, "red", 1);
-            }
-            else{
-                localStorage.setItem("userId", userData[0].id);
-                localStorage.setItem("userName", userData[0].name);
-                localStorage.setItem("email", userData[0].email);
-                localStorage.setItem("phone", userData[0].phone);
-                localStorage.setItem("firstName", userData[0].first_name);
-                localStorage.setItem("lastName", userData[0].last_name);
-                
-                // Hide Sign Up | Login from the navigation bar, and show Logout
+            } else {
+                ['id', 'name', 'email', 'phone', 'first_name', 'last_name'].forEach(function(field) {
+                    localStorage.setItem(field, userData[0][field]);
+                });
+
+                // Redirect to the homepage
                 window.location.assign("./index.html");
             }
-          })
-          .catch(function (error) {
+        })
+        .catch(function(error) {
             passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
             console.error(error);
-          });
+        });
+    } else {
+        const messageType = !isEmail && !isUsername ? "usernameError" : "passwordError";
+        const message = !isEmail && !isUsername ? "Please enter a valid username / email" : "Please enter a valid password";
+        passMessageToElement(messageType, message, "red", 1);
     }
-    // Invalid password format.
-    else passMessageToElement("passwordError", "Please enter a valid password", "red", 1);
-    }
-    // Invalid username or Email format.
-    else passMessageToElement("usernameError", "Please enter a valid username / email", "reg", 1);
-
 }
 
 // Function when the user clicks the button Sign up in the user registration page.
-function signup(){
-    // Get all relevant element's values.
-    const username = getValueOfElementById("username");
-    const password = getValueOfElementById("password");
-    const email = getValueOfElementById("email");    
-    const firstName = getValueOfElementById("fName");
-    const lastName = getValueOfElementById("lName");
-    const phone = getValueOfElementById("phone");
+function signup() {
+    // Get all relevant element values.
+    const userInfo = {
+        username: getValueOfElementById("username"),
+        password: getValueOfElementById("password"),
+        email: getValueOfElementById("email"),
+        firstName: getValueOfElementById("fName"),
+        lastName: getValueOfElementById("lName"),
+        phone: getValueOfElementById("phone"),
+    };
 
-    // Reset all messages by their ID's (hide them and turn their text values into an empty string)
-    resetMessages(["usernameError","passwordError", "emailError", "phoneError", "fNameError", "lNameError", "errorMessage"]);
+    // Reset all error messages.
+    resetMessages(["usernameError", "passwordError", "emailError", "phoneError", "fNameError", "lNameError", "errorMessage"]);
 
-    if(validateName(username)){
-        // Password accepts numbers, letters and spaces. 
-        if(validateName(password, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))){
-            // Match letters, numbers and ._%+- before the @ and letters numbers .- after it but before the dot, and at least 2 letters after the dot.
-            if(validateName(email, new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'))){
-                if(validatePhone(phone)){
-                    if(validateName(firstName)){
-                        if(validateName(lastName)){
-                            axios.get(domain+"/signup", {
-                                params: {
-                                username: username,
-                                password: password,
-                                email: email,
-                                phone: phone,
-                                firstName: firstName,
-                                lastName: lastName
-                              }
-                            })
-                              .then(function (response) {
-                                passMessageToElement("errorMessage", response.data.message, "green", 1);
-                              })
-                              .catch(function (error) {
-                                passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
-                              });
-                        }
-                        else
-                        // Wrong last name format
-                        passMessageToElement("lNameError", "Must be between 2 and 50 chars", "red", 1);
-                    }
-                    else
-                    // Wrong first name format
-                    passMessageToElement("fNameError", "Must be between 2 and 50 chars", "red", 1);
-                }
-                else
-                // Wrong phone format
-                passMessageToElement("phoneError", "Must be between 7 and 15 numbers", "red", 1);
-            }
-            else
-            // Wrong email format
-            passMessageToElement("emailError", "Invalid email format", "red", 1);
-        }
-        // Wrong password format
-        else{
-            passMessageToElement("passwordError", "Please enter a valid password", "red", 1);
-        }
+    // Validate information
+    if (!validateName(userInfo.username)) {
+        return passMessageToElement("usernameError", "Please enter a valid username", "red", 1);
     }
-    // Wrong username format
-    else{
-        passMessageToElement("usernameError", "Please enter a valid username", "red", 1);
+
+    if (!validateName(userInfo.password, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))) {
+        return passMessageToElement("passwordError", "Please enter a valid password", "red", 1);
     }
+
+    if (!validateName(userInfo.email, new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'))) {
+        return passMessageToElement("emailError", "Invalid email format", "red", 1);
+    }
+
+    if (!validatePhone(userInfo.phone)) {
+        return passMessageToElement("phoneError", "Must be between 7 and 15 numbers", "red", 1);
+    }
+
+    if (!validateName(userInfo.firstName)) {
+        return passMessageToElement("fNameError", "Must be between 2 and 50 chars", "red", 1);
+    }
+
+    if (!validateName(userInfo.lastName)) {
+        return passMessageToElement("lNameError", "Must be between 2 and 50 chars", "red", 1);
+    }
+
+    // All validations passed, proceed with the signup
+    axios.get(domain + "/signup", {
+        params: userInfo
+    })
+    .then(function(response) {
+        passMessageToElement("errorMessage", response.data.message, "green", 1);
+    })
+    .catch(function(error) {
+        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+    });
 }
+
 
 // My Profile, when the user clicks on their name in the navigation bar.
 function profile(){
-    const profileElements = ["username", "email","phone", "fName", "lName"];
+    const profileElements = ["username", "email","phone", "fName", "lName", "password"];
     const username = getElementById("username");
     const email = getElementById("email");    
     const firstName = getElementById("fName");
@@ -225,18 +201,180 @@ function profile(){
     disableElements(profileElements);
 
     // Load values from the localStorage into the input fields after the page loads (window.location.assign)
-    username.value =  localStorage.getItem("userName");
-    firstName.value = localStorage.getItem("firstName");
+    username.value =  localStorage.getItem("name");
+    firstName.value = localStorage.getItem("first_name");
     email.value =  localStorage.getItem("email");
     phone.value = localStorage.getItem("phone");
-    lastName.value = localStorage.getItem("lastName");
+    lastName.value = localStorage.getItem("last_name");
 }
 function activateField(fieldIndex){
-    const profileElements = ["username", "email","phone", "fName", "lName"];
+    const profileElements = ["username", "email","phone", "fName", "lName", "password"];
     enableElement(profileElements[fieldIndex]);
 }
-// saves the profile information when the user clicks Save in My Profile page.
+// saves the profile information when the user clicks Save in My Profile page after changing some info about them.
 function saveProfile(){
-    const id = localStorage.getItem("userId");
+    const id = localStorage.getItem("id");
+    // Get all relevant element values.
+    const userInfo = {
+        password: getValueOfElementById("password"),
+        email: getValueOfElementById("email"),
+        firstName: getValueOfElementById("fName"),
+        lastName: getValueOfElementById("lName"),
+        phone: getValueOfElementById("phone"),
+    };
+    var isPassword = false;
+    if(userInfo.password != ""){
+        if (!validateName(userInfo.password, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))) {
+            return passMessageToElement("passwordError", "Please enter a valid password", "red", 1);
+        }
+        isPassword = true;
+    }
     
+    if (!validateName(userInfo.email, new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'))) {
+        return passMessageToElement("emailError", "Invalid email format", "red", 1);
+    }
+
+    if (!validatePhone(userInfo.phone)) {
+        return passMessageToElement("phoneError", "Must be between 7 and 15 numbers", "red", 1);
+    }
+
+    if (!validateName(userInfo.firstName)) {
+        return passMessageToElement("fNameError", "Must be between 2 and 50 chars", "red", 1);
+    }
+
+    if (!validateName(userInfo.lastName)) {
+        return passMessageToElement("lNameError", "Must be between 2 and 50 chars", "red", 1);
+    }
+    var parameters = {};
+    if(isPassword){
+        parameters = {
+            id: id,
+            password: userInfo.password,
+            email: userInfo.email,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            phone: userInfo.phone
+        };
+    }
+    else
+    {
+        parameters = {
+            id: id,
+            email: userInfo.email,
+            firstName: userInfo.firstName,
+            lastName: userInfo.lastName,
+            phone: userInfo.phone
+        };
+    }
+    // All validations passed, proceed with the signup
+    axios.get(domain + "/save", {
+        params: parameters
+    })
+    .then(function(response) {
+        localStorage.setItem("email", userInfo.email);
+        localStorage.setItem("first_name", userInfo.firstName);
+        localStorage.setItem("phone", userInfo.phone);
+        localStorage.setItem("last_name", userInfo.lastName);
+        window.location.assign("./user.html");
+        passMessageToElement("errorMessage", response.data.message, "green", 1);
+    })
+    .catch(function(error) {
+        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+    });
+    
+}
+
+function ShowAddresses(){
+    const viewAddresses = getElementById("viewAddresses");
+    const addresses_table = getElementById("addresses_table");
+    const countryDropdown = getElementById("country");
+    const cityDropdown = document.getElementById("city");
+    // hide Show Addresses section.
+    viewAddresses.style.display = "none";
+    addresses_table.style.display = "block";
+    // 3 cities per country, because...well....
+    const countryCityData = {
+        "Afghanistan": ["Kabul", "Kandahar", "Herat"],
+        "Albania": ["Tirana", "Durrës", "Vlorë"],
+        "Algeria": ["Algiers", "Oran", "Constantine"],
+        "Andorra": ["Andorra la Vella", "Escaldes-Engordany"],
+        "Argentina": ["Buenos Aires", "Córdoba", "Rosario"],
+        "Australia": ["Sydney", "Melbourne", "Brisbane"],
+        "Austria": ["Vienna", "Graz", "Salzburg"],
+        "Brazil": ["São Paulo", "Rio de Janeiro", "Brasília"],
+        "Canada": ["Toronto", "Vancouver", "Montreal"],
+        "China": ["Beijing", "Shanghai", "Guangzhou"],
+        "Colombia": ["Bogotá", "Medellín", "Cali"],
+        "Croatia": ["Zagreb", "Split", "Dubrovnik"],
+        "Cuba": ["Havana", "Santiago de Cuba", "Camagüey"],
+        "Denmark": ["Copenhagen", "Aarhus", "Odense"],
+        "Egypt": ["Cairo", "Alexandria", "Giza"],
+        "France": ["Paris", "Lyon", "Marseille"],
+        "Germany": ["Berlin", "Munich", "Frankfurt"],
+        "Greece": ["Athens", "Thessaloniki", "Patras"],
+        "Hungary": ["Budapest", "Debrecen", "Szeged"],
+        "India": ["Delhi", "Mumbai", "Bangalore"],
+        "Indonesia": ["Jakarta", "Surabaya", "Bali"],
+        "Ireland": ["Dublin", "Cork", "Limerick"],
+        "Italy": ["Rome", "Milan", "Florence"],
+        "Japan": ["Tokyo", "Osaka", "Kyoto"],
+        "Kenya": ["Nairobi", "Mombasa", "Kisumu"],
+        "Malaysia": ["Kuala Lumpur", "Penang", "Johor Bahru", "Selangor"],
+        "Mexico": ["Mexico City", "Guadalajara", "Monterrey"],
+        "Netherlands": ["Amsterdam", "Rotterdam", "Utrecht"],
+        "New Zealand": ["Auckland", "Wellington", "Christchurch"],
+        "Nigeria": ["Lagos", "Abuja", "Kano"],
+        "Norway": ["Oslo", "Bergen", "Stavanger"],
+        "Pakistan": ["Islamabad", "Karachi", "Lahore"],
+        "Peru": ["Lima", "Cusco", "Arequipa"],
+        "Philippines": ["Manila", "Cebu City", "Davao City"],
+        "Poland": ["Warsaw", "Kraków", "Wrocław"],
+        "Portugal": ["Lisbon", "Porto", "Braga"],
+        "Romania": ["Bucharest", "Cluj-Napoca", "Timișoara"],
+        "Russia": ["Moscow", "Saint Petersburg", "Novosibirsk"],
+        "Saudi Arabia": ["Riyadh", "Jeddah", "Dammam"],
+        "South Africa": ["Johannesburg", "Cape Town", "Durban"],
+        "South Korea": ["Seoul", "Busan", "Incheon"],
+        "Spain": ["Madrid", "Barcelona", "Valencia"],
+        "Sweden": ["Stockholm", "Gothenburg", "Malmö"],
+        "Switzerland": ["Zurich", "Geneva", "Bern"],
+        "Taiwan": ["Taipei", "Kaohsiung", "Taichung"],
+        "Thailand": ["Bangkok", "Chiang Mai", "Phuket"],
+        "Turkey": ["Istanbul", "Ankara", "Izmir"],
+        "Ukraine": ["Kyiv", "Lviv", "Odesa"],
+        "United Kingdom": ["London", "Manchester", "Birmingham"],
+        "United States": ["New York", "Los Angeles", "Chicago"],
+        "Uruguay": ["Montevideo", "Salto", "Paysandú"],
+        "Venezuela": ["Caracas", "Maracaibo", "Valencia"]
+    };
+    // loop through countries and add them to the dropdown list one by one...
+    for (const country in countryCityData) {
+        // Create a new option element
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+       
+        countryDropdown.appendChild(option);
+    }
+    /*
+        whenever the value of the Country dropdown menu changes, this function will get called,
+        gets the new selected country, change the cities based on it
+    */
+    countryDropdown.addEventListener("change", function(){
+        const selectedCountry = getValueOfElementById("country");
+        cityDropdown.innerHTML = '<option value="" disabled selected>Select a city</option>';
+        if (selectedCountry) {
+            const cities = countryCityData[selectedCountry];
+            cities.forEach(function(city) {
+                const option = document.createElement("option");
+                option.value = city; // set the value to the city's name
+                option.textContent = city;
+                cityDropdown.appendChild(option);
+            });
+            cityDropdown.disabled = false;
+        }
+        // Disable city dropdown menu if no country is selected.
+        else cityDropdown.disabled = true;
+    });
+
 }

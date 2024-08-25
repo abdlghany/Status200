@@ -26,7 +26,6 @@ class MysqlQueries{
             if (err) {
                 console.error("Error disconnecting from the database:", err.message);
             } else {
-                console.log("Disconnected from the database.");
             }
         });
     }
@@ -36,17 +35,17 @@ class MysqlQueries{
             if (err) {
                 console.error("Error creating table:", err.message);
             } else {
-                console.log("Table created successfully:", result);
             }
         });
     }
 
-    insert(query, values) {
-        this.#connection.query(query, values, function(err, result) {
+    insert(query, values, callback) {
+        this.#connection.query(query, values, function(err, results) {
             if (err) {
                 console.error("Error inserting data:", err.message);
+                callback(err, null);
             } else {
-                console.log("Data inserted successfully:", result);
+                callback(null, results);
             }
         });
     }
@@ -62,22 +61,24 @@ class MysqlQueries{
         });
     }
 
-    update(query, values) {
-        this.#connection.query(query, values, function(err, result) {
+    update(query, values, callback) {
+        this.#connection.query(query, values, function(err, results) {
             if (err) {
                 console.error("Error updating data:", err.message);
+                callback(err, null);
             } else {
-                console.log("Data updated successfully:", result);
+                callback(null, results);
             }
         });
     }
 
-    delete(query, values) {
-        this.#connection.query(query, values, function(err, result) {
+    delete(query, values, callback) {
+        this.#connection.query(query, values, function(err, results) {
             if (err) {
                 console.error("Error deleting data:", err.message);
+                callback(err, null);
             } else {
-                console.log("Data deleted successfully:", result);
+                callback(null, results);
             }
         });
     }
@@ -113,6 +114,7 @@ CREATE TABLE Users_addresses (
     label VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );
+
 CREATE TABLE Products (
     product_id INT AUTO_INCREMENT PRIMARY KEY,
     product_name VARCHAR(50) NOT NULL,
@@ -182,8 +184,10 @@ INSERT INTO categories (category_name, category_description, category_image) VAL
 ('Groceries', 'Fresh food and household items', './img/categories/groceries.png'),
 ('Accessories', 'Various accessories for all of your needs.', './img/categories/accessories.png');
 
-Categories (category_id, category_name, category_image, category_description)
+Categories (category_id, category_name, category_image, category_description);
 
-Users (user_id, user_name, password, email, phone, first_name, last_name)
+Users (user_id, user_name, password, email, phone, first_name, last_name);
+
+Users_addresses (address_id, user_id, street, city, state, country, zip_code, label);
 
 */

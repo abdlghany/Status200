@@ -147,27 +147,33 @@ td {
     padding: 0 15px;
 }
 
-table input, table label{
+table input, table label, table Select{
     width: 100%;
     padding-left:0.3rem ;
     line-height:2.5rem;
     vertical-align: middle;
-    
 }
+
 label{
     font-size: 1.5rem;
 }
-table input{
+table input, table Select{
     width: 350px;
     background-color: #202020;
     color: #E0E0E0;
     border-radius: 10px;
     font-size: 1.2rem;
 }
+table Select{
+    height: 2.5rem;
+
+}
 table a, table a:visited{
     color: #E0E0E0;
 }
-
+.tdSelect{
+    padding-bottom: 1.5rem;
+}
 /* class errorMessage and id errorMessage styles */
 .errorMessage, #errorMessage{
     opacity: 0;
@@ -186,19 +192,18 @@ table a, table a:visited{
     max-width: 1600px;
     padding: 50px 50px;
     display: flex;
-    flex-direction: row;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
 }
+
 #signup h1, #signup button,
 #login h1, #login button,
 #userProfile h1, #userProfile button{
     display: block;
     margin: 2rem auto;
 }
-#userProfile a{
-   
-}
+
 #signup button,
 #login button,
 #userProfile button{
@@ -216,4 +221,12 @@ input[type=number]::-webkit-outer-spin-button {
 /* Remove arrows from input type number for Firefox */
 input[type=number] {
     -moz-appearance: textfield;
+}
+
+#addresses_table{
+    display: none;
+}
+.horizontalRule{
+    margin-top: 0;
+    margin-bottom: 1rem;
 }

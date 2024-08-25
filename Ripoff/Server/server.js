@@ -37,42 +37,47 @@ const server = http.createServer(function(request, response) {
         });
     } 
     // Route GET Signup
-    else if(pathname === "/signup" && queryParams){
-        doesAccountExist(queryParams.get('username'),queryParams.get('email'), function(result){
-            if(result == "success"){
-                db.insert("INSERT INTO USERS VALUES (NULL, ?, ?, ?, ?, ?, ?)",
-                    [queryParams.get('username'), queryParams.get('password'), queryParams.get('email'), queryParams.get('phone'), queryParams.get('firstName'), queryParams.get('lastName')],
-                    function(err, results){
-                        if (err) {
-                            //if an error has happened, return code 500 with the error.
-                            response.writeHead(500, { "Content-Type": "application/json" });
-                            response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
-                        } else if (results.length > 0) {
-                            console.log("New user registered: "+queryParams.get('username'));
-                            // if results are more than 0, return them with code 200 (success*.)
-                            response.writeHead(200, { "Content-Type": "application/json" });
-                            response.end({message: "Account successfully created! please login to use your account"});
-                        } else {
-                            // if nothing was found, return 404 not found with an appropriate message.
-                            response.writeHead(500, { "Content-Type": "application/json" });
-                            response.end(JSON.stringify({ message: "An error happened while registering your account to the database, please try again." }));
-                        }
+    else if (pathname === "/signup" && queryParams) {
+        doesAccountExist(queryParams.get('username'), queryParams.get('email'), function(result) {
+            if (result === "success") {
+                //Table: Users (user_id, user_name, password, email, phone, first_name, last_name)
+                const query = "INSERT INTO USERS VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+                const parameters = [
+                    queryParams.get('username'),
+                    queryParams.get('password'),
+                    queryParams.get('email'),
+                    queryParams.get('phone'),
+                    queryParams.get('firstName'),
+                    queryParams.get('lastName')
+                ];
+    
+                db.update(query, parameters, function(err, results) {
+                    if (err) {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
+                    } else if (results.length > 0) {
+                        //console.log("New user registered: " + queryParams.get('username'));
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "Account successfully created! Please log in to use your account." }));
+                    } else {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "An error occurred while registering your account, please try again." }));
+                    }
                 });
-            }
-            else if(result == "email"){
-                response.writeHead(200, { "Content-Type": "application/json" });
-                response.end(JSON.stringify({ message: "Email is already in use." }));
-            }
-            else if(result == "DBError"){
-                response.writeHead(500, { "Content-Type": "application/json" });
-                response.end(JSON.stringify({ message: "An error happened while registering your account to the database, please try again." }));
-            }
-            else{
-                response.writeHead(200, { "Content-Type": "application/json" });
-                response.end(JSON.stringify({ message: "Username is already in use." }));
+            } else {
+                let message = "Username is already in use.";
+                if (result === "email") {
+                    message = "Email is already in use.";
+                } else if (result === "DBError") {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    message = "An error occurred while registering your account to the database, please try again.";
+                } else {
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                }
+                response.end(JSON.stringify({ message }));
             }
         });
-    }
+    }    
     else if(pathname === "/login" && queryParams){
         // Table: Users (user_id, user_name, password, email, phone, first_name, last_name)
         var query = "SELECT user_id as id, user_name as name, email, phone, first_name, last_name FROM users ";
@@ -94,8 +99,7 @@ const server = http.createServer(function(request, response) {
             } else if (results.length > 0) {
                 // if results are more than 0, return them with code 200 (success*.)
                 response.writeHead(200, { "Content-Type": "application/json" });
-                response.write(JSON.stringify(results));
-                response.end();
+                response.end(JSON.stringify(results));
             } else {
                 // if nothing was found, return 200 not found with an appropriate message.
                 response.writeHead(200, { "Content-Type": "application/json" });
@@ -103,6 +107,45 @@ const server = http.createServer(function(request, response) {
             }
         });
     }
+    else if (pathname === "/save" && queryParams) {
+        doesEmailExist(queryParams.get('id'), queryParams.get('email'), function(result) {
+            if (result === "success") {
+                let query = "UPDATE USERS SET email = ?, first_name = ?, last_name = ?, phone = ?";
+                var parameters = [queryParams.get('email'), queryParams.get('firstName'), queryParams.get('lastName'), queryParams.get('phone')];
+    
+                if (queryParams.get('password')) {
+                    query += ", password = ?";
+                    parameters.push(queryParams.get('password'));
+                }
+    
+                query += " WHERE user_id = ?";
+                parameters.push(queryParams.get('id'));
+    
+                db.insert(query, parameters, function(err, results) {
+                    if (err) {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
+                    } else if (results.changedRows === 0) {
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "No changes" }));
+                    } else if (results.affectedRows > 0) {
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "Saved successfully!" }));
+                    } else {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "An error happened while updating your information, please try again." }));
+                    }
+                });
+            } else if (result === "DBError") {
+                response.writeHead(500, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "An error happened while registering your account to the database, please try again." }));
+            } else {
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "Email is already in use." }));
+            }
+        });
+    }
+    
     else {
         response.writeHead(404, { "Content-Type": "text/plain" });
         response.end("Not Found");
@@ -128,7 +171,19 @@ function doesAccountExist(username, email = "", callback){
         }
     });
 }
-
+function doesEmailExist(id, email = "", callback){
+    db.select("SELECT * FROM USERS WHERE email = ? AND user_id != ? LIMIT 1", [email, id], function(err, results){
+        if(err){callback("DBError")}
+        else if(results.length > 0){
+            if (email == results[0].email){
+                callback("email");
+            }
+        }
+        else{
+            callback("success");
+        }
+    });
+}
 server.listen(3000, function() {
     console.log("Listening on port 3000...");
 });
