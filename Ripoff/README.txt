@@ -61,7 +61,7 @@ doc
   .link(100, 100, 160, 27, 'http://google.com/');
 ```
 // Finalize PDF file
-```
+```js
 doc.end();
 ```
 // Simulate a mouse click:
