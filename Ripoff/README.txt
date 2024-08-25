@@ -52,18 +52,23 @@ doc.image('path/to/image.png', {
 });
 
 // Add some text with annotations
+```
 doc
   .addPage()
   .fillColor('blue')
   .text('Here is a link!', 100, 100)
   .underline(100, 100, 160, 27, { color: '#0000FF' })
   .link(100, 100, 160, 27, 'http://google.com/');
-
+```
 // Finalize PDF file
+```
 doc.end();
-
+```
 // Simulate a mouse click:
+```
 window.location.href = "http://www.w3schools.com";
-
+```
 // Simulate an HTTP redirect:
+```
 window.location.replace("http://www.w3schools.com");
+```
