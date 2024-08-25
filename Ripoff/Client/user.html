@@ -7,28 +7,32 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body onload="loadNavigationBar()">
+<body onload="javascript:loadNavigationBar(); javascript:profile();">
     <nav id="navigationBar"></nav>
-
     <div id="mainContent">
-        <div id="signup">
+        <div id="userProfile">
             <table>
                 <thead>
                     <tr>
                         <td colspan="2">
-                            <h1>Create a new account</h1>
+                            <h1>My Profile</h1>
                         </td>
                         <td></td>
                     </tr>
                 </thead>
                 <tbody>
+                    <tr>
+                        <td colspan="3">
+                            <hr>
+                        </td>
+                    </tr>
                     <!-- Username -->
                     <tr>
                         <td>
                             <label for="username">Username</label>
                         </td>
                         <td>
-                            <input type="text" id="username" name="username"  placeholder="Enter your username..." autofocus onfocus="this.select()">
+                            <input type="text" id="username" name="username"  placeholder="Enter your username..." autofocus onfocus="this.select()"> <a href="javascript:activateField(0)">change</a>
                         </td>
                         <td>
                             <span class="errorMessage" id="usernameError">Filler text that's invisible to the naked eye</span>
@@ -45,7 +49,7 @@
                             <label for="password">Password</label>
                         </td>
                         <td>
-                            <input type="password" id="password" name="password" placeholder="Enter your password...">
+                            <input type="password" id="password" name="password" placeholder="Enter a new password...">
                         </td>
                         <td>
                             <p class="errorMessage" id="passwordError"></p>
@@ -62,7 +66,7 @@
                             <label for="email">Email</label>
                         </td>
                         <td>
-                            <input type="text" id="email" name="email"  placeholder="Enter your E-mail...">
+                            <input type="text" id="email" name="email"  placeholder="Enter your E-mail..."onfocus="this.select()"> <a href="javascript:activateField(1)">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="emailError"></p>
@@ -79,7 +83,7 @@
                             <label for="phone">Phone No.</label>
                         </td>
                         <td>
-                            <input type="number" id="phone" name="phone" placeholder="Enter your phone number...">
+                            <input type="number" id="phone" name="phone" placeholder="Enter your phone number..."onfocus="this.select()"> <a href="javascript:activateField(2)">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="phoneError"></p>
@@ -96,7 +100,7 @@
                             <label for="fName">First Name</label>
                         </td>
                         <td>
-                            <input type="text" id="fName" name="fName" placeholder="Enter your first name...">
+                            <input type="text" id="fName" name="fName" placeholder="Enter your first name..."onfocus="this.select()"> <a href="javascript:activateField(3)">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="fNameError"></p>
@@ -113,7 +117,7 @@
                             <label for="lName">Last Name</label>
                         </td>
                         <td>
-                            <input type="text" id="lName" name="lName" placeholder="Enter your last name...">
+                            <input type="text" id="lName" name="lName" placeholder="Enter your last name..."onfocus="this.select()"> <a href="javascript:activateField(4)">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="lNameError"></p>
@@ -128,12 +132,12 @@
                     <tr>
                         <td></td>
                         <td>
-                            <button onclick="javascript:signup()">Sign Up</button>
+                            <button onclick="javascript:saveProfile()" title="Save changes">Save</button>
                         </td>
                         <td></td>
                     </tr>
                     <tr>
-                        <td>Already have an account? <a href="./login.html">Login instead</a></td>
+                        <td></td>
                         <td><p id="errorMessage">All information are correct</p></td>
                     </tr>
                 </tbody>

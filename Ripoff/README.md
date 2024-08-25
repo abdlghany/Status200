@@ -26,7 +26,8 @@ Notes: CSS design matters, "do not design an ugly website".
 // validator.validate("test@email.com"); // true
 
 
-# PDF Example (documentation)
+# PDF Example
+- (from the documentation of pdfkit Nodejs module)
 ```js
 const PDFDocument = require('pdfkit');
 const fs = require('fs');
@@ -63,7 +64,7 @@ doc
   .underline(100, 100, 160, 27, { color: '#0000FF' })
   .link(100, 100, 160, 27, 'http://google.com/');
 ```
-- Finalize PDF file
+### Finalize PDF file
 ```js
 doc.end();
 ```

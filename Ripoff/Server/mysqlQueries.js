@@ -184,5 +184,6 @@ INSERT INTO categories (category_name, category_description, category_image) VAL
 
 Categories (category_id, category_name, category_image, category_description)
 
+Users (user_id, user_name, password, email, phone, first_name, last_name)
 
 */

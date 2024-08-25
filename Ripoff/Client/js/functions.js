@@ -1,4 +1,6 @@
-
+/* 
+    A collection of reusable functions made by yours truly.
+*/
 function getElementById(elementId){
     return document.getElementById(elementId);
 }
@@ -6,12 +8,18 @@ function getElementById(elementId){
 function getValueOfElementById(elementId){
     return document.getElementById(elementId).value;
 }
-// default regex accepts letters and spaces only.
+/* 
+    default regex accepts letters and spaces only. 
+    (Examples of acceptable usernames: "aaaaa aaaa aaaaaa aaa", "abhdabsdhmdaks")
+ */
 function validateName(name, regex = new RegExp('^[a-zA-Z]+(?:[ ][a-zA-Z]+)*$')){
     //remove extra empty spaces (even between words) (\s finds whitespace characters) and replcae replaces them with nothing. '/g/ finds all that match
     name = String(name).replace(/\s+/g, '');
-    // Regular expression to match any alphabetical letters combo, capital or small, then (space or) then any alphabetical letters combo...making sure it doesn't end with
-    //anything other than the specified characters using $, reference https://www.w3schools.com/jsref/jsref_obj_regexp.asp
+    /*   
+        Regular expression to match any alphabetical letters combo, capital or small, then (space or) then any alphabetical letters combo...
+        making sure it doesn't end withanything ot her than the specified characters using $
+        reference https://www.w3schools.com/jsref/jsref_obj_regexp.asp
+    */
     if(!name && name != ""){
        return false
     }
@@ -28,7 +36,6 @@ function validateName(name, regex = new RegExp('^[a-zA-Z]+(?:[ ][a-zA-Z]+)*$')){
         return true;
     }
 }
-
 
 function validatePhone(stringToValidate){
     if(stringToValidate != "" && stringToValidate.length <= 15 && !isNaN(stringToValidate) && stringToValidate.length > 7){
@@ -51,4 +58,14 @@ function resetMessages(messageFields){
     messageFields.forEach(function(field){
     passMessageToElement(field, ""); // run with default values.
     });
+}
+
+function disableElements(elementsIds){
+    elementsIds.forEach(function(elementId){
+        getElementById(elementId).disabled = true;
+    });
+}
+function enableElement(elementId){
+    getElementById(elementId).disabled = false;
+    getElementById(elementId).focus();
 }

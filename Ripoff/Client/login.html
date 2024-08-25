@@ -11,7 +11,7 @@
     <nav id="navigationBar"></nav>
 
     <div id="mainContent">
-        <div id="signup">
+        <div id="login">
             <table>
                 <thead>
                     <tr>
@@ -36,7 +36,7 @@
                     </tr>
                     <tr>
                         <td colspan="1"></td>
-                        <td><p class="helperText">Letters and spaces only.</p></td>
+                        <td><p class="helperText">Letters, spaces for username  numbers ._%+-@ for email</p></td>
                         <td colspan="1"></td>
                     </tr>
                     <!-- Password -->
@@ -58,11 +58,14 @@
                     </tr>
                     <!-- Submit button -->
                     <tr>
-                        <td></td>
+                        <td>No account? <a href="./signup.html">Sign Up instead</a></td>
                         <td>
-                            <button>Login</button>
+                            <button onclick="javascript:login()">Login</button>
                         </td>
                         <td></td>
+                    </tr>
+                    <tr>
+                        <td><p id="errorMessage">All information are correct</p></td>
                     </tr>
                 </tbody>
             </table>
