@@ -341,29 +341,27 @@ function addAddressLoaded(){
         option.textContent = country;
         countryDropdown.appendChild(option);
     }
-    /*
-        whenever the value of the Country dropdown menu changes, this function will get called,
-        gets the new selected country, change the states based on it.
-    */
+    /*  whenever the value of the Country dropdown menu changes, this function will get called,
+        gets the new selected country, change the states based on it.   */
     countryDropdown.addEventListener("change", function() {
         populateDropdownMenu(stateDropdown, countryDropdown.value, countryStateData, "state");
     });
-    /*
-        whenever the value of the State dropdown menu changes, this function will get called,
-        gets the new selected State, then change the cities based on it.
-    */
+    /*  whenever the value of the State dropdown menu changes, this function will get called,
+        gets the new selected State, then change the cities based on it.    */
     stateDropdown.addEventListener("change", function() {
         populateDropdownMenu(cityDropdown, stateDropdown.value, stateCityData, "city");
     });
 }
 function ShowAddresses(){
     const viewAddresses = getElementById("viewAddresses");
-    const addresses_table = getElementById("addresses_table");
-    
-    // hide "Show Addresses section".
+    const addresses_profile_body = getElementById("addresses_profile_body");
+    fetchAddresses(function(response){
+        if(response){
+        // hide "Show Addresses section".
     viewAddresses.style.display = "none";
-    addresses_table.style.display = "block";
-    
+    addresses_profile_body.style.display = "block";
+        }
+    });
 }
 
 function populateDropdownMenu(dropdownMenuToFill, valueChanged, dictionary, nameOfCreatedSelection){
@@ -446,3 +444,62 @@ function addAddress(){
     });    
 }
 
+function fetchAddresses(callback) {
+    const parameters = { id: localStorage.getItem("id") };
+
+    axios.get(domain + "/fetchAddresses", { params: parameters })
+        .then(function (response) {
+            if (response.data.message) {
+                passMessageToElement("errorMessage", response.data.message, "red", 1);
+                return;
+            }
+
+            const addresses = response.data;
+            const addressesProfileBody = getElementById("addresses_profile_body");
+
+            addresses.forEach(function (address) {
+                const addressRows = [
+                    { label: "Street", value: address.street },
+                    { label: "City", value: address.city },
+                    { label: "State", value: address.state },
+                    { label: "Country", value: address.country },
+                    { label: "Zipcode", value: address.zip_code }
+                ];
+                const table = document.createElement('table');
+                // Disaply table header, which is the address label (Work, Home...etc.)
+                const tableHeader = document.createElement('tr');
+                tableHeader.innerHTML = "<label><b>"+address.label+"</b></label>";
+                table.appendChild(tableHeader);
+
+                addressRows.forEach(function (row) {
+                    const tr = document.createElement('tr');
+                    const labelTd = document.createElement('td');
+                    const valueTd = document.createElement('td');
+                    labelTd.innerHTML = `<label>${row.label}</label>`;
+                    valueTd.innerHTML = `<label>${row.value}</label>`;
+                    tr.appendChild(labelTd);
+                    tr.appendChild(valueTd);
+                    table.appendChild(tr);
+                });
+                // Add delete and edit buttons to each address.
+                const updateRow = document.createElement('tr');
+                const updateData1 = document.createElement('td');
+                const updateData2 = document.createElement('td');
+                updateData1.innerHTML = "<label><a href='javascript:deleteAddress("+address.address_id+");'>Delete</a></label>";
+                updateData2.innerHTML = "<label><a href='javascript:editAddress("+address.address_id+");'>Edit</a></label>";
+                updateRow.appendChild(updateData1);
+                updateRow.appendChild(updateData2);
+                table.appendChild(updateRow);
+
+                addressesProfileBody.appendChild(table);    
+                const hr = document.createElement('hr');
+                hr.style.width = "80%";
+                addressesProfileBody.appendChild(hr);
+            });
+
+            callback(true);
+        })
+        .catch(function (error) {
+            passMessageToElement("errorMessage", "Error happened while connecting to the server."+error, "red", 1);
+        });
+}

@@ -40,8 +40,8 @@ const server = http.createServer(function(request, response) {
     else if (pathname === "/signup" && queryParams) {
         doesAccountExist(queryParams.get('username'), queryParams.get('email'), function(result) {
             if (result === "success") {
-                //Table: Users (user_id, user_name, password, email, phone, first_name, last_name)
-                const query = "INSERT INTO USERS VALUES (NULL, ?, ?, ?, ?, ?, ?)";
+                //Table: Users (user_id, user_name, password, email, phone, first_name, last_name, isActive)
+                const query = "INSERT INTO USERS VALUES (NULL, ?, ?, ?, ?, ?, ?, 1)";
                 const parameters = [
                     queryParams.get('username'),
                     queryParams.get('password'),
@@ -83,11 +83,11 @@ const server = http.createServer(function(request, response) {
         // Check if isEmail is true, then use email in the WHERE clause, else use user_name
         if(queryParams.get("isEmail") == "true"){
             // Set a query that'll select based on Email.
-            query += "WHERE email = ? and password = ? LIMIT 1"
+            query += "WHERE email = ? AND password = ? AND isActive = 1 LIMIT 1"
         }
         else{
             // set a query that'll select based on username.
-            query += "WHERE user_name = ? and password = ? LIMIT 1"
+            query += "WHERE user_name = ? AND password = ? AND isActive = 1 LIMIT 1"
         }
 
         db.select(query, [queryParams.get("username"), queryParams.get("password")], function(err, results){
@@ -175,6 +175,29 @@ const server = http.createServer(function(request, response) {
                     }
                 });
                 }
+    else if (pathname === "/fetchAddresses" && queryParams) {
+        //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
+        // order by address_id to show them in they order they were added
+        const query = "SELECT * FROM users_addresses WHERE user_id = ? ORDER BY address_id";
+        const parameters = [
+            queryParams.get("id")
+        ];
+        db.select(query,parameters, function(err, results) {
+            if (err) {
+                //if an error has happened, return code 500 with the error.
+                response.writeHead(500, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ error: "Server error, could not fetch addresses." }));
+            } else if (results.length > 0) {
+                // if results are more than 0, return them with code 200 (success*.)
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.end(JSON.stringify(results));
+            } else {
+                // if nothing was found, return 404 not found with an appropriate message.
+                response.writeHead(404, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "No Addresses found." }));
+            }
+        });
+    } 
      //request isn't any of the previous pathnames           
     else {
         response.writeHead(404, { "Content-Type": "text/plain" });
