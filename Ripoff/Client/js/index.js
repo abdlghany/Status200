@@ -485,6 +485,7 @@ function fetchAddresses(callback) {
                 const updateRow = document.createElement('tr');
                 const updateData1 = document.createElement('td');
                 const updateData2 = document.createElement('td');
+                //Pass the address id to the functions in order to determine which address 'Anchor' the user clicked.
                 updateData1.innerHTML = "<label><a href='javascript:deleteAddress("+address.address_id+");'>Delete</a></label>";
                 updateData2.innerHTML = "<label><a href='javascript:editAddress("+address.address_id+");'>Edit</a></label>";
                 updateRow.appendChild(updateData1);
