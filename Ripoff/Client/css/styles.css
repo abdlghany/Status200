@@ -177,7 +177,7 @@ table a, table a:visited{
 /* class errorMessage and id errorMessage styles */
 .errorMessage, #errorMessage{
     opacity: 0;
-    font-size: 0.9rem;
+    font-size: 1.1rem;
     min-width:250px;
     min-height: 1rem;
 }

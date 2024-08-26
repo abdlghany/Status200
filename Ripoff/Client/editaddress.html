@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ripoff</title>
+    <link rel="stylesheet" href="./css/styles.css">
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body onload="javascript:addAddressLoaded();javascript:editAddressLoaded()">
+    <nav id="navigationBar"></nav>
+    <div id="mainContent">
+        <div id="userProfile">
+            <table id="addresses_table">
+                <thead>
+                    <tr>
+                        <td colspan="2">
+                            <h2>Add an Address</h2>
+                        </td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="horizontalRule">
+                        <td colspan="3" class="horizontalRule">
+                            <hr class="horizontalRule">
+                        </td>
+                    </tr>
+                    <!--TABLE: Users_addresses (address_id, user_id, street, city, state, country, zip_code, label); -->
+                    <!-- Address Label -->
+                    <tr>
+                        <td>
+                            <label for="address_label">Label this address</label>
+                        </td>
+                        <td>
+                            <input type="text" name="address_label" id="address_label" placeholder="Work, Home, Mom's place..."onfocus="this.select()">
+                        </td>
+                        <td>
+                            <span class="errorMessage" id="address_labelError">Filler text that's invisible to the naked eye</span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td><p class="helperText">Letters, spaces and numbers only</p></td>
+                        <td colspan="1"></td>
+                    </tr>
+                    <!-- Street -->
+                    <tr>
+                        <td>
+                            <label for="street">House No. & Street</label>
+                        </td>
+                        <td>
+                            <input type="text" name="street" id="street" placeholder="5-9-3E, Block E, Sultan Abdulaziz..."onfocus="this.select()">
+                        </td>
+                        <td>
+                            <span class="errorMessage" id="streetError"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td><p class="helperText">Letters spaces numbers -,. only</p></td>
+                        <td colspan="1"></td>
+                    </tr>
+                    <!-- Country -->
+                    <tr>
+                        <td class="tdSelect">
+                            <label for="country">Country</label>
+                        </td>
+                        <td class="tdSelect">
+                            <!-- Country dropdown list -->
+                            <Select id="country" name="country">
+                                <option value="" disabled selected>Select a country...</option>
+                            </Select>
+                        </td>
+                        <td class="tdSelect">
+                            <span class="errorMessage" id="countryError"></span>
+                        </td>
+                    </tr>
+                    <!-- State -->
+                    <tr>
+                        <td class="tdSelect">
+                            <label for="state">State</label>
+                        </td>
+                        <td class="tdSelect">
+                            <!-- state dropdown list -->
+                            <Select id="state" name="state">
+                                <option value="" disabled selected>Select a country first</option>
+                            </Select>
+                        </td>
+                        <td class="tdSelect">
+                            <span class="errorMessage" id="stateError"></span>
+                        </td>
+                    </tr>
+                    <!-- City -->
+                    <tr>
+                        <td class="tdSelect">
+                            <label for="city">City</label>
+                        </td>
+                        <td class="tdSelect">
+                            <!-- city dropdown list -->
+                            <Select id="city" name="city">
+                                <option value="" disabled selected>Select a state first</option>
+                            </Select>
+                        </td>
+                        <td class="tdSelect">
+                            <span class="errorMessage" id="cityError"></span>
+                        </td>
+                    </tr>
+                    <!-- Zipcode -->
+                    <tr>
+                        <td>
+                            <label for="zipcode">Zipcode</label>
+                        </td>
+                        <td>
+                            <input type="text" name="zipcode" id="zipcode" placeholder="40100, 50201..."onfocus="this.select()">
+                        </td>
+                        <td>
+                            <span class="errorMessage" id="zipcodeError"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td><p class="helperText">Numbers only</p></td>
+                        <td colspan="1"></td>
+                    </tr>
+                    <!-- Address Submit button -->
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button onclick="javascript:addAddress()" title="Add Address">Add Address</button>
+                        </td>
+                        <td></td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td><p id="errorMessage">All information are correct</p></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script src="./js/functions.js"></script>
+    <script src="./js/index.js"></script>
+</body>
+</html>

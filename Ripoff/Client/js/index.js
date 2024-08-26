@@ -446,7 +446,6 @@ function addAddress(){
 
 function fetchAddresses(callback) {
     const parameters = { id: localStorage.getItem("id") };
-
     axios.get(domain + "/fetchAddresses", { params: parameters })
         .then(function (response) {
             if (response.data.message) {
@@ -503,4 +502,59 @@ function fetchAddresses(callback) {
         .catch(function (error) {
             passMessageToElement("errorMessage", "Error happened while connecting to the server."+error, "red", 1);
         });
+}
+
+function deleteAddress(address_id){
+    const parameters = { id: localStorage.getItem("id"),
+        address_id: address_id
+     };
+     axios.get(domain + "/deleteAddress", { params: parameters })
+     .then(function(response) {
+        //set the message before reloading the page..(for example, address removed successfully)
+        localStorage.setItem("message", response.data.message);
+        localStorage.setItem("messageColor", "green");
+        //reload the page
+        window.location.assign("./user.html");
+    })
+    .catch(function(error) {
+        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+    });    
+}
+
+function editAddress(address_id){
+    localStorage.setItem("address_id", address_id);
+    window.location.assign("./editaddress.html");
+}
+
+function editAddressLoaded(){
+    // get all relevant elements from the HTML page
+    const addressInfo = {
+        address_label: getElementById("address_label"),
+        street: getElementById("street"),
+        country: getElementById("country"),
+        state: getElementById("state"),
+        city: getElementById("city"),
+        zip_code: getElementById("zipcode"),
+    };
+    const parameters = {
+        id: localStorage.getItem('id'),
+        address_id: localStorage.getItem('address_id')
+    };
+    axios.get(domain + "/fetchAddress", {
+        params: parameters
+    })
+    .then(function(response) {
+        const dataFromDB = response.data;
+        // set the values of the input/select elements in the page to their current values in the database.
+        addressInfo.address_label.value = dataFromDB.address_label;
+        addressInfo.street.value = dataFromDB.street;
+        addressInfo.country.value = dataFromDB.country;
+        addressInfo.state.value = dataFromDB.state;
+        addressInfo.city.value = dataFromDB.city;
+        addressInfo.zip_code.value = dataFromDB.zip_code;
+    })
+    .catch(function(error) {
+        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+    });   
+    
 }

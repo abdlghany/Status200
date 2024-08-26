@@ -174,7 +174,7 @@ const server = http.createServer(function(request, response) {
                         response.end(JSON.stringify({ message: "An error occurred while adding your address, please try again." }));
                     }
                 });
-                }
+    }
     else if (pathname === "/fetchAddresses" && queryParams) {
         //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
         // order by address_id to show them in they order they were added
@@ -197,7 +197,49 @@ const server = http.createServer(function(request, response) {
                 response.end(JSON.stringify({ message: "No Addresses found." }));
             }
         });
-    } 
+    }
+    else if (pathname === "/deleteAddress" && queryParams) {
+        //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
+        const query = "DELETE FROM users_addresses WHERE user_id = ? AND address_id = ?";
+        const parameters = [
+            queryParams.get('id'),
+            queryParams.get('address_id')
+        ];
+        db.delete(query, parameters, function(err, results) {
+            if (err) {
+                response.writeHead(500, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "Server error, could not remove your address." }));
+                // if there are affectedRows, that means the deletion is successful.
+            } else if (results.affectedRows > 0) {
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "Address removed successflly!" }));
+            } else {
+                response.writeHead(500, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "An error occurred while removing your address, please try again." }));
+            }
+        });
+        }
+        else if (pathname === "/fetchAddress" && queryParams) {
+            //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
+            // order by address_id to show them in they order they were added
+            const query = "SELECT * FROM users_addresses WHERE user_id = ? AND address_id = ? ORDER BY address_id";
+            const parameters = [
+                queryParams.get("id"),
+                queryParams.get("address_id")
+            ];
+            db.select(query,parameters, function(err, results) {
+                if (err) {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ error: "Server error, could not fetch the specified address." }));
+                } else if (results.length > 0) {
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify(results));
+                } else {
+                    response.writeHead(404, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "Address Not found." }));
+                }
+            });
+        }
      //request isn't any of the previous pathnames           
     else {
         response.writeHead(404, { "Content-Type": "text/plain" });
