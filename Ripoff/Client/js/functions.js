@@ -50,6 +50,12 @@ function disableElements(elementsIds){
         getElementById(elementId).disabled = true;
     });
 }
+function disableElement(elementId){
+    if(getElementById(elementId)){
+        getElementById(elementId).style.display = "none";
+    }
+    
+}
 function enableElement(elementId){
     getElementById(elementId).disabled = false;
     getElementById(elementId).focus();

@@ -50,12 +50,11 @@ const server = http.createServer(function(request, response) {
                     queryParams.get('firstName'),
                     queryParams.get('lastName')
                 ];
-    
-                db.update(query, parameters, function(err, results) {
+                db.insert(query, parameters, function(err, results) {
                     if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
-                    } else if (results.length > 0) {
+                    } else if (results.affectedRows > 0) {
                         //console.log("New user registered: " + queryParams.get('username'));
                         response.writeHead(200, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ message: "Account successfully created! Please log in to use your account." }));
@@ -110,24 +109,30 @@ const server = http.createServer(function(request, response) {
     else if (pathname === "/save" && queryParams) {
         doesEmailExist(queryParams.get('id'), queryParams.get('email'), function(result) {
             if (result === "success") {
-                let query = "UPDATE USERS SET email = ?, first_name = ?, last_name = ?, phone = ?";
+                let query = "UPDATE USERS SET email = ?, first_name = ?, last_name = ?, phone = ? ";
                 var parameters = [queryParams.get('email'), queryParams.get('firstName'), queryParams.get('lastName'), queryParams.get('phone')];
-    
+                // Either there's a password change, get the password and old password (current), then put user_id.
+                var message = "No changes";
                 if (queryParams.get('password')) {
-                    query += ", password = ?";
+                    query += ", password = ? WHERE password = ? AND user_id = ?";
                     parameters.push(queryParams.get('password'));
+                    parameters.push(queryParams.get('oldPassword'));
+                    parameters.push(queryParams.get('id'));
+                    message = "No changes, check if your current password is correct.";
                 }
-    
-                query += " WHERE user_id = ?";
-                parameters.push(queryParams.get('id'));
-    
+                // Or there's no password so just search for user_id becuase there's no password to be checked/updated
+                else{
+                    query += " WHERE user_id = ?";
+                    parameters.push(queryParams.get('id'));
+                }
                 db.insert(query, parameters, function(err, results) {
                     if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
                     } else if (results.changedRows === 0) {
                         response.writeHead(200, { "Content-Type": "application/json" });
-                        response.end(JSON.stringify({ message: "No changes" }));
+                        // Disaply a custom message if no rows were changed after the query runs successfully.
+                        response.end(JSON.stringify({ message: message }));
                     } else if (results.affectedRows > 0) {
                         response.writeHead(200, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ message: "Saved successfully!" }));
@@ -145,7 +150,32 @@ const server = http.createServer(function(request, response) {
             }
         });
     }
-    
+    else if (pathname === "/addaddress" && queryParams) {
+                //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
+                const query = "INSERT INTO users_addresses VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
+                const parameters = [
+                    queryParams.get('id'),
+                    queryParams.get('street'),
+                    queryParams.get('city'),
+                    queryParams.get('state'),
+                    queryParams.get('country'),
+                    queryParams.get('zipcode'),
+                    queryParams.get('address_label')
+                ];
+                db.insert(query, parameters, function(err, results) {
+                    if (err) {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ error: "Server error, could not add your address." }));
+                    } else if (results.affectedRows > 0) {
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "Address added successflly!" }));
+                    } else {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "An error occurred while adding your address, please try again." }));
+                    }
+                });
+                }
+     //request isn't any of the previous pathnames           
     else {
         response.writeHead(404, { "Content-Type": "text/plain" });
         response.end("Not Found");

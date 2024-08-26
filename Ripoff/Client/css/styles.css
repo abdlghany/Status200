@@ -223,10 +223,10 @@ input[type=number] {
     -moz-appearance: textfield;
 }
 
-#addresses_table{
-    display: none;
-}
 .horizontalRule{
     margin-top: 0;
     margin-bottom: 1rem;
+}
+.hidden{
+    opacity: 0;
 }

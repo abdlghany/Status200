@@ -99,7 +99,7 @@ CREATE TABLE Users (
     user_name VARCHAR(50) NOT NULL,
     password VARCHAR(50) NOT NULL,
     email VARCHAR(50),
-    phone INT(15),
+    phone VARCHAR(15),
     first_name VARCHAR(50),
     last_name VARCHAR(50)
 );
@@ -110,7 +110,7 @@ CREATE TABLE Users_addresses (
     city VARCHAR(50),
     state VARCHAR(50),
     country VARCHAR(50),
-    zip_code INT(5),
+    zip_code CHAR(5),
     label VARCHAR(50),
     FOREIGN KEY (user_id) REFERENCES Users(user_id)
 );

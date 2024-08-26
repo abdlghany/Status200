@@ -7,6 +7,21 @@ const domain = "http://ripoff.local:3000";
     &nbsp; = empty space.
 */
 
+//listen to the page reload then display the errorMessage (if any.)
+window.addEventListener("load", function() {
+    //Loads navigation bar to pages anytime a page loads.
+    loadNavigationBar();
+    const message = localStorage.getItem("message");
+    const messageColor = localStorage.getItem("messageColor");
+
+    if (message) {
+        passMessageToElement("errorMessage", message, messageColor, 1);
+        //clear the message from localStorage after displaying it
+        localStorage.removeItem("message");
+        localStorage.removeItem("messageColor");
+    }
+});
+
 function loadNavigationBar(){
     var navigationBarContents =
         '<ul class="nav-ul">'+
@@ -190,8 +205,8 @@ function signup() {
 
 
 // My Profile, when the user clicks on their name in the navigation bar.
+const profileElements = ["username", "email","phone", "fName", "lName", "password", "oldPassword"];
 function profile(){
-    const profileElements = ["username", "email","phone", "fName", "lName", "password"];
     const username = getElementById("username");
     const email = getElementById("email");    
     const firstName = getElementById("fName");
@@ -201,15 +216,18 @@ function profile(){
     disableElements(profileElements);
 
     // Load values from the localStorage into the input fields after the page loads (window.location.assign)
-    username.value =  localStorage.getItem("name");
+    username.innerText =  localStorage.getItem("name");
     firstName.value = localStorage.getItem("first_name");
     email.value =  localStorage.getItem("email");
     phone.value = localStorage.getItem("phone");
     lastName.value = localStorage.getItem("last_name");
 }
+// this function is being called from the HTML, which is why it has the variables again.
 function activateField(fieldIndex){
-    const profileElements = ["username", "email","phone", "fName", "lName", "password"];
     enableElement(profileElements[fieldIndex]);
+    console.log("change"+fieldIndex);
+    disableElement("change"+fieldIndex);
+    console.log("change"+fieldIndex);
 }
 // saves the profile information when the user clicks Save in My Profile page after changing some info about them.
 function saveProfile(){
@@ -217,6 +235,7 @@ function saveProfile(){
     // Get all relevant element values.
     const userInfo = {
         password: getValueOfElementById("password"),
+        oldPassword: getValueOfElementById("oldPassword"),
         email: getValueOfElementById("email"),
         firstName: getValueOfElementById("fName"),
         lastName: getValueOfElementById("lName"),
@@ -226,6 +245,9 @@ function saveProfile(){
     if(userInfo.password != ""){
         if (!validateName(userInfo.password, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))) {
             return passMessageToElement("passwordError", "Please enter a valid password", "red", 1);
+        }
+        if (!validateName(userInfo.oldPassword, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))) {
+            return passMessageToElement("oldPasswordError", "Please enter a valid password", "red", 1);
         }
         isPassword = true;
     }
@@ -250,6 +272,7 @@ function saveProfile(){
         parameters = {
             id: id,
             password: userInfo.password,
+            oldPassword:userInfo.oldPassword,
             email: userInfo.email,
             firstName: userInfo.firstName,
             lastName: userInfo.lastName,
@@ -275,106 +298,151 @@ function saveProfile(){
         localStorage.setItem("first_name", userInfo.firstName);
         localStorage.setItem("phone", userInfo.phone);
         localStorage.setItem("last_name", userInfo.lastName);
+        //set the message before reloading the page..
+        localStorage.setItem("message", response.data.message);
+        localStorage.setItem("messageColor", "green");
+        //reload the page
         window.location.assign("./user.html");
-        passMessageToElement("errorMessage", response.data.message, "green", 1);
     })
     .catch(function(error) {
         passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
-    });
-    
+    });    
 }
-
-function ShowAddresses(){
-    const viewAddresses = getElementById("viewAddresses");
-    const addresses_table = getElementById("addresses_table");
+// Load <select> options in each select elements
+function addAddressLoaded(){
     const countryDropdown = getElementById("country");
-    const cityDropdown = document.getElementById("city");
-    // hide Show Addresses section.
-    viewAddresses.style.display = "none";
-    addresses_table.style.display = "block";
-    // 3 cities per country, because...well....
-    const countryCityData = {
-        "Afghanistan": ["Kabul", "Kandahar", "Herat"],
-        "Albania": ["Tirana", "Durrës", "Vlorë"],
-        "Algeria": ["Algiers", "Oran", "Constantine"],
-        "Andorra": ["Andorra la Vella", "Escaldes-Engordany"],
-        "Argentina": ["Buenos Aires", "Córdoba", "Rosario"],
-        "Australia": ["Sydney", "Melbourne", "Brisbane"],
-        "Austria": ["Vienna", "Graz", "Salzburg"],
-        "Brazil": ["São Paulo", "Rio de Janeiro", "Brasília"],
-        "Canada": ["Toronto", "Vancouver", "Montreal"],
-        "China": ["Beijing", "Shanghai", "Guangzhou"],
-        "Colombia": ["Bogotá", "Medellín", "Cali"],
-        "Croatia": ["Zagreb", "Split", "Dubrovnik"],
-        "Cuba": ["Havana", "Santiago de Cuba", "Camagüey"],
-        "Denmark": ["Copenhagen", "Aarhus", "Odense"],
-        "Egypt": ["Cairo", "Alexandria", "Giza"],
-        "France": ["Paris", "Lyon", "Marseille"],
-        "Germany": ["Berlin", "Munich", "Frankfurt"],
-        "Greece": ["Athens", "Thessaloniki", "Patras"],
-        "Hungary": ["Budapest", "Debrecen", "Szeged"],
-        "India": ["Delhi", "Mumbai", "Bangalore"],
-        "Indonesia": ["Jakarta", "Surabaya", "Bali"],
-        "Ireland": ["Dublin", "Cork", "Limerick"],
-        "Italy": ["Rome", "Milan", "Florence"],
-        "Japan": ["Tokyo", "Osaka", "Kyoto"],
-        "Kenya": ["Nairobi", "Mombasa", "Kisumu"],
-        "Malaysia": ["Kuala Lumpur", "Penang", "Johor Bahru", "Selangor"],
-        "Mexico": ["Mexico City", "Guadalajara", "Monterrey"],
-        "Netherlands": ["Amsterdam", "Rotterdam", "Utrecht"],
-        "New Zealand": ["Auckland", "Wellington", "Christchurch"],
-        "Nigeria": ["Lagos", "Abuja", "Kano"],
-        "Norway": ["Oslo", "Bergen", "Stavanger"],
-        "Pakistan": ["Islamabad", "Karachi", "Lahore"],
-        "Peru": ["Lima", "Cusco", "Arequipa"],
-        "Philippines": ["Manila", "Cebu City", "Davao City"],
-        "Poland": ["Warsaw", "Kraków", "Wrocław"],
-        "Portugal": ["Lisbon", "Porto", "Braga"],
-        "Romania": ["Bucharest", "Cluj-Napoca", "Timișoara"],
-        "Russia": ["Moscow", "Saint Petersburg", "Novosibirsk"],
-        "Saudi Arabia": ["Riyadh", "Jeddah", "Dammam"],
-        "South Africa": ["Johannesburg", "Cape Town", "Durban"],
-        "South Korea": ["Seoul", "Busan", "Incheon"],
-        "Spain": ["Madrid", "Barcelona", "Valencia"],
-        "Sweden": ["Stockholm", "Gothenburg", "Malmö"],
-        "Switzerland": ["Zurich", "Geneva", "Bern"],
-        "Taiwan": ["Taipei", "Kaohsiung", "Taichung"],
-        "Thailand": ["Bangkok", "Chiang Mai", "Phuket"],
-        "Turkey": ["Istanbul", "Ankara", "Izmir"],
-        "Ukraine": ["Kyiv", "Lviv", "Odesa"],
-        "United Kingdom": ["London", "Manchester", "Birmingham"],
-        "United States": ["New York", "Los Angeles", "Chicago"],
-        "Uruguay": ["Montevideo", "Salto", "Paysandú"],
-        "Venezuela": ["Caracas", "Maracaibo", "Valencia"]
+    const cityDropdown = getElementById("city");
+    const stateDropdown = getElementById("state");
+    // 1-2 cities per state, because...well....
+    const stateCityData = {
+        "Johor": ["Johor Bahru", "Muar"],
+        "Kedah": ["Alor Setar", "Sungai Petani"],
+        "Kelantan": ["Kota Bharu", "Kuala Krai"],
+        "Melacca": ["Melaka City", "Alor Gajah"],
+        "Negeri Sembilan": ["Seremban", "Port Dickson"],
+        "Pahang": ["Kuantan", "Temerloh"],
+        "Perak": ["Ipoh", "Taiping"],
+        "Perlis": ["Kangar", "Arau"],
+        "Sabah": ["Kota Kinabalu", "Sandakan"],
+        "Sarawak": ["Kuching", "Miri"],
+        "Selangor": ["Shah Alam", "Petaling Jaya"],
+        "Terengganu": ["Kuala Terengganu", "Dungun"],
+        "Kuala Lumpur": ["Kuala Lumpur City Centre", "Setapak"]
+    };
+    // Same thing for states.
+    const countryStateData = {
+       "Malaysia":["Johor", "Kedah", "Kelantan", "Melacca", "Negeri Sembilan", "Pahang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur"]
     };
     // loop through countries and add them to the dropdown list one by one...
-    for (const country in countryCityData) {
+    for (const country in countryStateData) {
         // Create a new option element
         const option = document.createElement('option');
         option.value = country;
         option.textContent = country;
-       
         countryDropdown.appendChild(option);
     }
     /*
         whenever the value of the Country dropdown menu changes, this function will get called,
-        gets the new selected country, change the cities based on it
+        gets the new selected country, change the states based on it.
     */
-    countryDropdown.addEventListener("change", function(){
-        const selectedCountry = getValueOfElementById("country");
-        cityDropdown.innerHTML = '<option value="" disabled selected>Select a city</option>';
-        if (selectedCountry) {
-            const cities = countryCityData[selectedCountry];
-            cities.forEach(function(city) {
-                const option = document.createElement("option");
-                option.value = city; // set the value to the city's name
-                option.textContent = city;
-                cityDropdown.appendChild(option);
-            });
-            cityDropdown.disabled = false;
-        }
-        // Disable city dropdown menu if no country is selected.
-        else cityDropdown.disabled = true;
+    countryDropdown.addEventListener("change", function() {
+        populateDropdownMenu(stateDropdown, countryDropdown.value, countryStateData, "state");
     });
-
+    /*
+        whenever the value of the State dropdown menu changes, this function will get called,
+        gets the new selected State, then change the cities based on it.
+    */
+    stateDropdown.addEventListener("change", function() {
+        populateDropdownMenu(cityDropdown, stateDropdown.value, stateCityData, "city");
+    });
 }
+function ShowAddresses(){
+    const viewAddresses = getElementById("viewAddresses");
+    const addresses_table = getElementById("addresses_table");
+    
+    // hide "Show Addresses section".
+    viewAddresses.style.display = "none";
+    addresses_table.style.display = "block";
+    
+}
+
+function populateDropdownMenu(dropdownMenuToFill, valueChanged, dictionary, nameOfCreatedSelection){
+    dropdownMenuToFill.innerHTML = '<option value="" disabled selected>Select a '+nameOfCreatedSelection+'</option>';
+        if (valueChanged) {
+            const elements = dictionary[valueChanged];
+            elements.forEach(function(element) {
+                const option = document.createElement("option");
+                option.value = element; // set the value to the name of the element (city, state, nameOfCreatedSelection, etc...)
+                option.textContent = element;
+                dropdownMenuToFill.appendChild(option);
+            });
+            dropdownMenuToFill.disabled = false;
+        }
+        // Disable dropdown menu if no value is selected from the element selectionChangedId.
+        else dropdownMenuToFill.disabled = true;  
+}
+
+function addAddress(){
+    /* 
+        HTML Input/Select IDs: address_label, street, country, state, city, zipcode
+     */
+    const addressInfo = {
+        address_label: getValueOfElementById("address_label"),
+        street: getValueOfElementById("street"),
+        country: getValueOfElementById("country"),
+        state: getValueOfElementById("state"),
+        city: getValueOfElementById("city"),
+        zipcode: getValueOfElementById("zipcode"),
+    };
+    //empty error messages 
+    resetMessages(["address_labelError", "streetError", "countryError", "stateError", "cityError", "zipcodeError", "errorMessage"]);
+        // Validate information
+    if (!validateName(addressInfo.address_label)) {
+        return passMessageToElement("address_labelError", "Please enter a valid address label", "red", 1);
+    }
+    //Letters spaces numbers -,. only REGEX expression
+    if (!validateName(addressInfo.street, new RegExp('^[a-zA-Z0-9]+(?:[-,. ][a-zA-Z0-9]+)*$'))) {
+        return passMessageToElement("streetError", "Please enter a valid street name", "red", 1);
+    }
+
+    if (!addressInfo.country) {
+        return passMessageToElement("countryError", "Please select a country", "red", 1);
+    }
+
+    if (!addressInfo.state) {
+        return passMessageToElement("stateError", "Please select a state", "red", 1);
+    }
+
+    if (!addressInfo.city) {
+        return passMessageToElement("cityError", "Please select a city", "red", 1);
+    }
+    //Zip code must have 5 numbers.
+    if (addressInfo.zipcode.length != 5 || isNaN(addressInfo.zipcode) || !addressInfo.zipcode) {
+        return passMessageToElement("zipcodeError", "Must contain 5 numbers", "red", 1);
+    }
+    
+    // All validations passed, proceed with adding the address
+    const parameters = {
+        id: localStorage.getItem("id"),
+        address_label: addressInfo.address_label,
+        street:addressInfo.street,
+        country: addressInfo.country,
+        state: addressInfo.state,
+        city: addressInfo.city,
+        zipcode: addressInfo.zipcode
+    };
+    axios.get(domain + "/addaddress", {
+        params: parameters
+    })
+    .then(function(response) {
+        //set the message before reloading the page..
+        localStorage.setItem("message", response.data.message);
+        localStorage.setItem("messageColor", "green");
+        //reload the page
+        window.location.assign("./addaddress.html");
+    })
+    .catch(function(error) {
+        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+    });    
+}
+

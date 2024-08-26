@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body onload="javascript:loadNavigationBar(); javascript:profile();">
+<body onload="javascript:profile();">
     <nav id="navigationBar"></nav>
     <div id="mainContent">
         <div id="userProfile">
@@ -32,24 +32,24 @@
                             <label for="username">Username</label>
                         </td>
                         <td>
-                            <input type="text" id="username" name="username"  placeholder="Enter your username..." autofocus onfocus="this.select()">
+                            <p type="text" id="username"></p><a></a>
                         </td>
                         <td>
-                            <span class="errorMessage" id="usernameError">Filler text that's invisible to the naked eye</span>
+                            <span>Username cannot be changed</span>
                         </td>
                     </tr>
                     <tr>
                         <td colspan="1"></td>
-                        <td><p class="helperText">Letters and spaces only.</p></td>
+                        <td><p class="helperText hidden">Letters and spaces only.</p></td>
                         <td colspan="1"></td>
                     </tr>
                     <!-- Password -->
                     <tr>
                         <td>
-                            <label for="password">Password</label>
+                            <label for="password">New Password</label>
                         </td>
                         <td>
-                            <input type="password" id="password" name="password" placeholder="Enter a new password..."> <a href="javascript:activateField(5)">change</a>
+                            <input type="password" id="password" name="password" placeholder="Enter a new password..."> <a href="javascript:activateField(6);javascript:activateField(5);" id="change5">change</a>
                         </td>
                         <td>
                             <p class="errorMessage" id="passwordError"></p>
@@ -60,13 +60,30 @@
                         <td><p class="helperText">Letters, spaces and numbers only.</p></td>
                         <td colspan="1"></td>
                     </tr>
+                    <!-- Old Password -->
+                    <tr>
+                        <td>
+                            <label for="oldPassword">Old Password</label>
+                        </td>
+                        <td>
+                            <input type="password" id="oldPassword" name="oldPassword" placeholder="Enter your current password...">
+                        </td>
+                        <td>
+                            <p class="errorMessage" id="oldPasswordError"></p>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td colspan="1"></td>
+                        <td><p class="helperText hidden">Letters, spaces and numbers only.</p></td> <!-- Hidden becuase the user knows their current password does not contain anything else.-->
+                        <td colspan="1"></td>
+                    </tr>
                     <!-- Email -->
                     <tr>
                         <td>
                             <label for="email">Email</label>
                         </td>
                         <td>
-                            <input type="text" id="email" name="email"  placeholder="Enter your E-mail..."onfocus="this.select()"> <a href="javascript:activateField(1)">change</a>
+                            <input type="text" id="email" name="email"  placeholder="Enter your E-mail..."onfocus="this.select()"> <a href="javascript:activateField(1)"id="change1">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="emailError"></p>
@@ -83,7 +100,7 @@
                             <label for="phone">Phone No.</label>
                         </td>
                         <td>
-                            <input type="number" id="phone" name="phone" placeholder="Enter your phone number..."onfocus="this.select()"> <a href="javascript:activateField(2)">change</a>
+                            <input type="number" id="phone" name="phone" placeholder="Enter your phone number..."onfocus="this.select()"> <a href="javascript:activateField(2)"id="change2">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="phoneError"></p>
@@ -100,7 +117,7 @@
                             <label for="fName">First Name</label>
                         </td>
                         <td>
-                            <input type="text" id="fName" name="fName" placeholder="Enter your first name..."onfocus="this.select()"> <a href="javascript:activateField(3)">change</a>
+                            <input type="text" id="fName" name="fName" placeholder="Enter your first name..."onfocus="this.select()"> <a href="javascript:activateField(3)"id="change3">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="fNameError"></p>
@@ -117,7 +134,7 @@
                             <label for="lName">Last Name</label>
                         </td>
                         <td>
-                            <input type="text" id="lName" name="lName" placeholder="Enter your last name..."onfocus="this.select()"> <a href="javascript:activateField(4)">change</a>
+                            <input type="text" id="lName" name="lName" placeholder="Enter your last name..."onfocus="this.select()"> <a href="javascript:activateField(4)"id="change4">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="lNameError"></p>
@@ -134,94 +151,12 @@
                         <td>
                             <button onclick="javascript:saveProfile()" title="Save changes">Save</button>
                         </td>
-                        <td></td>
+                        <td><a href="./addaddress.html" id="addAddress">Add new Address</a></td>
                     </tr>
                     <tr>
                         <td></td>
                         <td><p id="errorMessage">All information are correct</p></td>
                     </tr>
-                </tbody>
-            </table>
-            <table id="addresses_table">
-                <thead>
-                    <tr>
-                        <td colspan="2">
-                            <h2>Your Addresses</h2>
-                        </td>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr class="horizontalRule">
-                        <td colspan="3" class="horizontalRule">
-                            <hr class="horizontalRule">
-                        </td>
-                    </tr>
-                    <!-- Users_addresses (address_id, user_id, street, city, state, country, zip_code, label); -->
-                    <!-- Address Label -->
-                    <tr>
-                        <td>
-                            <label for="address_label">Label this address</label>
-                        </td>
-                        <td>
-                            <input type="text" name="address_label" id="address_label" placeholder="Work, Home, Mom's place..."onfocus="this.select()">
-                        </td>
-                        <td>
-                            <span class="errorMessage" id="address_labelError">Filler text that's invisible to the naked eye</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="1"></td>
-                        <td><p class="helperText">Letters, spaces and numbers only</p></td>
-                        <td colspan="1"></td>
-                    </tr>
-                    <!-- Street -->
-                    <tr>
-                        <td>
-                            <label for="street">House No. & Street</label>
-                        </td>
-                        <td>
-                            <input type="text" name="street" id="street" placeholder="5-9-3E, Block E, Sultan Abdulaziz..."onfocus="this.select()">
-                        </td>
-                        <td>
-                            <span class="errorMessage" id="streetError"></span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td colspan="1"></td>
-                        <td><p class="helperText">Letters spaces numbers -,. only</p></td>
-                        <td colspan="1"></td>
-                    </tr>
-                    <!-- Country -->
-                    <tr>
-                        <td class="tdSelect">
-                            <label for="country">Country</label>
-                        </td>
-                        <td class="tdSelect">
-                            <!-- Country dropdown list -->
-                            <Select id="country" name="country">
-                                <option value="" disabled selected>Select a country...</option>
-                            </Select>
-                        </td>
-                        <td class="tdSelect">
-                            <span class="errorMessage" id="streetError"></span>
-                        </td>
-                    </tr>
-                    <!-- City -->
-                    <tr>
-                        <td class="tdSelect">
-                            <label for="city">City</label>
-                        </td>
-                        <td class="tdSelect">
-                            <!-- city dropdown list -->
-                            <Select id="city" name="city">
-                                <option value="" disabled selected>Select a country first</option>
-                            </Select>
-                        </td>
-                        <td class="tdSelect">
-                            <span class="errorMessage" id="streetError"></span>
-                        </td>
-                    </tr>
-                    
                 </tbody>
             </table>
         </div>
