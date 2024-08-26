@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body onload="javascript:addAddressLoaded();javascript:editAddressLoaded()">
+<body onload="javascript:editAddressLoaded();">
     <nav id="navigationBar"></nav>
     <div id="mainContent">
         <div id="userProfile">
@@ -68,7 +68,6 @@
                         <td class="tdSelect">
                             <!-- Country dropdown list -->
                             <Select id="country" name="country">
-                                <option value="" disabled selected>Select a country...</option>
                             </Select>
                         </td>
                         <td class="tdSelect">
@@ -83,7 +82,6 @@
                         <td class="tdSelect">
                             <!-- state dropdown list -->
                             <Select id="state" name="state">
-                                <option value="" disabled selected>Select a country first</option>
                             </Select>
                         </td>
                         <td class="tdSelect">
@@ -98,7 +96,6 @@
                         <td class="tdSelect">
                             <!-- city dropdown list -->
                             <Select id="city" name="city">
-                                <option value="" disabled selected>Select a state first</option>
                             </Select>
                         </td>
                         <td class="tdSelect">
@@ -126,7 +123,7 @@
                     <tr>
                         <td></td>
                         <td>
-                            <button onclick="javascript:addAddress()" title="Add Address">Add Address</button>
+                            <button onclick="javascript:addAddress()" title="Add Address">Save Address</button>
                         </td>
                         <td></td>
                     </tr>

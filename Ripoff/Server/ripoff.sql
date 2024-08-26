@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 25, 2024 at 01:04 PM
+-- Generation Time: Aug 26, 2024 at 08:14 AM
 -- Server version: 8.3.0
 -- PHP Version: 7.4.33
 
@@ -172,9 +172,10 @@ CREATE TABLE IF NOT EXISTS `users` (
   `user_name` varchar(50) NOT NULL,
   `password` varchar(50) NOT NULL,
   `email` varchar(50) DEFAULT NULL,
-  `phone` int DEFAULT NULL,
+  `phone` varchar(15) DEFAULT NULL,
   `first_name` varchar(50) DEFAULT NULL,
   `last_name` varchar(50) DEFAULT NULL,
+  `isActive` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`user_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -182,9 +183,9 @@ CREATE TABLE IF NOT EXISTS `users` (
 -- Dumping data for table `users`
 --
 
-INSERT INTO `users` (`user_id`, `user_name`, `password`, `email`, `phone`, `first_name`, `last_name`) VALUES
-(1, 'abdalghany', 'ohitsme', 'abdalghany@windowslive.com', 1111915179, 'Abdlghany', 'Dada'),
-(3, 'bbbbbb', 'ccccc', 'aaaaa@bbb.ccc', 159532167, 'aaaaa', 'bbbbb');
+INSERT INTO `users` (`user_id`, `user_name`, `password`, `email`, `phone`, `first_name`, `last_name`, `isActive`) VALUES
+(1, 'abdalghany', 'ohitsme2', 'abdalghany@windowslive.com', '01111915179', 'Abdlghany', 'Dada', 1),
+(3, 'bbbbbb', 'ccccc', 'aaaaa@bbb.ccc', '159532167', 'aaaaa', 'bbbbb', 1);
 
 -- --------------------------------------------------------
 
@@ -200,10 +201,34 @@ CREATE TABLE IF NOT EXISTS `users_addresses` (
   `city` varchar(50) DEFAULT NULL,
   `state` varchar(50) DEFAULT NULL,
   `country` varchar(50) DEFAULT NULL,
-  `zip_code` int DEFAULT NULL,
+  `zip_code` char(5) CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci DEFAULT NULL,
   `label` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`address_id`),
   KEY `user_id` (`user_id`)
+) ENGINE=MyISAM AUTO_INCREMENT=9 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+--
+-- Dumping data for table `users_addresses`
+--
+
+INSERT INTO `users_addresses` (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`) VALUES
+(1, 1, '38B, Jalan Boleh has a Temper', 'Petaling Jaya', 'Selangor', 'Malaysia', '40150', 'Work'),
+(7, 1, '385-Blok 14', 'Shah Alam', 'Selangor', 'Malaysia', '40100', 'Home');
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users_security`
+--
+
+DROP TABLE IF EXISTS `users_security`;
+CREATE TABLE IF NOT EXISTS `users_security` (
+  `security_id` int NOT NULL AUTO_INCREMENT,
+  `user_id` int NOT NULL,
+  `question` varchar(50) NOT NULL,
+  `answer` varchar(50) NOT NULL,
+  PRIMARY KEY (`security_id`),
+  KEY `users.user_id` (`user_id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 COMMIT;
 

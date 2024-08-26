@@ -1,7 +1,26 @@
 const navigationBar = getElementById("navigationBar");
 const categories = getElementById("categories");
 const domain = "http://ripoff.local:3000";
-
+// 1-2 cities per state...
+const stateCityData = {
+    "Johor": ["Johor Bahru", "Muar"],
+    "Kedah": ["Alor Setar", "Sungai Petani"],
+    "Kelantan": ["Kota Bharu", "Kuala Krai"],
+    "Melacca": ["Melaka City", "Alor Gajah"],
+    "Negeri Sembilan": ["Seremban", "Port Dickson"],
+    "Pahang": ["Kuantan", "Temerloh"],
+    "Perak": ["Ipoh", "Taiping"],
+    "Perlis": ["Kangar", "Arau"],
+    "Sabah": ["Kota Kinabalu", "Sandakan"],
+    "Sarawak": ["Kuching", "Miri"],
+    "Selangor": ["Shah Alam", "Petaling Jaya"],
+    "Terengganu": ["Kuala Terengganu", "Dungun"],
+    "Kuala Lumpur": ["Kuala Lumpur City Centre", "Setapak"]
+};
+// Same thing for states.
+const countryStateData = {
+   "Malaysia":["Johor", "Kedah", "Kelantan", "Melacca", "Negeri Sembilan", "Pahang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur"]
+};
 /*
     to avoid having the navigation bar rewritten in every single HTML page, I've created a function that loads it when the HTML page Body finishes loading.
     &nbsp; = empty space.
@@ -308,31 +327,12 @@ function saveProfile(){
         passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
     });    
 }
-// Load <select> options in each select elements
+// Load <select> options in each of the select elements
 function addAddressLoaded(){
     const countryDropdown = getElementById("country");
     const cityDropdown = getElementById("city");
     const stateDropdown = getElementById("state");
-    // 1-2 cities per state, because...well....
-    const stateCityData = {
-        "Johor": ["Johor Bahru", "Muar"],
-        "Kedah": ["Alor Setar", "Sungai Petani"],
-        "Kelantan": ["Kota Bharu", "Kuala Krai"],
-        "Melacca": ["Melaka City", "Alor Gajah"],
-        "Negeri Sembilan": ["Seremban", "Port Dickson"],
-        "Pahang": ["Kuantan", "Temerloh"],
-        "Perak": ["Ipoh", "Taiping"],
-        "Perlis": ["Kangar", "Arau"],
-        "Sabah": ["Kota Kinabalu", "Sandakan"],
-        "Sarawak": ["Kuching", "Miri"],
-        "Selangor": ["Shah Alam", "Petaling Jaya"],
-        "Terengganu": ["Kuala Terengganu", "Dungun"],
-        "Kuala Lumpur": ["Kuala Lumpur City Centre", "Setapak"]
-    };
-    // Same thing for states.
-    const countryStateData = {
-       "Malaysia":["Johor", "Kedah", "Kelantan", "Melacca", "Negeri Sembilan", "Pahang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur"]
-    };
+
     // loop through countries and add them to the dropdown list one by one...
     for (const country in countryStateData) {
         // Create a new option element
@@ -500,8 +500,57 @@ function fetchAddresses(callback) {
             callback(true);
         })
         .catch(function (error) {
-            passMessageToElement("errorMessage", "Error happened while connecting to the server."+error, "red", 1);
+            passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
         });
+}
+
+function editAddress(address_id){
+    localStorage.setItem("address_id", address_id);
+    window.location.assign("./editaddress.html");
+}
+
+function editAddressLoaded(){
+    // get all relevant elements from the HTML page
+    const addressInfo = {
+     address_label: getElementById("address_label"),
+     street: getElementById("street"),
+     country: getElementById("country"),
+     state: getElementById("state"),
+     city: getElementById("city"),
+     zip_code: getElementById("zipcode"),
+    };
+    addAddressLoaded();
+    /*  whenever the value of the Country dropdown menu changes, this function will get called,
+    gets the new selected country, change the states based on it.   */
+    addressInfo.country.addEventListener("change", function() {
+        populateDropdownMenu(addressInfo.state, addressInfo.country.value, countryStateData, "state");
+    });
+    /*  whenever the value of the State dropdown menu changes, this function will get called,
+        gets the new selected State, then change the cities based on it.    */
+    addressInfo.state.addEventListener("change", function() {
+        populateDropdownMenu(addressInfo.city, addressInfo.state.value, stateCityData, "city");
+    });
+     
+    const parameters = {
+        id: localStorage.getItem('id'),
+        address_id: localStorage.getItem('address_id')
+    };
+    axios.get(domain + "/fetchAddress", {
+        params: parameters
+    })
+    .then(function(response) {
+        const dataFromDB = response.data[0];
+        // set the values of the input/select elements in the page to their current values in the database.
+        addressInfo.address_label.value = dataFromDB.label;
+        addressInfo.street.value = dataFromDB.street;
+        addressInfo.country.value = dataFromDB.country;
+        addressInfo.state.value = dataFromDB.state;
+        addressInfo.city.value = dataFromDB.city;
+        addressInfo.zip_code.value = dataFromDB.zip_code;
+    })
+    .catch(function(error) {
+        passMessageToElement("errorMessage", "An error happened while connecting to the server.", "red", 1);
+    });   
 }
 
 function deleteAddress(address_id){
@@ -519,42 +568,4 @@ function deleteAddress(address_id){
     .catch(function(error) {
         passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
     });    
-}
-
-function editAddress(address_id){
-    localStorage.setItem("address_id", address_id);
-    window.location.assign("./editaddress.html");
-}
-
-function editAddressLoaded(){
-    // get all relevant elements from the HTML page
-    const addressInfo = {
-        address_label: getElementById("address_label"),
-        street: getElementById("street"),
-        country: getElementById("country"),
-        state: getElementById("state"),
-        city: getElementById("city"),
-        zip_code: getElementById("zipcode"),
-    };
-    const parameters = {
-        id: localStorage.getItem('id'),
-        address_id: localStorage.getItem('address_id')
-    };
-    axios.get(domain + "/fetchAddress", {
-        params: parameters
-    })
-    .then(function(response) {
-        const dataFromDB = response.data;
-        // set the values of the input/select elements in the page to their current values in the database.
-        addressInfo.address_label.value = dataFromDB.address_label;
-        addressInfo.street.value = dataFromDB.street;
-        addressInfo.country.value = dataFromDB.country;
-        addressInfo.state.value = dataFromDB.state;
-        addressInfo.city.value = dataFromDB.city;
-        addressInfo.zip_code.value = dataFromDB.zip_code;
-    })
-    .catch(function(error) {
-        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
-    });   
-    
 }
