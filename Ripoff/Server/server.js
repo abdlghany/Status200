@@ -30,8 +30,7 @@ const server = http.createServer(function(request, response) {
                 response.writeHead(200, { "Content-Type": "application/json" });
                 response.end(JSON.stringify(results));
             } else {
-                // if nothing was found, return 404 not found with an appropriate message.
-                response.writeHead(404, { "Content-Type": "application/json" });
+                response.writeHead(200, { "Content-Type": "application/json" });
                 response.end(JSON.stringify({ message: "No categories found." }));
             }
         });
@@ -192,9 +191,8 @@ const server = http.createServer(function(request, response) {
                 response.writeHead(200, { "Content-Type": "application/json" });
                 response.end(JSON.stringify(results));
             } else {
-                // if nothing was found, return 404 not found with an appropriate message.
-                response.writeHead(404, { "Content-Type": "application/json" });
-                response.end(JSON.stringify({ message: "No Addresses found." }));
+                response.writeHead(200, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "You don't have any addresses yet, please add an address first." }));
             }
         });
     }

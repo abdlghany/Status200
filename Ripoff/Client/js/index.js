@@ -394,8 +394,8 @@ function addAddress(){
     };
     //empty error messages 
     resetMessages(["address_labelError", "streetError", "countryError", "stateError", "cityError", "zipcodeError", "errorMessage"]);
-        // Validate information
-    if (!validateName(addressInfo.address_label)) {
+        // Validate information, allow letters spaces and numbers only
+    if (!validateName(addressInfo.address_label, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))) {
         return passMessageToElement("address_labelError", "Please enter a valid address label", "red", 1);
     }
     //Letters spaces numbers -,. only REGEX expression
@@ -452,7 +452,6 @@ function fetchAddresses(callback) {
                 passMessageToElement("errorMessage", response.data.message, "red", 1);
                 return;
             }
-
             const addresses = response.data;
             const addressesProfileBody = getElementById("addresses_profile_body");
 
@@ -490,11 +489,13 @@ function fetchAddresses(callback) {
                 updateRow.appendChild(updateData1);
                 updateRow.appendChild(updateData2);
                 table.appendChild(updateRow);
-
-                addressesProfileBody.appendChild(table);    
-                const hr = document.createElement('hr');
-                hr.style.width = "80%";
-                addressesProfileBody.appendChild(hr);
+                addressesProfileBody.appendChild(table);
+                // add a horizontal rule only if it's not the last address, to seperate addresses.
+                if(address != addresses[addresses.length-1]){
+                    const hr = document.createElement('hr');
+                    hr.style.width = "80%";
+                    addressesProfileBody.appendChild(hr);
+                } 
             });
 
             callback(true);
@@ -519,18 +520,14 @@ function editAddressLoaded(){
      city: getElementById("city"),
      zip_code: getElementById("zipcode"),
     };
-    addAddressLoaded();
-    /*  whenever the value of the Country dropdown menu changes, this function will get called,
-    gets the new selected country, change the states based on it.   */
-    addressInfo.country.addEventListener("change", function() {
-        populateDropdownMenu(addressInfo.state, addressInfo.country.value, countryStateData, "state");
-    });
-    /*  whenever the value of the State dropdown menu changes, this function will get called,
-        gets the new selected State, then change the cities based on it.    */
-    addressInfo.state.addEventListener("change", function() {
-        populateDropdownMenu(addressInfo.city, addressInfo.state.value, stateCityData, "city");
-    });
-     
+     // loop through countries and add them to the dropdown list one by one...
+     for (const country in countryStateData) {
+        // Create a new option element
+        const option = document.createElement('option');
+        option.value = country;
+        option.textContent = country;
+        addressInfo.country.appendChild(option);
+    }
     const parameters = {
         id: localStorage.getItem('id'),
         address_id: localStorage.getItem('address_id')
@@ -544,9 +541,20 @@ function editAddressLoaded(){
         addressInfo.address_label.value = dataFromDB.label;
         addressInfo.street.value = dataFromDB.street;
         addressInfo.country.value = dataFromDB.country;
+        //Simulate an onChange event, because the value changed in the line above this one.
+        populateDropdownMenu(addressInfo.state, addressInfo.country.value, countryStateData, "state");
         addressInfo.state.value = dataFromDB.state;
+        populateDropdownMenu(addressInfo.city, addressInfo.state.value, stateCityData, "city");
         addressInfo.city.value = dataFromDB.city;
         addressInfo.zip_code.value = dataFromDB.zip_code;
+       
+        addressInfo.country.addEventListener("change", function() {
+            populateDropdownMenu(addressInfo.state, addressInfo.country.value, countryStateData, "state");
+        });
+       
+        addressInfo.state.addEventListener("change", function() {
+            populateDropdownMenu(addressInfo.city, addressInfo.state.value, stateCityData, "city");
+        });
     })
     .catch(function(error) {
         passMessageToElement("errorMessage", "An error happened while connecting to the server.", "red", 1);
