@@ -150,7 +150,8 @@ const server = http.createServer(function(request, response) {
         });
     }
     else if (pathname === "/addaddress" && queryParams) {
-        var query; var parameters; console.log(queryParams.get('address_id'));
+        var query; var parameters;
+        // if address_id exists in the queryParams that means the user is editing an existing address, therefore I used the appropriate query and parameters to do so
         if(queryParams.get('address_id')){
             //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
          query = "UPDATE users_addresses SET street = ?, city = ?, state = ?, country = ?, zip_code = ?, label = ? WHERE address_id = ?";
@@ -163,6 +164,7 @@ const server = http.createServer(function(request, response) {
             queryParams.get('address_label'),
             queryParams.get('address_id')
         ];
+        // otherwise the user is adding a new address to the list of their addresses! so the query is insert and not update.
         }else{
             //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
          query = "INSERT INTO users_addresses VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
