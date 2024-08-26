@@ -150,29 +150,47 @@ const server = http.createServer(function(request, response) {
         });
     }
     else if (pathname === "/addaddress" && queryParams) {
-                //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
-                const query = "INSERT INTO users_addresses VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
-                const parameters = [
-                    queryParams.get('id'),
-                    queryParams.get('street'),
-                    queryParams.get('city'),
-                    queryParams.get('state'),
-                    queryParams.get('country'),
-                    queryParams.get('zipcode'),
-                    queryParams.get('address_label')
-                ];
-                db.insert(query, parameters, function(err, results) {
-                    if (err) {
-                        response.writeHead(500, { "Content-Type": "application/json" });
-                        response.end(JSON.stringify({ error: "Server error, could not add your address." }));
-                    } else if (results.affectedRows > 0) {
-                        response.writeHead(200, { "Content-Type": "application/json" });
-                        response.end(JSON.stringify({ message: "Address added successflly!" }));
-                    } else {
-                        response.writeHead(500, { "Content-Type": "application/json" });
-                        response.end(JSON.stringify({ message: "An error occurred while adding your address, please try again." }));
-                    }
-                });
+        var query; var parameters; console.log(queryParams.get('address_id'));
+        if(queryParams.get('address_id')){
+            //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
+         query = "UPDATE users_addresses SET street = ?, city = ?, state = ?, country = ?, zip_code = ?, label = ? WHERE address_id = ?";
+         parameters = [
+            queryParams.get('street'),
+            queryParams.get('city'),
+            queryParams.get('state'),
+            queryParams.get('country'),
+            queryParams.get('zipcode'),
+            queryParams.get('address_label'),
+            queryParams.get('address_id')
+        ];
+        }else{
+            //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
+         query = "INSERT INTO users_addresses VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
+         parameters = [
+            queryParams.get('id'),
+            queryParams.get('street'),
+            queryParams.get('city'),
+            queryParams.get('state'),
+            queryParams.get('country'),
+            queryParams.get('zipcode'),
+            queryParams.get('address_label')
+        ];
+        }
+        db.insert(query, parameters, function(err, results) {
+            if (err) {
+                response.writeHead(500, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ error: "Server error, could not add your address." }));
+            } else if (results.affectedRows > 0) {
+                response.writeHead(200, { "Content-Type": "application/json" });
+                if(queryParams.get('address_id')) 
+                    response.end(JSON.stringify({ message: "Address updated successflly!" }));
+                else 
+                    response.end(JSON.stringify({ message: "Address added successflly!" }));
+            } else {
+                response.writeHead(500, { "Content-Type": "application/json" });
+                response.end(JSON.stringify({ message: "An error occurred while adding your address, please try again." }));
+            }
+        });
     }
     else if (pathname === "/fetchAddresses" && queryParams) {
         //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)

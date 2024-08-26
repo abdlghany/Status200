@@ -429,6 +429,10 @@ function addAddress(){
         city: addressInfo.city,
         zipcode: addressInfo.zipcode
     };
+    // if there's a localStorage address_id value that means the function is being called from editAddress.html page and the user is editing an existing address.
+    if(localStorage.getItem('address_id')){
+        parameters.address_id = localStorage.getItem('address_id');
+    }
     axios.get(domain + "/addaddress", {
         params: parameters
     })
@@ -437,7 +441,10 @@ function addAddress(){
         localStorage.setItem("message", response.data.message);
         localStorage.setItem("messageColor", "green");
         //reload the page
-        window.location.assign("./addaddress.html");
+        if(localStorage.getItem('address_id')){
+            localStorage.removeItem('address_id');
+        }
+        window.location.assign("./user.html");
     })
     .catch(function(error) {
         passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
