@@ -356,9 +356,9 @@ function ShowAddresses(){
     const addresses_profile_body = getElementById("addresses_profile_body");
     fetchAddresses(function(response){
         if(response){
-        // hide "Show Addresses section".
-    viewAddresses.style.display = "none";
-    addresses_profile_body.style.display = "block";
+            // hide "Show Addresses section" if callback was called.
+            viewAddresses.style.display = "none";
+            addresses_profile_body.style.display = "block";
         }
     });
 }

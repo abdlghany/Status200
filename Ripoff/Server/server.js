@@ -251,6 +251,65 @@ const server = http.createServer(function(request, response) {
                     response.end(JSON.stringify(results));
             });
         }
+        else if (pathname === "/products") {
+            var parameters = [];
+                var query = [`SELECT DISTINCT 
+                                p.product_id as id,
+                                p.product_name as name,
+                                p.sold as sold,
+                                ci.category_name as category_name,
+                                ci.category_id as category_id,
+                                pi.image_location as image,
+                                p.created_at as created_at,
+                                pv.variation_price as price,
+                                p.is_active as is_active
+                            FROM Products p
+                            JOIN Categories ci ON p.category_id = ci.category_id
+                            JOIN (SELECT 
+                                        product_id, 
+                                        MIN(image_location) AS image_location
+                                    FROM 
+                                        Products_images
+                                    GROUP BY 
+                                        product_id
+                                    ) pi ON p.product_id = pi.product_id
+                            JOIN 
+                                Products_variations pv ON p.product_id = pv.product_id
+                            WHERE pv.variation_price = (
+                                        SELECT MIN(pv2.variation_price)
+                                        FROM Products_variations pv2
+                                        WHERE pv2.product_id = p.product_id) `];
+            if(queryParams.get("category_id")){
+                // if parameters have category_id, add it to the query
+                query.push(`AND ci.category_id = ? `);
+                parameters.push(queryParams.get("category_id"));
+            }
+            if(queryParams.get("order_by")){
+                // if parameters have order_by, add it to the query
+                var direction = "DESC";
+                if(queryParams.get("direction")){
+                    // if there's a direction in the parameters, use it, otherwise use default = DESC
+                    direction = queryParams.get("direction");
+                }
+                query.push("ORDER BY is_active DESC, " + queryParams.get("order_by") + " "+ direction);
+            }else{
+              query.push("ORDER BY is_active DESC ");  
+            }
+            var finalQuery = "";
+            for(let i = 0; i< query.length; i++){
+                finalQuery += query[i];
+            }
+            //console.log(finalQuery);
+            db.select(finalQuery,parameters, function(err, results) {
+                if (err || results.length == 0) {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "Address Not found." }));
+                    return;
+                }
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify(results));
+            });
+        }
      //request isn't any of the previous pathnames           
     else {
         response.writeHead(404, { "Content-Type": "text/plain" });
