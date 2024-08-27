@@ -77,9 +77,17 @@ function loadNavigationBar(){
 /* 
     Get categories from the database and display them in the index page.
 */
-function fetchCategories(){
+function fetchCategories(callback){
     axios.get(domain+"/index")
     .then(function(response) {
+        callback(response);
+    })
+    .catch(function(error) { 
+        console.error("There was an error fetching categories:", error);
+    });
+}
+function loadMainMenu(){
+    fetchCategories(function(response){
         const responseCategories = response.data;
         responseCategories.forEach(function(category){
             const div = document.createElement("div");
@@ -93,12 +101,9 @@ function fetchCategories(){
             };
             categories.appendChild(div);
         });
-    })
-    .catch(function(error) { 
-        console.error("There was an error fetching categories:", error);
     });
 }
-// On Enter keydown, run the search() function.
+// On Enter keydown (when the user is typing in the searh input), run the search() function.
 function logKey(e) {
     if(e.code === "Enter"){
         search();

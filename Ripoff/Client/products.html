@@ -12,11 +12,24 @@
 
     <div id="mainContent">
         <h1 id="categoryName"></h1>
-        <div id="products">
-       
+        <div id="sort_products">
+            <div id="sort">
+                <label for="sortBy">Sort by</label>
+                <select name="sortBy" id="sortBy" onchange="javascript:sortBy();">
+                    <option value="" selected disabled>Select</option>
+                    <option value="created_at">New</option>
+                    <option value="price">Price</option>
+                    <option value="sold">Items Sold</option>
+                </select>
+                <hr class="fullWidth">
+                <ul id="side_menu_categories">
+                    <li><a href="./products.html"><b>All Products</b></a></li>
+                </ul>
+            </div>
+            <div id="products">
+            </div>
         </div>
     </div>
-
     <script src="./js/functions.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/products.js"></script>

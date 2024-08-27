@@ -305,12 +305,16 @@ const server = http.createServer(function(request, response) {
             for(let i = 0; i< query.length; i++){
                 finalQuery += query[i];
             }
-            //console.log(finalQuery);
+            console.log(finalQuery);
             db.select(finalQuery,parameters, function(err, results) {
-                if (err || results.length == 0) {
+                if (err) {
                     console.error(err);
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    response.end(JSON.stringify({ message: "Product not found." }));
+                    response.end(JSON.stringify({ message: "Internal Server Error. Please contact the site admin" }));
+                    return;
+                }else if(results.length == 0){
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "Product not found" }));
                     return;
                 }
                     response.writeHead(200, { "Content-Type": "application/json" });
