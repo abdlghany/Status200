@@ -8,6 +8,7 @@ function getQueryParam(parameter) {
 // Fetch and display products for the selected category
 function fetchProducts(order_by) {
     const categoryId = getQueryParam('category');
+    const searchValue = getQueryParam('search');
     if(!order_by){
         order_by = "created_at";
     }
@@ -16,10 +17,13 @@ function fetchProducts(order_by) {
     if (categoryId) {
         urlExtension += "&category_id=" + categoryId;   
     }
-    productsQuery(urlExtension, categoryId);
+    if(searchValue){
+        urlExtension += "&search=" + searchValue;
+    }
+    productsQuery(urlExtension, categoryId, searchValue);
 }
 
-function productsQuery(urlExtension, categoryId){
+function productsQuery(urlExtension, categoryId, searchValue){
     axios.get(domain + urlExtension )
             .then(function(response) {
                 const responseProducts = response.data;
@@ -31,6 +35,11 @@ function productsQuery(urlExtension, categoryId){
                 if(categoryId){
                     categoryNameHeader.textContent = responseProducts[0].category_name;
                 }
+                else if(searchValue){
+                    categoryNameHeader.textContent = "Search results for '"+searchValue.toLowerCase()+"'";
+                    const navigationSearch = getElementById("navigationSearch");
+                    navigationSearch.value = searchValue.toLowerCase();
+                }
                 else categoryNameHeader.textContent = "All Products";
 
                 responseProducts.forEach(function(product) {
@@ -38,7 +47,6 @@ function productsQuery(urlExtension, categoryId){
                     var productName = product.name.split(' ');
                     productName = productName[0]+" "+productName[1] + " image"
                     productDiv.innerHTML = "<img src='"+product.image+"' alt='"+productName+"'><div class='product_text'><p class='product_name'>"+product.name+"</p><div class='product_footer'><p class='product_price'>RM"+product.price+"</p><p class='product_sold'>"+product.sold+" Sold</p></div></div>";
-
                     productDiv.style.cursor = "pointer";
                     productsDiv.appendChild(productDiv);
                     productDiv.title = "View product";

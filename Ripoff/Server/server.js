@@ -279,16 +279,22 @@ const server = http.createServer(function(request, response) {
                                         SELECT MIN(pv2.variation_price)
                                         FROM Products_variations pv2
                                         WHERE pv2.product_id = p.product_id) `];
+
+            // if parameters have category_id, add it to the query
             if(queryParams.get("category_id")){
-                // if parameters have category_id, add it to the query
                 query.push(`AND ci.category_id = ? `);
                 parameters.push(queryParams.get("category_id"));
             }
+            // if search Parameters contain Search, then add this to the query.
+            if(queryParams.get("search")){
+                query.push('AND (LOWER(p.product_name) LIKE LOWER("%'+queryParams.get("search")+'%") OR LOWER(p.product_description) LIKE LOWER("%'+queryParams.get("search")+'%")) ')
+            }
+            // if searchParameters contain order_by
             if(queryParams.get("order_by")){
                 // if parameters have order_by, add it to the query
                 var direction = "DESC";
                 if(queryParams.get("direction")){
-                    // if there's a direction in the parameters, use it, otherwise use default = DESC
+                    // if there's a direction in the parameters, use the line below this comment, otherwise use default = DESC
                     direction = queryParams.get("direction");
                 }
                 query.push("ORDER BY is_active DESC, " + queryParams.get("order_by") + " "+ direction);
@@ -302,8 +308,9 @@ const server = http.createServer(function(request, response) {
             //console.log(finalQuery);
             db.select(finalQuery,parameters, function(err, results) {
                 if (err || results.length == 0) {
+                    console.error(err);
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    response.end(JSON.stringify({ message: "Address Not found." }));
+                    response.end(JSON.stringify({ message: "Product not found." }));
                     return;
                 }
                     response.writeHead(200, { "Content-Type": "application/json" });

@@ -21,6 +21,7 @@ const stateCityData = {
 const countryStateData = {
    "Malaysia":["Johor", "Kedah", "Kelantan", "Melacca", "Negeri Sembilan", "Pahang", "Perak", "Perlis", "Sabah", "Sarawak", "Selangor", "Terengganu", "Kuala Lumpur"]
 };
+
 /*
     to avoid having the navigation bar rewritten in every single HTML page, I've created a function that loads it when the HTML page Body finishes loading.
     &nbsp; = empty space.
@@ -49,8 +50,8 @@ function loadNavigationBar(){
                '<li class="nav-li"><a href="./index.html">Ripoff</a></li>'+
            '</div>'+
            '<div id="searchDiv">'+
-               '<li class="nav-li"><input id="navigationSearch" type="text" placeholder="Search products..."></li>'+
-               '<li class="nav-li"><a href="javascript:search()"><img src="./img/search.png" alt="Search Button" id="searchButton"></a></li>'+
+               '<li class="nav-li"><input id="navigationSearch" type="text" placeholder="Search all products..."></li>'+
+               '<li class="nav-li"><a href="javascript:search();" title="Search"><img src="./img/search.png" alt="Search Button" id="searchButton"></a></li>'+
           '</div>'+
            '<div id="cartDiv">';
             if(localStorage.getItem("id")){
@@ -70,6 +71,8 @@ function loadNavigationBar(){
            ' </div>'+
         '</ul>';
         navigationBar.innerHTML = navigationBarContents;
+        //run logKey Function whenever a "keydown" event happens to the search field.
+        getElementById("navigationSearch").addEventListener("keydown", logKey);
     }
 /* 
     Get categories from the database and display them in the index page.
@@ -95,14 +98,19 @@ function fetchCategories(){
         console.error("There was an error fetching categories:", error);
     });
 }
-//When the search button in the navigation bar is clicked.
-function search(){
-    const navigationSearchValue = getValueOfElementById("navigationSearch");
-    //There's no else because we don't want the browser to do anything if there's nothing in the search bar.
-    if(navigationSearchValue && navigationSearchValue!= ""){
-        window.location.assign("./search?keyword="+navigationSearchValue);
+// On Enter keydown, run the search() function.
+function logKey(e) {
+    if(e.code === "Enter"){
+        search();
     }
-    
+  }
+//When the search button in the navigation bar is clicked or Enter key is clicked in the search input.
+function search(){
+    const searchValue = getValueOfElementById("navigationSearch");
+    //There's no else because we don't want the browser to do anything if there's nothing in the search bar.
+    if(searchValue && searchValue!= ""){
+        window.location.assign("./products?search="+searchValue);
+    }
 }
 // When the cart is clicked.
 function cart(){
