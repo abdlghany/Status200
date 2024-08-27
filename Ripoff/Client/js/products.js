@@ -16,9 +16,10 @@ function fetchProducts(order_by) {
     if (categoryId) {
         urlExtension += "&category_id=" + categoryId;   
     }
-    productsQuery(urlExtension);
+    productsQuery(urlExtension, categoryId);
 }
-function productsQuery(urlExtension){
+
+function productsQuery(urlExtension, categoryId){
     axios.get(domain + urlExtension )
             .then(function(response) {
                 const responseProducts = response.data;
@@ -27,10 +28,10 @@ function productsQuery(urlExtension){
                  */
                 const productsDiv = getElementById("products");
                 const categoryNameHeader = getElementById("categoryName");
-                if(responseProducts[0].category_name){
+                if(categoryId){
                     categoryNameHeader.textContent = responseProducts[0].category_name;
                 }
-                else categoryNameHeader.textContent = "Products";
+                else categoryNameHeader.textContent = "All Products";
 
                 responseProducts.forEach(function(product) {
                     const productDiv = document.createElement("div");
