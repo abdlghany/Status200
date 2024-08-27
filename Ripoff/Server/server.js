@@ -39,7 +39,7 @@ const server = http.createServer(function(request, response) {
     else if (pathname === "/signup" && queryParams) {
         doesAccountExist(queryParams.get('username'), queryParams.get('email'), function(result) {
             if (result === "success") {
-                //Table: Users (user_id, user_name, password, email, phone, first_name, last_name, isActive)
+                //Table: Users (user_id, user_name, password, email, phone, first_name, last_name, is_Active)
                 const query = "INSERT INTO USERS VALUES (NULL, ?, ?, ?, ?, ?, ?, 1)";
                 const parameters = [
                     queryParams.get('username'),
@@ -82,11 +82,11 @@ const server = http.createServer(function(request, response) {
         // Check if isEmail is true, then use email in the WHERE clause, else use user_name
         if(queryParams.get("isEmail") == "true"){
             // Set a query that'll select based on Email.
-            query += "WHERE email = ? AND password = ? AND isActive = 1 LIMIT 1"
+            query += "WHERE email = ? AND password = ? AND is_active = 1 LIMIT 1"
         }
         else{
             // set a query that'll select based on username.
-            query += "WHERE user_name = ? AND password = ? AND isActive = 1 LIMIT 1"
+            query += "WHERE user_name = ? AND password = ? AND is_active = 1 LIMIT 1"
         }
 
         db.select(query, [queryParams.get("username"), queryParams.get("password")], function(err, results){
@@ -101,7 +101,7 @@ const server = http.createServer(function(request, response) {
             } else {
                 // if nothing was found, return 200 not found with an appropriate message.
                 response.writeHead(200, { "Content-Type": "application/json" });
-                response.end(JSON.stringify({ message: "Wrong Username or Password." }));
+                response.end(JSON.stringify({ message: "Inactive account or Wrong Username or Password." }));
             }
         });
     }

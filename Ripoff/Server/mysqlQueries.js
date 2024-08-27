@@ -101,7 +101,8 @@ CREATE TABLE Users (
     email VARCHAR(50),
     phone VARCHAR(15),
     first_name VARCHAR(50),
-    last_name VARCHAR(50)
+    last_name VARCHAR(50),
+    is_active tinyint(1)
 );
 CREATE TABLE Users_addresses (
     address_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -136,7 +137,6 @@ CREATE TABLE Products_variations (
     variation_price DECIMAL(10, 2) NOT NULL,
     variation_stock INT(50) DEFAULT 0,
     variation_name VARCHAR(50) NOT NULL,
-    variation_image VARCHAR(255),
     product_id INT,
     is_active BOOLEAN DEFAULT TRUE,
     FOREIGN KEY (product_id) REFERENCES Products(product_id)
@@ -183,11 +183,53 @@ INSERT INTO categories (category_name, category_description, category_image) VAL
 ('Beauty Products', 'Cosmetics and skincare', './img/categories/beauty_products.png'),
 ('Groceries', 'Fresh food and household items', './img/categories/groceries.png'),
 ('Accessories', 'Various accessories for all of your needs.', './img/categories/accessories.png');
-
+ -- Example of products_variations Insertion
+ INSERT INTO `products_variations`(`variation_id`, `variation_price`, `variation_stock`, `variation_name`, `product_id`, `is_active`);
+ INSERT INTO `products_variations` VALUES (NULL,180.00,65,'Black',20,1);
 Categories (category_id, category_name, category_image, category_description);
 
 Users (user_id, user_name, password, email, phone, first_name, last_name);
 
 Users_addresses (address_id, user_id, street, city, state, country, zip_code, label);
+
+
+
+-- Query that selects all relevant products information to show in the selected category (in products.html)
+-- Explanation: Selects columns from relevant tables joining used tables based on columns, select 1 image from each product Grouping by product_id to select 1 image per product 
+-- Select the lowest price per variation per product to display in the Products.html page, to show the user the lowest price per product (variations might have different prices based on quantity.)
+SELECT DISTINCT 
+    p.product_id,
+    p.product_name,
+    p.sold,
+    ci.category_name,
+    ci.category_id,
+    pi.image_location,
+    p.created_at,
+    pv.variation_price,
+    p.is_active
+FROM 
+    Products p
+JOIN 
+    Categories ci ON p.category_id = ci.category_id
+JOIN 
+    (SELECT 
+         product_id, 
+         MIN(image_location) AS image_location
+     FROM 
+         Products_images
+     GROUP BY 
+         product_id
+    ) pi ON p.product_id = pi.product_id
+JOIN 
+    Products_variations pv ON p.product_id = pv.product_id
+WHERE 
+    pv.variation_price = (
+        SELECT MIN(pv2.variation_price)
+        FROM Products_variations pv2
+        WHERE pv2.product_id = p.product_id
+    )
+ORDER BY
+p.is_active DESC;
+
 
 */
