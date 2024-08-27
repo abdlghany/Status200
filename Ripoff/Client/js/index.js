@@ -85,8 +85,8 @@ function fetchCategories(){
             div.style.cursor = "pointer";
             div.title = "Shop for "+category.category_name;
             div.onclick = function() {
-                productListHeader.innerText = "Products in "+category.category_name;
-                fetchProducts(category.category_id)
+               /*  productListHeader.innerText = "Products in "+category.category_name;
+                fetchProducts(category.category_id) */
                 
             };
             categories.appendChild(div);
