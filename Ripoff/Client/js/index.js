@@ -98,7 +98,7 @@ function loadMainMenu(){
             div.title = "Shop for "+category.category_name;
             div.onclick = function() {
                 // Display the selected category's products in another page, for example: ripoff.local/products.html?category=1
-                window.location.href = "./products.html?category="+category.category_id;
+                window.location.assign("./products.html?category="+category.category_id);
             };
             categories.appendChild(div);
         });
@@ -115,7 +115,7 @@ function search(){
     const searchValue = getValueOfElementById("navigationSearch");
     //There's no else because we don't want the browser to do anything if there's nothing in the search bar.
     if(searchValue && searchValue!= ""){
-        window.location.assign("./products?search="+searchValue);
+        window.location.assign("./products.html?search="+searchValue);
     }
 }
 // When the cart is clicked.

@@ -15,15 +15,11 @@ const server = http.createServer(function(request, response) {
     const url = new URL(request.url, `http://${request.headers.host}`);
     const pathname = url.pathname;
     const queryParams = url.searchParams;
-    var query = "";
-    var message = "";
-    var parameters = [];
     // Route - GET categories
     if (request.url === "/" || request.url === "/index") {
         //Table: Categories (category_id, category_name, category_image, category_description)
         // Order by category_id desc to show new categories first.
-        query = "SELECT * FROM categories ORDER BY category_id DESC";
-        message = "No categories found.";
+        const query = "SELECT * FROM categories ORDER BY category_id DESC";
         db.query(query, function(err, results) {
             if (err) {
                 //if an error has happened, return code 500 with the error.
@@ -112,7 +108,7 @@ const server = http.createServer(function(request, response) {
     else if (pathname === "/save" && queryParams) {
         doesEmailExist(queryParams.get('id'), queryParams.get('email'), function(result) {
             if (result === "success") {
-                let query = "UPDATE USERS SET email = ?, first_name = ?, last_name = ?, phone = ? ";
+                var query = "UPDATE USERS SET email = ?, first_name = ?, last_name = ?, phone = ? ";
                 var parameters = [queryParams.get('email'), queryParams.get('firstName'), queryParams.get('lastName'), queryParams.get('phone')];
                 // Either there's a password change, get the password and old password (current), then put user_id.
                 var message = "No changes";
@@ -309,7 +305,7 @@ const server = http.createServer(function(request, response) {
             for(let i = 0; i< query.length; i++){
                 finalQuery += query[i];
             }
-            console.log(finalQuery);
+            //console.log(finalQuery);
             db.query(finalQuery,parameters, function(err, results) {
                 if (err) {
                     console.error(err);
@@ -321,6 +317,52 @@ const server = http.createServer(function(request, response) {
                     response.end(JSON.stringify({ message: "Product not found" }));
                     return;
                 }
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify(results));
+            });
+        }
+        else if (pathname === "/product" && queryParams) {
+            // returned columns (image_id, image, product_id).
+            var query = `SELECT image_id, image_location as image FROM products_images WHERE product_id = ? ORDER BY image_id;`;
+            // returned columns (product_id, product_name, product_description, category_id, created_at, sold, product_is_active, category_name)
+            query += `SELECT 
+                        p.product_id,
+                        p.product_name,
+                        p.product_description,
+                        p.category_id,
+                        p.created_at,
+                        p.Sold,
+                        p.is_active AS product_is_active,
+                        ci.category_name
+                      FROM Products p
+                      LEFT JOIN  Categories ci ON p.category_id = ci.category_id
+                      WHERE p.product_id = ?
+                      ORDER BY product_is_active DESC;`;
+            // returned columns (product_id, variation_id, variation_name, variation_price, variation_stock, variation_is_active)
+            query+= `SELECT 
+                        p.product_id,
+                        pv.variation_id,
+                        pv.variation_name,
+                        pv.variation_price,
+                        pv.variation_stock,
+                        pv.is_active AS variation_is_active
+                      FROM Products p
+                      LEFT JOIN Products_variations pv ON p.product_id = pv.product_id
+                      WHERE p.product_id = ?
+                      ORDER BY p.product_id, pv.variation_id;`;
+            const parameters = [
+                queryParams.get("product"),
+                queryParams.get("product"),
+                queryParams.get("product")
+            ];
+            console.log("query:", query, "Parameters: ", parameters);
+            db.query(query,parameters, function(err, results) {
+                if (err || results.length == 0) {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "Address Not found." }));
+                    return;
+                }
+                console.log("results:", results);
                     response.writeHead(200, { "Content-Type": "application/json" });
                     response.end(JSON.stringify(results));
             });

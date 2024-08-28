@@ -7,18 +7,35 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body>
+<body onload="javascript:fetchProduct()">
     <nav id="navigationBar"></nav>
     <div id="mainContent">
-      
         <div id="product">
-            <div id="productImage"></div>
-            <div id="productDetails"></div>
-            <h1 id="productName"></h1>
+            <div id="productImageDiv">
+                <button class="leftArrow" onclick="prevImage()">&#9668;</button><!-- left arrow HTML https://graphemica.com/%E2%97%84 -->
+                <div id="productImageContainer">
+                </div>
+                <button class="rightArrow" onclick="nextImage()">&#9658;</button><!-- Right arrow HTML https://graphemica.com/%E2%96%BA -->
+            </div>
+            <div id="productDetails">
+                <h2 id="productName"></h2>
+                <div id="productVariations">
+                    <ul id="productVariationsUl"></ul>
+                </div>
+                <div id="productAddtoCart">
+                    <button id="leftProductCountButton" onclick="javascript:changeProductCount(0, 'productCount');">-</button>
+                    <input type="number" name="productCount" id="productCount" value="0" max="999">
+                    <button id="rightProductCountButton" onclick="javascript:changeProductCount(1, 'productCount');">+</button>
+                    <button id="addToCart" onclick="javascript:addToCart()">ADD TO CART</button>
+                </div>
+            </div>
+            <h3>Description</h3>
+            <p>Category: <b><a id="categoryName"></a></b></p>
+            <p id="productDesc"></p>
         </div>
     </div>
     <script src="./js/functions.js"></script>
     <script src="./js/index.js"></script>
-    <script src="./js/product.js"></script>
+    <script src="./js/products.js"></script>
 </body>
 </html>

@@ -1,12 +1,13 @@
 import mysql from "mysql2";
-
+// Enable multiple Query Statements in 1 call.
 class MysqlQueries{
     #connection ;
     #config = {
         host: "localhost",
         user: "abdalghany",
         password: "ohitsme",
-        database:"ripoff"
+        database:"ripoff",
+        multipleStatements: true
       };
     constructor(){
         this.#connection  = mysql.createConnection(this.#config);
@@ -197,7 +198,7 @@ ORDER BY
 p.is_active DESC;
 
 -- 3 Queries that selects all products information from all products tables, returns the desired product information for (product.html?product_id=id)
--- (returns 2 variations for product_id=1: 1,1 1,2 Black, White 15, 10 399.99, 399.99 1,1 )
+-- The first one (returns 2 variations for product_id=1: 1,1 1,2 Black, White 15, 10 399.99, 399.99 1,1 )
 --                                  product_id,var_id, var_name, stock, price, is_active?
 
 SELECT 
@@ -210,7 +211,7 @@ pv.is_active AS variation_is_active
 FROM Products p
 LEFT JOIN Products_variations pv ON p.product_id = pv.product_id
 WHERE p.product_id = ?
-ORDER BY p.product_id, pv.variation_id
+ORDER BY p.product_id, pv.variation_id;
 
 -- output example for product_id = 1:
 -- product_id 	product_name 	                                         product_description 	                            category_id 	created_at 	  Sold 	product_is_active 	category_name 	
@@ -227,15 +228,15 @@ ci.category_name
 FROM Products p
 LEFT JOIN  Categories ci ON p.category_id = ci.category_id
 WHERE p.product_id = ?
-ORDER BY product_is_active DESC
+ORDER BY product_is_active DESC;
 
 -- Example output of the below query: image_id, image_location,             product_id
 --                                      1           ./img/products/1/1.png      1
 --                                      2           ./img/products/1/2.png      1
 -- Images are stored as follows: ./img/products/[product_id]/[1++].[extension], extensions (png, jpeg)
 
-SELECT image_id, image_location, product_id 
+SELECT image_id, image_location as image, product_id 
 FROM products_images 
-WHERE product_id = 1 ORDER BY image_id
+WHERE product_id = ? ORDER BY image_id;
 
 */
