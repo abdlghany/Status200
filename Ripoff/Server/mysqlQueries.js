@@ -39,10 +39,10 @@ class MysqlQueries{
         });
     }
 
-    insert(query, values, callback) {
-        this.#connection.query(query, values, function(err, results) {
+    query(query, values, callback){
+        this.#connection.query(query,values, function(err, results){
             if (err) {
-                console.error("Error inserting data:", err.message);
+                console.error("Error querying data:", err.message);
                 callback(err, null);
             } else {
                 callback(null, results);
@@ -50,38 +50,6 @@ class MysqlQueries{
         });
     }
 
-    select(query, values, callback) {
-        this.#connection.query(query, values, function(err, results) {
-            if (err) {
-                console.error("Error selecting data:", err.message);
-                callback(err, null);
-            } else {
-                callback(null, results);
-            }
-        });
-    }
-
-    update(query, values, callback) {
-        this.#connection.query(query, values, function(err, results) {
-            if (err) {
-                console.error("Error updating data:", err.message);
-                callback(err, null);
-            } else {
-                callback(null, results);
-            }
-        });
-    }
-
-    delete(query, values, callback) {
-        this.#connection.query(query, values, function(err, results) {
-            if (err) {
-                console.error("Error deleting data:", err.message);
-                callback(err, null);
-            } else {
-                callback(null, results);
-            }
-        });
-    }
 }
 
 export default MysqlQueries;

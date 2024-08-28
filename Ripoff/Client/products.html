@@ -15,15 +15,15 @@
         <div id="sort_products">
             <div id="sort">
                 <label for="sortBy">Sort by</label>
-                <select name="sortBy" id="sortBy" onchange="javascript:sortBy();">
+                <select name="sortBy" id="sortBy" onchange="javascript:sortBy();"> <!-- onchange beucase when you use the keyboard to select it does not count as a "click" event for onclick to work. -->
                     <option value="" selected disabled>Select</option>
-                    <option value="created_at">New</option>
-                    <option value="price">Price</option>
-                    <option value="sold">Items Sold</option>
+                    <option value="created_at" onclick="javascript:sortBy();">New</option>
+                    <option value="price" onclick="javascript:sortBy();">Price</option>
+                    <option value="sold" onclick="javascript:sortBy();">Items Sold</option>
                 </select>
                 <hr class="fullWidth">
                 <ul id="side_menu_categories">
-                    <li><a href="./products.html"><b>All Products</b></a></li>
+                    <li><a href="./products.html" id="allProducts">All Products</a></li>
                 </ul>
             </div>
             <div id="products">

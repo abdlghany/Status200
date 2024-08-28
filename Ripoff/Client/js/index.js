@@ -75,7 +75,7 @@ function loadNavigationBar(){
         getElementById("navigationSearch").addEventListener("keydown", logKey);
     }
 /* 
-    Get categories from the database and display them in the index page.
+    Get categories from the database and display them in the index page using loadMainMenu().
 */
 function fetchCategories(callback){
     axios.get(domain+"/index")
@@ -86,6 +86,7 @@ function fetchCategories(callback){
         console.error("There was an error fetching categories:", error);
     });
 }
+
 function loadMainMenu(){
     fetchCategories(function(response){
         const responseCategories = response.data;

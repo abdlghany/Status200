@@ -1,7 +1,6 @@
 import http from "http";
 import { URL } from "url";
 import MysqlQueries from "./mysqlQueries.js";
-import { clearScreenDown } from "readline";
 
 const db = new MysqlQueries();
 db.connect();
@@ -16,11 +15,16 @@ const server = http.createServer(function(request, response) {
     const url = new URL(request.url, `http://${request.headers.host}`);
     const pathname = url.pathname;
     const queryParams = url.searchParams;
+    var query = "";
+    var message = "";
+    var parameters = [];
     // Route - GET categories
     if (request.url === "/" || request.url === "/index") {
         //Table: Categories (category_id, category_name, category_image, category_description)
         // Order by category_id desc to show new categories first.
-        db.select("SELECT * FROM categories ORDER BY category_id DESC", function(err, results) {
+        query = "SELECT * FROM categories ORDER BY category_id DESC";
+        message = "No categories found.";
+        db.query(query, function(err, results) {
             if (err) {
                 //if an error has happened, return code 500 with the error.
                 response.writeHead(500, { "Content-Type": "application/json" });
@@ -49,7 +53,7 @@ const server = http.createServer(function(request, response) {
                     queryParams.get('firstName'),
                     queryParams.get('lastName')
                 ];
-                db.insert(query, parameters, function(err, results) {
+                db.query(query, parameters, function(err, results) {
                     if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
@@ -58,7 +62,7 @@ const server = http.createServer(function(request, response) {
                         response.writeHead(200, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ message: "Account successfully created! Please log in to use your account." }));
                     } else {
-                        response.writeHead(500, { "Content-Type": "application/json" });
+                        response.writeHead(200, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ message: "An error occurred while registering your account, please try again." }));
                     }
                 });
@@ -89,7 +93,7 @@ const server = http.createServer(function(request, response) {
             query += "WHERE user_name = ? AND password = ? AND is_active = 1 LIMIT 1"
         }
 
-        db.select(query, [queryParams.get("username"), queryParams.get("password")], function(err, results){
+        db.query(query, [queryParams.get("username"), queryParams.get("password")], function(err, results){
             if (err) {
                 //if an error has happened, return code 500 with the error.
                 response.writeHead(500, { "Content-Type": "application/json" });
@@ -124,7 +128,7 @@ const server = http.createServer(function(request, response) {
                     query += " WHERE user_id = ?";
                     parameters.push(queryParams.get('id'));
                 }
-                db.insert(query, parameters, function(err, results) {
+                db.query(query, parameters, function(err, results) {
                     if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
                         response.end(JSON.stringify({ error: "Server error, could not fetch categories." }));
@@ -178,7 +182,7 @@ const server = http.createServer(function(request, response) {
             queryParams.get('address_label')
         ];
         }
-        db.insert(query, parameters, function(err, results) {
+        db.query(query, parameters, function(err, results) {
             if (err) {
                 response.writeHead(500, { "Content-Type": "application/json" });
                 response.end(JSON.stringify({ error: "Server error, could not add your address." }));
@@ -201,7 +205,7 @@ const server = http.createServer(function(request, response) {
         const parameters = [
             queryParams.get("id")
         ];
-        db.select(query,parameters, function(err, results) {
+        db.query(query,parameters, function(err, results) {
             if (err) {
                 //if an error has happened, return code 500 with the error.
                 response.writeHead(500, { "Content-Type": "application/json" });
@@ -223,7 +227,7 @@ const server = http.createServer(function(request, response) {
             queryParams.get('id'),
             queryParams.get('address_id')
         ];
-        db.delete(query, parameters, function(err, results) {
+        db.query(query, parameters, function(err, results) {
             if (err || results.length == 0) {
                 response.writeHead(500, { "Content-Type": "application/json" });
                 response.end(JSON.stringify({ message: "Server error, could not remove your address." }));
@@ -241,7 +245,7 @@ const server = http.createServer(function(request, response) {
                 queryParams.get("id"),
                 queryParams.get("address_id")
             ];
-            db.select(query,parameters, function(err, results) {
+            db.query(query,parameters, function(err, results) {
                 if (err || results.length == 0) {
                     response.writeHead(500, { "Content-Type": "application/json" });
                     response.end(JSON.stringify({ message: "Address Not found." }));
@@ -306,7 +310,7 @@ const server = http.createServer(function(request, response) {
                 finalQuery += query[i];
             }
             console.log(finalQuery);
-            db.select(finalQuery,parameters, function(err, results) {
+            db.query(finalQuery,parameters, function(err, results) {
                 if (err) {
                     console.error(err);
                     response.writeHead(500, { "Content-Type": "application/json" });
@@ -329,7 +333,7 @@ const server = http.createServer(function(request, response) {
 });
 
 function doesAccountExist(username, email = "", callback){
-    db.select("SELECT * FROM USERS WHERE user_name = ? OR email = ? LIMIT 1", [username, email], function(err, results){
+    db.query("SELECT * FROM USERS WHERE user_name = ? OR email = ? LIMIT 1", [username, email], function(err, results){
         if(err){callback("DBError")}
         else if(results.length > 0){
            // console.log(results);
@@ -348,7 +352,7 @@ function doesAccountExist(username, email = "", callback){
     });
 }
 function doesEmailExist(id, email = "", callback){
-    db.select("SELECT * FROM USERS WHERE email = ? AND user_id != ? LIMIT 1", [email, id], function(err, results){
+    db.query("SELECT * FROM USERS WHERE email = ? AND user_id != ? LIMIT 1", [email, id], function(err, results){
         if(err){callback("DBError")}
         else if(results.length > 0){
             if (email == results[0].email){

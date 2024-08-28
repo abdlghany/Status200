@@ -1,4 +1,4 @@
-// This js file is designed to work with ./products.html?category="+category.category_id only
+// This js file is designed to work with ./products.html only
 function getQueryParam(parameter) {
     // return query parameter.
     const urlParameters = new URLSearchParams(window.location.search);
@@ -10,15 +10,36 @@ function fetchProducts() {
     const categoryId = getQueryParam('category');
     const searchValue = getQueryParam('search');
     var order_by = getQueryParam('order_by');
-
+    const allProducts = getElementById("allProducts");
     // if there's no order_by parameter, order by created_at
-    if(!order_by){
+    if(order_by){
+        // if the current order by is the same as last order_by, invert the direction of the column (DESC -> ASC).
+        if(order_by == localStorage.getItem("last_order_by")){
+            if(localStorage.getItem("direction") == "DESC"){
+                localStorage.setItem("direction", "ASC");
+            }
+            else{
+                localStorage.setItem("direction", "DESC");
+            }
+        }
+        // if the user did not select the same order_by (to make sure "direction" is defined).
+        else{
+            localStorage.setItem("direction", "DESC");
+        }
+        localStorage.setItem("last_order_by", order_by);
+    }
+    else{
         order_by = "created_at";
     }
+    // Always use order_by and direction when requesting, even if it doesn't exist in the current URL parameters.
+    var urlExtension = "/products?order_by=" + order_by + "&direction=" + localStorage.getItem("direction");
     // check if categoryId exists then request the category from the server
-    var urlExtension = "/products?order_by="+order_by;
     if (categoryId) {
         urlExtension += "&category_id=" + categoryId;   
+    }
+    // if categoryId does not exist, make 'all products' bold.
+    else{
+        allProducts.classList.add("bold");
     }
     if(searchValue){
         urlExtension += "&search=" + searchValue;
@@ -26,23 +47,28 @@ function fetchProducts() {
     fetchCategories(function(response){
         const responseCategories = response.data;
         const side_menu_categories = getElementById("side_menu_categories");
+       
         responseCategories.forEach(function(category){
             const li = document.createElement("li");
-            li.innerHTML = "<a href='./products.html?category="+category.category_id+"'>"+category.category_name+"</a>";
+            if(category.category_id == categoryId){
+                li.classList.add("bold");
+            }
+            li.innerHTML = "<a href='./products.html?category="+ category.category_id+"'>"+ category.category_name+"</a>";
             side_menu_categories.appendChild(li);
 
         });
+        
     });
     productsQuery(urlExtension, categoryId, searchValue);
 }
-
+// Sory by <select> in Products.html page
 function sortBy() {
     const urlParameters = new URLSearchParams(window.location.search);
     const sortByValue = getValueOfElementById("sortBy");
     // Remove existing order_by parameter.
     urlParameters.delete("order_by");
     // Set the new order_by parameter.
-    window.location.assign("./products?" + urlParameters.toString()+"&order_by="+sortByValue);
+    window.location.assign("./products?" + urlParameters.toString()+"&order_by="+ sortByValue);
 }
 
 function productsQuery(urlExtension, categoryId, searchValue){
@@ -58,11 +84,11 @@ function productsQuery(urlExtension, categoryId, searchValue){
                     categoryNameHeader.textContent = responseProducts[0].category_name;
                 }
                 else if(searchValue){
-                    categoryNameHeader.textContent = "Search results for '"+searchValue.toLowerCase()+"'";
+                    categoryNameHeader.textContent = "Search results for '"+ searchValue.toLowerCase()+"'";
                     const navigationSearch = getElementById("navigationSearch");
                     navigationSearch.value = searchValue.toLowerCase();
                     if(responseProducts.message == "Product not found"){
-                        categoryNameHeader.textContent = "There are no results for your search '"+searchValue.toLowerCase()+"'";
+                        categoryNameHeader.textContent = "There are no results for your search '"+ searchValue.toLowerCase()+"'";
                         return
                     }
                 }
@@ -72,8 +98,8 @@ function productsQuery(urlExtension, categoryId, searchValue){
                     const productDiv = document.createElement("div");
                     // get the first 2 words of a product's name and set them as img alt if it fails to load.
                     var productName = product.name.split(' ');
-                    productName = productName[0]+" "+productName[1] + " image" 
-                    productDiv.innerHTML = "<img src='"+product.image+"' alt='"+productName+"'><div class='product_text'><p class='product_name'>"+product.name+"</p><div class='product_footer'><p class='product_price'>RM"+product.price+"</p><p class='product_sold'>"+product.sold+" Sold</p></div></div>";
+                    productName = productName[0]+" "+ productName[1] + " image" 
+                    productDiv.innerHTML = "<img src='"+ product.image+"' alt='"+ productName+"'><div class='product_text'><p class='product_name'>"+ product.name+"</p><div class='product_footer'><p class='product_price'>RM"+ product.price+"</p><p class='product_sold'>"+product.sold+" Sold</p></div></div>";
                     productDiv.style.cursor = "pointer";
                     productsDiv.appendChild(productDiv);
                     productDiv.title = "View product";
