@@ -59,7 +59,7 @@ function fetchProduct(){
             });
             // PRODUCTS: Since there's only 1 product, there's no need for a forEach loop.
             productNameHeader.innerText = products[0].product_name;
-            
+            ADD SUPPORT FOR 1 IMAGE (HIDE THEM ARROWS FROM THE VIEW).
             productDesc.innerHTML = products[0].product_description
             categoryName.innerHTML += products[0].category_name
             categoryName.href = "./products.html?category="+products[0].category_id;
