@@ -1,10 +1,9 @@
-// This js file is designed to work with ./products.html only
+// This js file is designed to work with ./products.html & product.html
+// return query parameter.
 function getQueryParam(parameter) {
-    // return query parameter.
     const urlParameters = new URLSearchParams(window.location.search);
     return urlParameters.get(parameter);
 }
-
 // Fetch and display products for the selected category
 function fetchProducts() {
     const categoryId = getQueryParam('category');

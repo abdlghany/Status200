@@ -88,7 +88,7 @@ nav {
     color: #E0E0E0;
 }
 /* categories.html */
-#categories, #products{
+#categories, #products, #product{
     margin: 0 auto;
     margin-top: 2rem;
     margin-bottom: 2rem;
