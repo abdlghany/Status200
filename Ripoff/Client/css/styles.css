@@ -202,7 +202,7 @@ table a, table a:visited{
 #signup h1, #signup button,
 #login h1, #login button,
 #userProfile h1, #userProfile button,
- #userProfile h2{
+#userProfile h2{
     display: block;
     margin: 2rem auto;
 }
@@ -315,7 +315,7 @@ input[type=number] {
  #sort li{
     margin-bottom: 2rem;
  }
- #sort ul{
+ #sort ul, #productVariationsUl{
     list-style: none;
     padding-left: 5px;
  }
@@ -352,7 +352,7 @@ input[type=number] {
 }
 #productAddtoCart {
     position: relative;
-    width: 200px; /* Adjust as needed */
+    width: 200px; 
 }
 
 #leftProductCountButton,
@@ -433,4 +433,55 @@ input[type=number] {
 
 .rightArrow {
     right: 0;
+}
+.display_none{
+    display: none;
+}
+
+/* Styling the label to look like a button because the variation radio-button is hidden  */
+.label_radio {
+    display: inline-block; /* make it look like a button */
+    padding: 10px 20px;
+    background-color: #DDDDDD;
+    border: 2px solid #cccccc;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    margin: 5px;
+    color: #1C1C1C;
+}
+#productVariationsUl{
+    display: flex;
+    flex-direction: row;
+}
+
+/* Change the appearance when the radio button is checked (When the user clicks the label, it automatically selects the radio button if they have for/name on them */
+/* Using Combined selector to select .label_radio when the radio button is checked and apply the css properties to it. */
+.productVariationButton:checked + .label_radio {
+    background-color: #007bff;
+    color: #DDDDDD;
+    border-color: #007bff;
+}
+
+#parentOfProductAddtoCart{
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    align-items: center;
+    justify-content: left;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+#addToCartButton{
+    width: 200px;
+    height: 40px;
+}
+#productDetails{
+    margin-left: 1rem;
+    width: 60%;
+}
+#description{
+    /* Force it to the next line */
+    width: 80%;
 }

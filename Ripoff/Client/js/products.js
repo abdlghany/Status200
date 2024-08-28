@@ -46,8 +46,11 @@ function fetchProduct(){
             const productImages = response.data[0];
             const products = response.data[1];
             const variations = response.data[2];
+
             // IMAGES
             productImages.forEach(function(image, index){
+                const leftArrow = document.getElementsByClassName('leftArrow');
+                const rightArrow = document.getElementsByClassName('rightArrow');
                 const img = document.createElement("img");
                 img.src= image.image;
                 img.classList.add("productImage");
@@ -55,8 +58,19 @@ function fetchProduct(){
                 img.style.display = "none";
                 productImageContainer.appendChild(img);
                 // add this image to the list of global images in this file.
-                images[images.length] = img;
+                images[index] = img;
+                //this will hide the arrows on the first loop pass 
+                if(index == 0){
+                    leftArrow[0].classList.add('display_none');
+                    rightArrow[0].classList.add('display_none'); 
+                }
+                //then display them if there's more than 1 image in the database. (index = 1 on the second pass.)
+                else{
+                leftArrow[0].classList.remove('display_none');
+                rightArrow[0].classList.remove('display_none');
+                }
             });
+
             // PRODUCTS: Since there's only 1 product, there's no need for a forEach loop.
             productNameHeader.innerText = products[0].product_name;
             //ADD SUPPORT FOR 1 IMAGE (HIDE THEM ARROWS FROM THE VIEW).
@@ -69,13 +83,52 @@ function fetchProduct(){
                 soldOutImage.classList.add("soldout-overlay");
                 productImageContainer.appendChild(soldOutImage);
             }
+
             // VARIATIONS.
-            variations.forEach(function(variation){
+            var variationsStock = 0;
+            variations.forEach(function(variation, index){
                 const li = document.createElement("li");
-                const button = document.createElement("button");
-                button.classList.add("productVariationButton");
+                const radio = document.createElement("input");
+                const label = document.createElement("label");
+                const variation_stock = getElementById('variation_stock');
+                // Radio button that'll allow the user to select a variation
+                radio.type ="radio";
+                radio.name = "variation"; // all radio buttons will have the same name.
+                radio.value = variation.variation_id; 
+                radio.id = "variation"+variation.variation_id;
+                radio.classList.add("productVariationButton", "display_none");
+                // Change the displayed number of available pieces when the user selects a (different) variation
+                radio.onchange = function() {
+                    changeStockCount(variation.variation_stock);
+                };
+                
+                li.appendChild(radio);
+                // Label for the radio button
+                label.innerText = variation.variation_name;
+                label.setAttribute("for", "variation" + variation.variation_id);
+                label.classList.add("label_radio");
+                //label.onclick = "javascript:changeStockCount("+variation.variation_stock+");";
+                li.appendChild(label);
+                // add li to ul
+                productVariationsUl.appendChild(li);
+                //disable the radio button if the product is inactive or if it's out of stock
+                if(variation.variation_is_active == 0 || variation.variation_stock == 0){
+                    radio.disabled = true;
+                }
+                // if the radio button is not disabled (and not out of stock), and there's only 1 variation, auto select it.
+                else if(variations.length == 1){
+                    radio.checked = true;
+                    // There's one variation.
+                    variationsStock = variation.variation_stock;
+                }
+                else{
+                    // Increase variationsStock count if there's more than 1 variation and it's active and it's not out of stock
+                    variationsStock += variation.variation_stock;
+                }
+                variation_stock.innerText = variationsStock + " pieces available.";
+                
             });
-            //shows Image number 'currentImageIndex' which is Image 1 and hides the rest
+            //shows Image number 'currentImageIndex' which is Image 1 and hide the rest
             showImage(currentImageIndex);
         });
     }
@@ -83,6 +136,10 @@ function fetchProduct(){
     else{
         window.location.assign("./products.html");
     }
+}
+function changeStockCount(newCount){
+    const variation_stock = getElementById('variation_stock');
+    variation_stock.innerText = newCount + " pieces available.";
 }
 // Increase or decrease the number of variations in a product quantity input field (before adding to cart)
 function changeProductCount(change, elementId){
