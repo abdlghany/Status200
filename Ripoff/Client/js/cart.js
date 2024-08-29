@@ -22,25 +22,23 @@ window.onload = function() {
                 const infoDiv = document.createElement('div');
                 infoDiv.classList.add('cart-item-info');
                 infoDiv.innerHTML = `
-                <h3>${item.product_name}</h3>
+                <h3><a href="./product.html?product=${item.product_id}">${item.product_name}</a></h3>
                 <div class="variation-quantity-price">
                     <p>Variation: ${item.variation_name}</p>
-                     <button id="cartLeftProductCountButton"">-</button>
-                    <input type="number" value="${item.total_variation_quantity}" id="cartProductCount">
-                     <button id="cartRightProductCountButton">+</button>
+                    <p>${item.variation_stock} pieces available</p>
                     <p>Price: RM${item.variation_price}</p>
+                    <div class="cartProductCountDiv">
+                        <button id="cartLeftProductCountButton">-</button>
+                        <input type="number" value="${item.total_variation_quantity}" id="cartProductCount">
+                        <button id="cartRightProductCountButton">+</button>
+                    </div>
                 </div>`;
                 cartItemDiv.appendChild(infoDiv);
 
-                // Quantity and Stock
-                const span = document.createElement('span');
-                span.innerHTML = item.variation_stock + " pieces available";
-                cartItemDiv.appendChild(span);
-
-                // Price
+                // Quantity + Total Price
                 const priceDiv = document.createElement('div');
                 priceDiv.classList.add('cart-item-price');
-                priceDiv.textContent = `RM${item.variation_price}`;
+                priceDiv.innerHTML = `<p>Total: RM${parseFloat(item.variation_price) * parseFloat(item.total_variation_quantity)}</p>`;
                 cartItemDiv.appendChild(priceDiv);
 
                 // Append cart item to cart
