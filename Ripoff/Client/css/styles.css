@@ -16,7 +16,7 @@ nav {
     right: 0;
     left: 0;
     max-height: 5rem;
-    z-index: 1;
+    z-index: 20;
     padding: 0 1rem;
 }
 /* navbar list styles here */
@@ -54,7 +54,7 @@ nav {
 #category a:hover,
 #sort a:hover,
 #description #categoryName:hover,
-.cart-item-info a:hover {
+.cart-item-info a:hover{
     color: #AAAAAA;
 }
 /* navbar lists' contents styles here */
@@ -372,14 +372,20 @@ input[type=number] {
 #rightProductCountButton,
 #cartLeftProductCountButton,
 #cartRightProductCountButton {
-    background-color: rgba(255, 255, 255, 0.54);
+    background-color: #CCCCCC;
     border: none;
     font-size: 1.2rem;
     position: absolute;
     top: 0;
     z-index: 10;
 }
-
+#addToCartButton,
+#placeOrderButton{
+    background-color: #CCCCCC;
+    width: 200px;
+    height: 40px;
+    border-radius: 5px;
+}
 /* Specific styles for left product count buttons */
 #leftProductCountButton,
 #cartLeftProductCountButton {
@@ -413,15 +419,15 @@ input[type=number] {
     width: 100px; /* Adjust to fit within the button spacing */
 }
 
-#cartProductCount {
+.cartProductCount {
     height: 30px; 
     width: 50px;
     padding: 0 50px;
 }
 
 #productCount,
-#cartProductCount {
-    background: rgba(255, 255, 255, 0.54);
+.cartProductCount {
+    background: #CCCCCC;
     border: none;
     text-align: center;
     position: relative;
@@ -431,10 +437,12 @@ input[type=number] {
 #leftProductCountButton:hover,
 #rightProductCountButton:hover,
 #cartLeftProductCountButton:hover,
-#cartRightProductCountButton:hover {
-    background-color: rgba(255, 255, 255, 0.45);
+#cartRightProductCountButton:hover,
+.label_radio:hover,
+#addToCartButton:hover,
+#placeOrderButton:hover {
+    background-color: #AAAAAA;
 }
-
 
 #productImageDiv {
     position: relative;
@@ -495,6 +503,7 @@ input[type=number] {
     margin: 5px;
     color: #1C1C1C;
 }
+
 #productVariationsUl{
     display: flex;
     flex-direction: row;
@@ -517,10 +526,7 @@ input[type=number] {
     margin-top: 2rem;
     margin-bottom: 2rem;
 }
-#addToCartButton{
-    width: 200px;
-    height: 40px;
-}
+
 #productDetails{
     margin-left: 1rem;
     width: 60%;
@@ -580,16 +586,19 @@ input[type=number] {
     padding-right: 10px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    width: 80%;
+    width: 75%;
     margin: 0 auto;
 }
 
-.cart-item img {
+.cart-item img, .cart-img-div {
     width: 120px;
     height: 120px;
-    object-fit: cover;
+    object-fit: contain;
 }
-
+.cart-img-div{
+    background-color: white;
+    cursor: pointer;
+}
 .variation-quantity-price{
     display: flex;
     flex-direction: row;
@@ -616,9 +625,26 @@ input[type=number] {
     -webkit-box-orient: vertical;
 }
 
-.cart-item-price p {
+.cart-item-price label{
     font-size: 1.2rem;
     font-weight: bold;
-    display: flex;
-    flex-direction: row;
+    width: 150px;
+    display: inline;
+    vertical-align: middle;
+}
+.cartCheckbox{
+    width: 25px;
+    height: 25px;
+    vertical-align: middle;
+}
+.placeOrderDiv{
+    padding-right: 50px;
+    justify-content: right;
+}
+#finalTotalItemsCount,
+#finalOrderPrice{
+    width: 120px;
+    height: 40px;
+    vertical-align: bottom;
+    margin-right: 2rem;
 }

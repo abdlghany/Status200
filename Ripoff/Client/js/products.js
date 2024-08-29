@@ -112,6 +112,7 @@ function fetchProduct(){
                 label.innerText = variation.variation_name;
                 label.setAttribute("for", "variation" + variationId);
                 label.classList.add("label_radio");
+                label.title = "Select "+variation.variation_name;
 
                 li.appendChild(label);
                 // add li to ul
@@ -400,11 +401,4 @@ function nextImage() {
     }
     showImage(currentImageIndex);
 }
-function showToast(message) {
-    var toast = document.getElementById("toast");
-    toast.textContent = message; 
-    toast.className = "show"; // display the toast by adding the "show" class
-    setTimeout(function(){
-        toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
-    }, 3000);
-}
+

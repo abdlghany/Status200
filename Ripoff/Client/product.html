@@ -12,10 +12,10 @@
     <div id="mainContent">
         <div id="product">
             <div id="productImageDiv">
-                <button class="leftArrow" onclick="prevImage()">&#9668;</button><!-- left arrow HTML https://graphemica.com/%E2%97%84 -->
+                <button class="leftArrow" onclick="prevImage()" title="Previous image">&#9668;</button><!-- left arrow HTML https://graphemica.com/%E2%97%84 -->
                 <div id="productImageContainer">
                 </div>
-                <button class="rightArrow" onclick="nextImage()">&#9658;</button><!-- Right arrow HTML https://graphemica.com/%E2%96%BA -->
+                <button class="rightArrow" onclick="nextImage()" title="Next image">&#9658;</button><!-- Right arrow HTML https://graphemica.com/%E2%96%BA -->
             </div>
             <div id="productDetails">
                 <h2 id="productName"></h2>
@@ -25,14 +25,14 @@
                 <!-- Had to add this class for contents to be on the same line... -->
                 <div id="parentOfProductAddtoCart">
                     <div id="productAddtoCart">
-                        <button id="leftProductCountButton"">-</button>
+                        <button id="leftProductCountButton" title="Decrease quantity">-</button>
                         <input type="number" name="productCount" id="productCount" value="0" max="999">
-                        <button id="rightProductCountButton">+</button>
+                        <button id="rightProductCountButton" title="Increase quantity">+</button>
                     </div>
                     <p id="variation_stock"></p>
                     
                 </div>
-                <button id="addToCartButton">ADD TO CART</button>
+                <button id="addToCartButton" title="Add to cart">ADD TO CART</button>
                 <p id="errorMessage"></p>
             </div>
             <div id="description">

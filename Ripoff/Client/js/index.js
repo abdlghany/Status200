@@ -598,3 +598,12 @@ function deleteAddress(address_id){
         passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
     });    
 }
+
+function showToast(message) {
+    var toast = document.getElementById("toast");
+    toast.textContent = message; 
+    toast.className = "show"; // display the toast by adding the "show" class
+    setTimeout(function(){
+        toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
+    }, 3000);
+}

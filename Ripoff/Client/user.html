@@ -49,7 +49,7 @@
                             <label for="password">New Password</label>
                         </td>
                         <td>
-                            <input type="password" id="password" name="password" placeholder="Enter a new password..."> <a href="javascript:activateField(6);javascript:activateField(5);" id="change5">change</a>
+                            <input type="password" id="password" name="password" placeholder="Enter a new password..."> <a href="javascript:activateField(6);javascript:activateField(5);" id="change5"  title="Change password">change</a>
                         </td>
                         <td>
                             <p class="errorMessage" id="passwordError"></p>
@@ -83,7 +83,7 @@
                             <label for="email">Email</label>
                         </td>
                         <td>
-                            <input type="text" id="email" name="email"  placeholder="Enter your E-mail..."onfocus="this.select()"> <a href="javascript:activateField(1)"id="change1">change</a>
+                            <input type="text" id="email" name="email"  placeholder="Enter your E-mail..."onfocus="this.select()"> <a href="javascript:activateField(1)"id="change1"  title="Change E-mail">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="emailError"></p>
@@ -100,7 +100,7 @@
                             <label for="phone">Phone No.</label>
                         </td>
                         <td>
-                            <input type="number" id="phone" name="phone" placeholder="Enter your phone number..."onfocus="this.select()"> <a href="javascript:activateField(2)"id="change2">change</a>
+                            <input type="number" id="phone" name="phone" placeholder="Enter your phone number..."onfocus="this.select()"> <a href="javascript:activateField(2)"id="change2"  title="Change phone number">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="phoneError"></p>
@@ -117,7 +117,7 @@
                             <label for="fName">First Name</label>
                         </td>
                         <td>
-                            <input type="text" id="fName" name="fName" placeholder="Enter your first name..."onfocus="this.select()"> <a href="javascript:activateField(3)"id="change3">change</a>
+                            <input type="text" id="fName" name="fName" placeholder="Enter your first name..."onfocus="this.select()"> <a href="javascript:activateField(3)"id="change3" title="Change first name">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="fNameError"></p>
@@ -134,7 +134,7 @@
                             <label for="lName">Last Name</label>
                         </td>
                         <td>
-                            <input type="text" id="lName" name="lName" placeholder="Enter your last name..."onfocus="this.select()"> <a href="javascript:activateField(4)"id="change4">change</a>
+                            <input type="text" id="lName" name="lName" placeholder="Enter your last name..."onfocus="this.select()"> <a href="javascript:activateField(4)"id="change4" title="Change last name">change</a>
                         </td>
                         <td>
                             <p class="errorMessage"  id="lNameError"></p>
@@ -147,7 +147,7 @@
                     </tr>
                     <!-- Submit button -->
                     <tr>
-                        <td><a href="javascript:ShowAddresses()" id="viewAddresses">View Addresses</a></td>
+                        <td><a href="javascript:ShowAddresses()" id="viewAddresses" title="View your saved addresses">View Addresses</a></td>
                         <td>
                             <button onclick="javascript:saveProfile()" title="Save changes">Save</button>
                         </td>
@@ -163,7 +163,7 @@
                 <h2>My Addresses</h2>
                 <hr>
             </div>
-            <a href="./addaddress.html" id="addAddress">Add new Address</a>
+            <a href="./addaddress.html" id="addAddress" title="Add a new address">Add new Address</a>
         </div>
     </div>
     <script src="./js/functions.js"></script>

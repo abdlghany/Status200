@@ -423,7 +423,7 @@ const server = http.createServer(function(request, response) {
             db.query(query,parameters, function(err, results) {
                 if (err || results.length == 0) {
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    console.log("Inserting into shopping cart failed at: " + Date.now());
+                    console.log("Inserting into shopping cart (fetchCartItems) failed at: " + Date.now());
                     response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                     return;
                 }
@@ -431,6 +431,42 @@ const server = http.createServer(function(request, response) {
                     response.end(JSON.stringify(results));
             });
         }
+        else if (pathname === "/updateCartItemCount" && queryParams) {
+            /* Table: Shopping_cart (cart_item_id, user_id, in_cart, variation_id, quantity) */
+            const query = "UPDATE shopping_cart SET in_cart = FALSE WHERE user_id = ? AND variation_id = ?;"; // remove item from cart (do not delete the row(s).)
+            //queryParams: updateCartItemCount?variation_id=?&id=?&quantity=?;
+            const parameters = [
+                queryParams.get("id"),
+                queryParams.get("variation_id")
+            ];
+            db.query(query,parameters, function(err, results) {
+                if (err || results.affectedRows == 0) {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    console.log("Updating shopping cart for user_id "+queryParams.get("id")+" failed at: " + Date.now());
+                    response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                    return;
+                }
+                /* Table: Shopping_cart (cart_item_id, user_id, in_cart, variation_id, quantity)*/
+                const query2 = "INSERT INTO shopping_cart VALUES (NULL, ?, 1, ?, ?)";
+                const parameters2 = [
+                    queryParams.get("id"),
+                    queryParams.get("variation_id"),
+                    queryParams.get("quantity")
+                ];
+                db.query(query2, parameters2, function(err, results){
+                    if(err || results.length == 0){
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        console.log("Inserting Into shopping cart (updateCartItemCount) for user_id "+queryParams.get("id")+" failed at: " + Date.now());
+                        response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                        return;
+                    }
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "Item quantity successfully updated to "+queryParams.get("quantity") }));
+
+                });
+            });
+        }
+        
      //request isn't any of the previous pathnames           
     else {
         response.writeHead(404, { "Content-Type": "text/plain" });
