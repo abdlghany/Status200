@@ -45,7 +45,10 @@ nav {
 .separator{
     margin: 0 10px;
 }
-.nav-li a:hover, #category a:hover,  #sort a:hover, #categoryName:hover {
+.nav-li a:hover,
+#category a:hover,
+#sort a:hover,
+#description #categoryName:hover {
     color: #AAAAAA;
 }
 /* navbar lists' contents styles here */
@@ -167,8 +170,7 @@ table input, table Select{
     font-size: 1.2rem;
 }
 table Select, #sort select, #sort label{
-    height: 2.5rem;
-
+    height: 3rem;
 }
 table a, table a:visited{
     color: #E0E0E0;
@@ -355,42 +357,79 @@ input[type=number] {
     width: 200px; 
 }
 
+#productAddtoCart,
+#cartItemContainer {
+    position: relative;
+    width: 200px; /* Adjust this width as necessary */
+}
+
+/* Common styles for product count buttons */
 #leftProductCountButton,
-#rightProductCountButton {
+#rightProductCountButton,
+#cartLeftProductCountButton,
+#cartRightProductCountButton {
     background-color: white;
-    width: 50px;
-    height: 32px;
     border: none;
     font-size: 1.2rem;
     position: absolute;
     top: 0;
-    z-index: 1;
+    z-index: 10;
 }
 
-#leftProductCountButton {
+/* Specific styles for left product count buttons */
+#leftProductCountButton,
+#cartLeftProductCountButton {
     left: 0;
     border-right: 1px solid #AAAAAA;
 }
 
-#rightProductCountButton {
+/* Specific styles for right product count buttons */
+#rightProductCountButton,
+#cartRightProductCountButton {
     right: 0;
     border-left: 1px solid #AAAAAA;
 }
 
+/* Specific dimensions for different product count buttons */
+#leftProductCountButton,
+#rightProductCountButton {
+    width: 50px;
+    height: 32px;
+}
+
+#cartLeftProductCountButton,
+#cartRightProductCountButton {
+    width: 40px;
+    height: 30px;
+}
+
 #productCount {
+    padding: 0 50px; /* Making enough space for the buttons */
     height: 32px; /* Match the height of the buttons */
     width: 100px; /* Adjust to fit within the button spacing */
+}
+
+#cartProductCount {
+    height: 30px; /* Match the height of the buttons */
+    width: 80px; /* Adjust to fit within the button spacing */
+    padding: 0 30px;
+}
+
+#productCount,
+#cartProductCount {
     border: none;
-    padding: 0 50px; /* Ensure enough space for the buttons */
     text-align: center;
     position: relative;
     z-index: 0;
 }
 
 #leftProductCountButton:hover,
-#rightProductCountButton:hover {
+#rightProductCountButton:hover,
+#cartLeftProductCountButton:hover,
+#cartRightProductCountButton:hover {
     background-color: #DDDDDD;
 }
+
 
 #productImageDiv {
     position: relative;
@@ -484,4 +523,75 @@ input[type=number] {
 #description{
     /* Force it to the next line */
     width: 80%;
+}
+/* to indicate that a radio button is disabled, using lighter bg color, lighter text color, not allowing cursor */
+.disabledRadioButton{
+    background-color: #e0e0e0; 
+    color: #888888;
+    border-color: #aaaaaa; 
+    cursor: not-allowed; 
+}
+#categories_h3 h3{
+    margin-top:0;
+}
+/* Notification popup (TOAST message) */
+#toast {
+    visibility: hidden;
+    min-width: 200px;
+    margin-left: -100px; 
+    background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent background */
+    color: #fff;
+    text-align: center;
+    border-radius: 5px;
+    padding: 16px;
+    position: fixed;
+    z-index: 1;
+    left: 50%; /* Center horizontally */
+    bottom: 40%; /* Position near the bottom of the screen */
+    font-size: 17px;
+    opacity: 0;
+    transition: opacity 0.5s ease; /* Fade-in effect */
+}
+
+#toast.show {
+    visibility: visible; /* Show the toast */
+    opacity: 1; /* Fully opaque */
+}
+
+/* cart related CSS */
+#cart {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    padding: 20px;
+}
+
+.cart-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-right: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+}
+
+.cart-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+}
+.variation-quantity-price{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 20px;
+    position: relative;
+}
+.cart-item-info {
+    flex: 1;
+    margin-left: 20px;
+}
+.cart-item-price {
+    font-size: 1.2rem;
+    font-weight: bold;
 }

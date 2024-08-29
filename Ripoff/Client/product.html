@@ -25,14 +25,15 @@
                 <!-- Had to add this class for contents to be on the same line... -->
                 <div id="parentOfProductAddtoCart">
                     <div id="productAddtoCart">
-                        <button id="leftProductCountButton" onclick="javascript:changeProductCount(0, 'productCount');">-</button>
+                        <button id="leftProductCountButton"">-</button>
                         <input type="number" name="productCount" id="productCount" value="0" max="999">
-                        <button id="rightProductCountButton" onclick="javascript:changeProductCount(1, 'productCount');">+</button>
+                        <button id="rightProductCountButton">+</button>
                     </div>
                     <p id="variation_stock"></p>
                     
                 </div>
-                <button id="addToCartButton" onclick="javascript:addToCart()">ADD TO CART</button>
+                <button id="addToCartButton">ADD TO CART</button>
+                <p id="errorMessage"></p>
             </div>
             <div id="description">
                 <h3>Description</h3>
@@ -41,6 +42,7 @@
             </div>
         </div>
     </div>
+    <div id="toast">Empty, invisible toast message</div>
     <script src="./js/functions.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/products.js"></script>

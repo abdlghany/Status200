@@ -77,18 +77,19 @@ function loadNavigationBar(){
 /* 
     Get categories from the database and display them in the index page using loadMainMenu().
 */
-function fetchCategories(callback){
-    axios.get(domain+"/index")
-    .then(function(response) {
-        callback(response);
-    })
-    .catch(function(error) { 
-        console.error("There was an error fetching categories:", error);
-    });
+// return data from the server based on the urlExtension passed for example (./products?category_id=9) will return products that are in the specified category_id
+function axiosQuery(urlExtension, callback){
+    axios.get(domain + urlExtension )
+            .then(function(response) {
+                callback(response)
+            })
+            .catch(function(error) {
+                console.error("Error fetching data:", error);
+            });
 }
 
 function loadMainMenu(){
-    fetchCategories(function(response){
+    axiosQuery("/index", function(response){
         const responseCategories = response.data;
         responseCategories.forEach(function(category){
             const div = document.createElement("div");
@@ -122,7 +123,7 @@ function search(){
 function cart(){
     // check if user is logged in then open the cart.
     if(localStorage.getItem("id")){
-
+        window.location.assign("./cart.html")
     }
     // if not logged in, redirect them to the login screen.
     else{

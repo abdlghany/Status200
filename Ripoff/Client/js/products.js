@@ -1,21 +1,13 @@
 // This js file is designed to work with ./products.html & product.html
 let images = [];
 let currentImageIndex = 0;
+var maxAvailableQuantity = 0
 // return query parameter.
 function getQueryParam(parameter) {
     const urlParameters = new URLSearchParams(window.location.search);
     return urlParameters.get(parameter);
 }
-// return data from the server based on the urlExtension passed for example (./products?category_id=9) will return products that are in the specified category_id
-function axiosQuery(urlExtension, callback){
-    axios.get(domain + urlExtension )
-            .then(function(response) {
-                callback(response)
-            })
-            .catch(function(error) {
-                console.error("Error fetching data:", error);
-            });
-}
+
 // Singular product query
 function fetchProduct(){
     const productId = getQueryParam('product');
@@ -87,54 +79,146 @@ function fetchProduct(){
             // VARIATIONS.
             var variationsStock = 0;
             variations.forEach(function(variation, index){
-                const li = document.createElement("li");
-                const radio = document.createElement("input");
-                const label = document.createElement("label");
-                const variation_stock = getElementById('variation_stock');
+                const li = document.createElement('li');
+                const radio = document.createElement('input');
+                const label = document.createElement('label');
+                const addToCartButton = getElementById('addToCartButton');
+                const variationId = variation.variation_id;
+                const availableQuantity = variation.variation_stock;
                 // Radio button that'll allow the user to select a variation
                 radio.type ="radio";
                 radio.name = "variation"; // all radio buttons will have the same name.
-                radio.value = variation.variation_id; 
-                radio.id = "variation"+variation.variation_id;
+                radio.value = variationId; 
+                radio.id = "variation"+variationId;
                 radio.classList.add("productVariationButton", "display_none");
                 // Change the displayed number of available pieces when the user selects a (different) variation
                 radio.onchange = function() {
-                    changeStockCount(variation.variation_stock);
+                    // change maxAvailableQuantity so that changeProductCount(1) doesn't incrase more than the max available
+                    // the maxAvailableQuantity starts at 0 so that the user can't 
+                    maxAvailableQuantity = availableQuantity;
+                    // if the input's current value is bigger than the maxAvailableQuantity, assign it to max.
+                    if(productCount.value > maxAvailableQuantity){
+                        productCount.value = maxAvailableQuantity;
+                    }
+
+                    changeStockCount(maxAvailableQuantity);
+                    // Change the button's variationId and stock quantity
+                    addToCartButton.onclick = function(){
+                        addToCart(variationId, maxAvailableQuantity);
+                    }
                 };
-                
                 li.appendChild(radio);
                 // Label for the radio button
                 label.innerText = variation.variation_name;
-                label.setAttribute("for", "variation" + variation.variation_id);
+                label.setAttribute("for", "variation" + variationId);
                 label.classList.add("label_radio");
-                //label.onclick = "javascript:changeStockCount("+variation.variation_stock+");";
+
                 li.appendChild(label);
                 // add li to ul
                 productVariationsUl.appendChild(li);
                 //disable the radio button if the product is inactive or if it's out of stock
-                if(variation.variation_is_active == 0 || variation.variation_stock == 0){
+                if(variation.variation_is_active == 0 || availableQuantity == 0){
                     radio.disabled = true;
+                    label.classList.add("disabledRadioButton");
+                    console.log(radio.classList.value);
+                    addToCartButton.onclick = function(){
+                        showToast("This item is out of stock.");
+                    }
                 }
                 // if the radio button is not disabled (and not out of stock), and there's only 1 variation, auto select it.
                 else if(variations.length == 1){
                     radio.checked = true;
+                    // Variation is already auto-checked, so assigning maxAvailableQuantity automatically as well.
+                    maxAvailableQuantity = availableQuantity;
                     // There's one variation.
-                    variationsStock = variation.variation_stock;
+                    variationsStock = maxAvailableQuantity;
+                    addToCartButton.onclick = function(){
+                        addToCart(variationId, maxAvailableQuantity);
+                    } 
                 }
                 else{
                     // Increase variationsStock count if there's more than 1 variation and it's active and it's not out of stock
-                    variationsStock += variation.variation_stock;
+                    variationsStock += availableQuantity;
                 }
-                variation_stock.innerText = variationsStock + " pieces available.";
-                
             });
+            /* 
+                Note to self: Keep these inside the callback function to make sure they run after the page loads db information, otherwise they don't work.
+            */
+            // Set the number of available 
+            const variation_stock_paragraph = getElementById('variation_stock');
+            // variationsStock is the total stock available for this product that includes all variations that are active 
+            variation_stock_paragraph.innerText = variationsStock + " pieces available.";
+
+            // assign an onclick event for the + and the - buttons around the quantity input field.
+            const leftProductCountButton = getElementById('leftProductCountButton');
+            const rightProductCountButton = getElementById('rightProductCountButton');
+            
+            leftProductCountButton.onclick = function(){
+                changeProductCount(0, 'productCount');
+            }
+            rightProductCountButton.onclick = function(){
+                changeProductCount(1, 'productCount');
+            }
             //shows Image number 'currentImageIndex' which is Image 1 and hide the rest
             showImage(currentImageIndex);
+            const productCount = getElementById('productCount');
+            productCount.onchange = function(){
+                //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than the maxAvailableQuantity
+                if(productCount.value > maxAvailableQuantity){
+                    productCount.value = maxAvailableQuantity;
+                }
+                else if(productCount.value < 0){
+                    productCount.value = 0;
+                }
+                else if(!productCount.value){
+                    // do not allow an empty field, fill it witl 0
+                    productCount.value = 0;
+                }
+            }
         });
     }
-    // if there's no productId, navigate to the products page
+    // if there's no productId, navigate to the products page because this product does not exist.
     else{
         window.location.assign("./products.html");
+    }
+}
+
+function addToCart(variationId, maxItemCount){
+    if(localStorage.getItem("id")){
+        // if the user is logged in, and the maximum count of the selected variation is bigger or equals to the amount they're trying to add to cart, add to cart
+        const productCountInput = getElementById('productCount');
+        const productCountValue = productCountInput.value;
+        //reset all text in the errorMessage paragraph to prepare for a new message (if any).
+        resetMessages(['errorMessage']);
+        if(productCountValue <= 0){
+            // faintly colored error message to not draw the user's attention away from the product
+            passMessageToElement("errorMessage", "Quantity can't be lower than 1.", "gray", 1);
+        }
+        else if(productCountValue <= maxItemCount){
+
+        }
+        // again ,just being 100% sure that the value is not bigger than the maxItemCount available for the variation.
+        else{
+            productCountInput.value = maxItemCount;
+            productCountValue = maxItemCount;
+            console.log("You should never see this message in the log.");
+        }
+        // Now that we're sure that the maxItem count is valid, and the user is logged in, we can safely add the item to the user's cart
+        const urlExtension = "/addToCart?variation_id="+variationId+"&quantity="+productCountValue+"&id="+localStorage.getItem('id');
+        axiosQuery(urlExtension,
+            function(response){
+                if(response){
+                    if(response.data.message){
+                        showToast(response.data.message);
+                    }
+                }else{
+                    passMessageToElement("errorMessage", "Please try again later.", "red", 1);
+                }
+            });
+    }
+    // if not logged in, redirect them to the login screen.
+    else{
+        window.location.assign("./login.html");
     }
 }
 function changeStockCount(newCount){
@@ -144,15 +228,23 @@ function changeStockCount(newCount){
 // Increase or decrease the number of variations in a product quantity input field (before adding to cart)
 function changeProductCount(change, elementId){
     // if change == 0 decrease, otherwise increase
-    const inputField = getElementById(elementId);   
+    const inputField = getElementById(elementId);
+    // input "type = Number"  that has a default value of '0' so it doesn't require any further validation.
     var inputFieldValue = parseInt(getValueOfElementById(elementId));
     if(change == 0){
         if(inputFieldValue > 0){
             inputFieldValue -= 1;
         }  
     }
-    else{
-        inputFieldValue += 1;
+    else {
+        if(inputFieldValue >= maxAvailableQuantity){
+            // do no increase anymore, assign the maxItemCount instead
+            inputFieldValue = maxAvailableQuantity;
+        }
+        else{
+            inputFieldValue += 1;
+        }
+        
     }
     inputField.value = inputFieldValue;
 }
@@ -203,7 +295,7 @@ function fetchProducts() {
     if(searchValue){
         urlExtension += "&search=" + searchValue;
     }
-    fetchCategories(function(response){
+    axiosQuery("/index",function(response){
         const responseCategories = response.data;
         const side_menu_categories = getElementById("side_menu_categories");
        
@@ -307,4 +399,12 @@ function nextImage() {
         currentImageIndex = 0;
     }
     showImage(currentImageIndex);
+}
+function showToast(message) {
+    var toast = document.getElementById("toast");
+    toast.textContent = message; 
+    toast.className = "show"; // display the toast by adding the "show" class
+    setTimeout(function(){
+        toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
+    }, 3000);
 }

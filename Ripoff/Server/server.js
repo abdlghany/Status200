@@ -355,14 +355,78 @@ const server = http.createServer(function(request, response) {
                 queryParams.get("product"),
                 queryParams.get("product")
             ];
-            console.log("query:", query, "Parameters: ", parameters);
+            //console.log("query:", query, "Parameters: ", parameters);
             db.query(query,parameters, function(err, results) {
                 if (err || results.length == 0) {
                     response.writeHead(500, { "Content-Type": "application/json" });
                     response.end(JSON.stringify({ message: "Address Not found." }));
                     return;
                 }
-                console.log("results:", results);
+                //console.log("results:", results);
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify(results));
+            });
+        }
+        else if (pathname === "/addToCart" && queryParams) {
+            /* Table: Shopping_cart (cart_item_id, user_id, in_cart, variation_id, quantity)*/
+            const query = "INSERT INTO shopping_cart VALUES (NULL, ?, 1, ?, ?)";
+            // queryParams: "/addToCart?variation_id=?&quantity=?&id=?;
+            const parameters = [
+                queryParams.get("id"),
+                queryParams.get("variation_id"),
+                queryParams.get("quantity")
+            ];
+            db.query(query,parameters, function(err, results) {
+                if (err || results.length == 0) {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    console.log("Inserting into shopping cart failed at: " + Date.now());
+                    response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                    return;
+                }
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: queryParams.get("quantity") +" Items added successfully" }));
+            });
+        }
+        else if (pathname === "/fetchCartItems" && queryParams) {
+            /* "/fetchCartItems?id=?"
+                returned columns: (user_id, variation_id, total_variation_quantity, product_id, variation_name, variation_price, variation_stock, name, image)
+            */
+            const query = `SELECT sc.user_id,
+                                  sc.variation_id,
+                                  SUM(sc.quantity) as total_variation_quantity,
+                                  pv.product_id,
+                                  pv.variation_name,
+                                  pv.variation_price,
+                                  pv.variation_stock,
+                                  p.product_name,
+                                  pi.image_location AS image
+                           FROM Shopping_cart sc
+                           JOIN Products_variations pv ON sc.variation_id = pv.variation_id
+                           JOIN Products p ON pv.product_id = p.product_id
+                           LEFT JOIN Products_images pi ON pi.image_id = (
+                                  SELECT MIN(image_id) 
+                                  FROM Products_images
+                                  WHERE product_id = p.product_id)
+                           WHERE sc.user_id = ? AND sc.in_cart = TRUE
+                           GROUP BY
+                                  sc.user_id,
+                                  sc.variation_id,
+                                  pv.product_id,
+                                  pv.variation_name,
+                                  pv.variation_price,
+                                  pv.variation_stock,
+                                  p.product_name,
+                                  image;`;
+            const parameters = [
+                queryParams.get("id")
+            ];
+            db.query(query,parameters, function(err, results) {
+                if (err || results.length == 0) {
+                    response.writeHead(500, { "Content-Type": "application/json" });
+                    console.log("Inserting into shopping cart failed at: " + Date.now());
+                    response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                    return;
+                }
                     response.writeHead(200, { "Content-Type": "application/json" });
                     response.end(JSON.stringify(results));
             });
