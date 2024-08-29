@@ -60,3 +60,33 @@ function enableElement(elementId){
     getElementById(elementId).disabled = false;
     getElementById(elementId).focus();
 }
+// Increase or decrease the number of variations in a product quantity input field (before/after bineg added to cart)
+function changeProductCount(change, elementId, max){
+    // if change == 0 decrease, otherwise increase
+    const inputField = getElementById(elementId);
+    // input "type = Number"  that has a default value of '0' so it doesn't require any further validation.
+    var inputFieldValue = parseInt(inputField.value);
+    if(change == 0){
+        if(inputFieldValue > 0){
+            inputFieldValue -= 1;
+        }  
+    }
+    else if(inputFieldValue >= max){
+        // do no increase anymore, assign the max instead
+        inputFieldValue = max;
+    }
+    else{
+        // 
+        inputFieldValue += 1;
+    }
+    inputField.value = inputFieldValue;
+}
+ // Shows notification messages in front of other content, for a duration of time.
+function showToast(message) {
+    var toast = document.getElementById("toast");
+    toast.textContent = message; 
+    toast.className = "show"; // display the toast by adding the "show" class
+    setTimeout(function(){
+        toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
+    }, 3000);
+}

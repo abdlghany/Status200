@@ -599,11 +599,3 @@ function deleteAddress(address_id){
     });    
 }
 
-function showToast(message) {
-    var toast = document.getElementById("toast");
-    toast.textContent = message; 
-    toast.className = "show"; // display the toast by adding the "show" class
-    setTimeout(function(){
-        toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
-    }, 3000);
-}

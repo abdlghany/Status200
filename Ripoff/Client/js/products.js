@@ -13,7 +13,6 @@ function fetchProduct(){
     const productId = getQueryParam('product');
     const urlExtension = "/product?product="+productId;
     const productImageContainer = getElementById('productImageContainer');
-    const productDetailsDiv = getElementById('productDetails');
     const productNameHeader = getElementById('productName');
     const productVariationsUl = getElementById('productVariationsUl');
     const productDesc = getElementById('productDesc');
@@ -155,10 +154,10 @@ function fetchProduct(){
             const rightProductCountButton = getElementById('rightProductCountButton');
             
             leftProductCountButton.onclick = function(){
-                changeProductCount(0, 'productCount');
+                changeProductCount(0, 'productCount', maxAvailableQuantity);
             }
             rightProductCountButton.onclick = function(){
-                changeProductCount(1, 'productCount');
+                changeProductCount(1, 'productCount', maxAvailableQuantity);
             }
             //shows Image number 'currentImageIndex' which is Image 1 and hide the rest
             showImage(currentImageIndex);
@@ -194,11 +193,12 @@ function addToCart(variationId, maxItemCount){
         if(productCountValue <= 0){
             // faintly colored error message to not draw the user's attention away from the product
             passMessageToElement("errorMessage", "Quantity can't be lower than 1.", "gray", 1);
+            return;
         }
         else if(productCountValue <= maxItemCount){
 
         }
-        // again ,just being 100% sure that the value is not bigger than the maxItemCount available for the variation.
+        // making sure that the value is not bigger than the maxItemCount available for the variation.
         else{
             productCountInput.value = maxItemCount;
             productCountValue = maxItemCount;
@@ -222,32 +222,10 @@ function addToCart(variationId, maxItemCount){
         window.location.assign("./login.html");
     }
 }
+
 function changeStockCount(newCount){
     const variation_stock = getElementById('variation_stock');
     variation_stock.innerText = newCount + " pieces available.";
-}
-// Increase or decrease the number of variations in a product quantity input field (before adding to cart)
-function changeProductCount(change, elementId){
-    // if change == 0 decrease, otherwise increase
-    const inputField = getElementById(elementId);
-    // input "type = Number"  that has a default value of '0' so it doesn't require any further validation.
-    var inputFieldValue = parseInt(getValueOfElementById(elementId));
-    if(change == 0){
-        if(inputFieldValue > 0){
-            inputFieldValue -= 1;
-        }  
-    }
-    else {
-        if(inputFieldValue >= maxAvailableQuantity){
-            // do no increase anymore, assign the maxItemCount instead
-            inputFieldValue = maxAvailableQuantity;
-        }
-        else{
-            inputFieldValue += 1;
-        }
-        
-    }
-    inputField.value = inputFieldValue;
 }
 
 // Fetch and display products for the selected category

@@ -370,8 +370,8 @@ input[type=number] {
 /* Common styles for product count buttons */
 #leftProductCountButton,
 #rightProductCountButton,
-#cartLeftProductCountButton,
-#cartRightProductCountButton {
+.cartLeftProductCountButton,
+.cartRightProductCountButton {
     background-color: #CCCCCC;
     border: none;
     font-size: 1.2rem;
@@ -388,14 +388,14 @@ input[type=number] {
 }
 /* Specific styles for left product count buttons */
 #leftProductCountButton,
-#cartLeftProductCountButton {
+.cartLeftProductCountButton {
     left: 0;
     border-right: 1px solid #AAAAAA;
 }
 
 /* Specific styles for right product count buttons */
 #rightProductCountButton,
-#cartRightProductCountButton {
+.cartRightProductCountButton {
     right: 0;
     border-left: 1px solid #AAAAAA;
 }
@@ -407,8 +407,8 @@ input[type=number] {
     height: 32px;
 }
 
-#cartLeftProductCountButton,
-#cartRightProductCountButton {
+.cartLeftProductCountButton,
+.cartRightProductCountButton {
     width: 40px;
     height: 30px;
 }
@@ -436,8 +436,8 @@ input[type=number] {
 
 #leftProductCountButton:hover,
 #rightProductCountButton:hover,
-#cartLeftProductCountButton:hover,
-#cartRightProductCountButton:hover,
+.cartLeftProductCountButton:hover,
+.cartRightProductCountButton:hover,
 .label_radio:hover,
 #addToCartButton:hover,
 #placeOrderButton:hover {
@@ -556,7 +556,7 @@ input[type=number] {
     border-radius: 5px;
     padding: 16px;
     position: fixed;
-    z-index: 1;
+    z-index: 100;
     left: 50%; /* Center horizontally */
     bottom: 40%; /* Position near the bottom of the screen */
     font-size: 17px;
@@ -632,7 +632,8 @@ input[type=number] {
     display: inline;
     vertical-align: middle;
 }
-.cartCheckbox{
+.cartCheckbox,
+.cartCheckboxFinal{
     width: 25px;
     height: 25px;
     vertical-align: middle;
@@ -646,5 +647,8 @@ input[type=number] {
     width: 120px;
     height: 40px;
     vertical-align: bottom;
+    margin-right: 2rem;
+}
+#placeOrderButton{
     margin-right: 2rem;
 }

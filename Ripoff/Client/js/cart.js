@@ -25,7 +25,10 @@ window.onload = function() {
                 imgDiv.title = item.product_name;
                 imgDiv.appendChild(img);
                 cartItemDiv.appendChild(imgDiv);
-
+                // creating different Ids for each set of quantity button field button
+                const cartProductCountInputId = "cartProductCount-"+item.variation_id;
+                const cartLeftProductCountButtonId = "cartLeftProductCountButton-"+item.variation_id;
+                const cartRightProductCountButtonId = "cartRightProductCountButton-"+item.variation_id;
                 // Product and Variation Info
                 const infoDiv = document.createElement('div');
                 infoDiv.classList.add('cart-item-info');
@@ -36,14 +39,14 @@ window.onload = function() {
                     <p>${item.variation_stock} pieces available</p>
                     <p>Price: RM${item.variation_price}</p>
                     <div class="cartProductCountDiv">
-                        <button id="cartLeftProductCountButton" title="Decrease quantity">-</button>
-                        <input type="number" value="${item.total_variation_quantity}" id="cartProductCount-${item.variation_id}"class="cartProductCount">
-                        <button id="cartRightProductCountButton" title="Increase quantity">+</button>
+                        <button id="${cartLeftProductCountButtonId}" class="cartLeftProductCountButton" title="Decrease quantity">-</button>
+                        <input type="number" value="${item.total_variation_quantity}" id="${cartProductCountInputId}" class="cartProductCount">
+                        <button id="${cartRightProductCountButtonId}" class="cartRightProductCountButton" title="Increase quantity">+</button>
                     </div>
                 </div>`;
                 cartItemDiv.appendChild(infoDiv);
 
-                // Total Price
+                // Total (Per item) Price + Checkboxes
                 const totalItemPrice = parseFloat(item.variation_price) * parseFloat(item.total_variation_quantity);
                 const priceDiv = document.createElement('div');
                 priceDiv.classList.add('cart-item-price');
@@ -52,23 +55,26 @@ window.onload = function() {
                 cartItemDiv.appendChild(priceDiv);
                 // Append cart item to cart div
                 cart.appendChild(cartItemDiv);
-                const cartProductCount = getElementById("cartProductCount-"+item.variation_id);
+                const cartProductCount = getElementById(cartProductCountInputId);
                 // assign an onchange event to all quantity input fields.
                 cartProductCount.onchange = function(){
                     const cartProductCountValue = cartProductCount.value;
-                    //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than the item.total_variation_quantity
-                    if(cartProductCountValue > item.variation_stock){
-                        cartProductCountValue = item.variation_stock;
-                    }
-                    else if(cartProductCountValue < 0){
-                        cartProductCountValue = 0;
-                    }
-                    else if(!cartProductCountValue){
-                        // do not allow an empty field, fill it witl 0
-                        cartProductCountValue = 0;
-                    }
-                    updateCartItemCount(item.variation_id, cartProductCountValue);
+                    preUpdateCartItemCount(item.variation_id, item.variation_stock, cartProductCountValue);
                 }
+                 // assign an onclick event for the + and the - buttons around the quantity input field.
+                 const cartLeftProductCountButton = getElementById(cartLeftProductCountButtonId);
+                 const cartRightProductCountButton = getElementById(cartRightProductCountButtonId);
+                 
+                 cartLeftProductCountButton.onclick = function(){
+                     changeProductCount(0, cartProductCountInputId, item.variation_stock);
+                     const cartProductCountValue = cartProductCount.value;
+                     preUpdateCartItemCount(item.variation_id, item.variation_stock, cartProductCountValue)
+                 }
+                 cartRightProductCountButton.onclick = function(){
+                     changeProductCount(1, cartProductCountInputId, item.variation_stock);
+                     const cartProductCountValue = cartProductCount.value;
+                     preUpdateCartItemCount(item.variation_id, item.variation_stock, cartProductCountValue)
+                 }
             });
             // create a cartItemDiv for the Place order information
             const cartItemDiv = document.createElement('div');
@@ -77,9 +83,12 @@ window.onload = function() {
                 <p id="finalTotalItemsCount">Total (0 Items)</p>
                 <p id="finalOrderPrice">RM0.00</p>
                 <button onclick="javascript:placeOrder()" title="Place Order" id="placeOrderButton">Place Order</button>
+                <div class="cart-item-price">
+                <label for="checkbox-final">Select All</label>
+                <input class="cartCheckboxFinal" type="checkbox" value="checkbox-final" name="checkbox-final" id="checkbox-final">
+                </div>
             `;
             cart.appendChild(cartItemDiv);
-            
             const cartCheckboxes = document.getElementsByClassName("cartCheckbox");
             //checkboxes and input fields have the same length
             for (let i = 0; i < cartCheckboxes.length; i++) {
@@ -93,9 +102,15 @@ window.onload = function() {
                     }
                 });
             }
-           
-            
-            
+            const checkboxFinal = getElementById("checkbox-final");
+            checkboxFinal.addEventListener('change', function(event){
+                if(event.target.checked){
+                    checkAll(cartCheckboxes, true);
+                }
+                else{
+                    checkAll(cartCheckboxes, false);
+                }
+            });
         })
         .catch(function(error){
             console.error('Error fetching cart items:', error);
@@ -106,6 +121,12 @@ function placeOrder(){
     const finalTotalItemsCount = getElementById('finalTotalItemsCount');
     const finalOrderPrice = getElementById('finalOrderPrice');
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
+}
+function checkAll(cartCheckboxes, state){
+    for(let i=0; i<cartCheckboxes.length; i++){
+        cartCheckboxes[i].checked = state;
+        addToTotal(parseFloat(cartCheckboxes[i].value), state);
+    }
 }
 var totalCartRM = 0;
 var totalSelectedItemsCount = 0;
@@ -119,9 +140,22 @@ function addToTotal(value, checked){
     }else{
         totalSelectedItemsCount-=1;
     }
-
     finalOrderPrice.innerHTML = "RM"+formatNumber(parseFloat(totalCartRM));
     finalTotalItemsCount.innerHTML = "Total ("+totalSelectedItemsCount+" Items)"
+}
+function preUpdateCartItemCount(variation_id, variation_stock, cartProductCountValue){
+    //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than the item.total_variation_quantity
+    if(cartProductCountValue > variation_stock){
+        cartProductCountValue = variation_stock;
+    }
+    else if(cartProductCountValue < 0){
+        cartProductCountValue = 0;
+    }
+    else if(!cartProductCountValue){
+        // do not allow an empty field, fill it with 0 if the user deletes the value.
+        cartProductCountValue = 0;
+    }
+    updateCartItemCount(variation_id, cartProductCountValue);
 }
 function updateCartItemCount(variation_id, cartProductCountValue){
     const urlExtension = "/updateCartItemCount?variation_id="+variation_id+"&id="+localStorage.getItem('id')+"&quantity="+cartProductCountValue;

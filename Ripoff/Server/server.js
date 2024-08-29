@@ -416,7 +416,10 @@ const server = http.createServer(function(request, response) {
                                   pv.variation_price,
                                   pv.variation_stock,
                                   p.product_name,
-                                  image;`;
+                                  image
+                           HAVING total_variation_quantity > 0
+                           ORDER BY sc.cart_item_id DESC;
+                                  ;`;
             const parameters = [
                 queryParams.get("id")
             ];
@@ -431,7 +434,7 @@ const server = http.createServer(function(request, response) {
                     response.end(JSON.stringify(results));
             });
         }
-        else if (pathname === "/updateCartItemCount" && queryParams) {
+        else if (pathname === "/updateCartItemCount" && queryParams){
             /* Table: Shopping_cart (cart_item_id, user_id, in_cart, variation_id, quantity) */
             const query = "UPDATE shopping_cart SET in_cart = FALSE WHERE user_id = ? AND variation_id = ?;"; // remove item from cart (do not delete the row(s).)
             //queryParams: updateCartItemCount?variation_id=?&id=?&quantity=?;
