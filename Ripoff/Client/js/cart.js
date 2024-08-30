@@ -1,5 +1,14 @@
 var maxAvailableQuantity = 0;
 window.onload = function() {
+    fetchCartItems();
+};
+
+function fetchCartItems(){
+    // Show a message if the view reloaded and there's a message. then remove it.
+    if(localStorage.getItem("showToast")){
+        showToast(localStorage.getItem("showToast"));
+        localStorage.removeItem("showToast");
+    }
     const userId = localStorage.getItem('id');
     axios.get(domain+"/fetchCartItems?id=" + userId)
         .then(function(response) {
@@ -8,12 +17,13 @@ window.onload = function() {
                 columns: (user_id, variation_id, total_variation_quantity, product_id, variation_name, variation_price, variation_stock, name, image);
             */
             const cart = document.getElementById('cart');
-
+             // clearing HTML contents of the div before filling it
+             cart.replaceChildren();
             cartItems.forEach(function(item){
                 // cart item container
                 const cartItemDiv = document.createElement('div');
                 cartItemDiv.classList.add('cart-item');
-
+               
                 // Product Image
                 const img = document.createElement('img');
                 img.src = item.image;
@@ -115,17 +125,22 @@ window.onload = function() {
         .catch(function(error){
             console.error('Error fetching cart items:', error);
         });
-};
-
+}
 function placeOrder(){
     const finalTotalItemsCount = getElementById('finalTotalItemsCount');
     const finalOrderPrice = getElementById('finalOrderPrice');
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
+    
 }
 function checkAll(cartCheckboxes, state){
     for(let i=0; i<cartCheckboxes.length; i++){
         cartCheckboxes[i].checked = state;
-        addToTotal(parseFloat(cartCheckboxes[i].value), state);
+        if(state){
+            addToTotal(parseFloat(cartCheckboxes[i].value), state);
+        }else{
+            addToTotal(-parseFloat(cartCheckboxes[i].value), state);
+        }
+        
     }
 }
 var totalCartRM = 0;
@@ -162,7 +177,8 @@ function updateCartItemCount(variation_id, cartProductCountValue){
     axiosQuery(urlExtension, function(response){
         const message = response.data.message;
         if(message){
-            showToast(message);
+            localStorage.setItem("showToast", message);
+            fetchCartItems();
         }
     });
 }

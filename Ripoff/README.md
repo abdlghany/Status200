@@ -78,11 +78,8 @@ window.location.replace("http://www.w3schools.com");
 ```
 
 <!-- 
-  -- Fix select all in cart
-  -- notification when the user doesn't select a variation and tries to increase quantity
   -- Reverse sort order in Products.html page
-  -- reg noti text
-  -- To sales in index
+  -- red noti text
+  -- Top sales in index
   -- 5 categories per row in home page
-  
  -->

@@ -8,7 +8,7 @@ function getQueryParam(parameter) {
     return urlParameters.get(parameter);
 }
 
-// Singular product query
+// Singular product query for (product.html?product=product_id)
 function fetchProduct(){
     const productId = getQueryParam('product');
     const urlExtension = "/product?product="+productId;
@@ -99,9 +99,8 @@ function fetchProduct(){
                     if(productCount.value > maxAvailableQuantity){
                         productCount.value = maxAvailableQuantity;
                     }
-
                     changeStockCount(maxAvailableQuantity);
-                    // Change the button's variationId and stock quantity
+                    // Change the button's variationId and stock quantity for the product that's being added to the cart.
                     addToCartButton.onclick = function(){
                         addToCart(variationId, maxAvailableQuantity);
                     }
@@ -116,7 +115,7 @@ function fetchProduct(){
                 li.appendChild(label);
                 // add li to ul
                 productVariationsUl.appendChild(li);
-                //disable the radio button if the product is inactive or if it's out of stock
+                //disable the radio button if the product is inactive or if it's out of stock (which makes the label disabled as well)
                 if(variation.variation_is_active == 0 || availableQuantity == 0){
                     radio.disabled = true;
                     label.classList.add("disabledRadioButton");
@@ -157,7 +156,12 @@ function fetchProduct(){
                 changeProductCount(0, 'productCount', maxAvailableQuantity);
             }
             rightProductCountButton.onclick = function(){
-                changeProductCount(1, 'productCount', maxAvailableQuantity);
+                if(maxAvailableQuantity == 0){
+                    showToast("Please select a variation first!")
+                }
+                else{
+                    changeProductCount(1, 'productCount', maxAvailableQuantity);
+                }
             }
             //shows Image number 'currentImageIndex' which is Image 1 and hide the rest
             showImage(currentImageIndex);
@@ -228,7 +232,7 @@ function changeStockCount(newCount){
     variation_stock.innerText = newCount + " pieces available.";
 }
 
-// Fetch and display products for the selected category
+// Fetch and display products for the selected category (for products.html?category_id=category_id)
 function fetchProducts() {
     //get query parameters
     const categoryId = getQueryParam('category');
