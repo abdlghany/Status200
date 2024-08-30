@@ -477,27 +477,69 @@ const server = http.createServer(function(request, response) {
             https://stackoverflow.com/questions/11754781/how-to-declare-a-variable-in-mysql
         */
             else if (pathname === "/order" && queryParams) {
-                const variation_ids = queryParams.get("variation_ids");
-                const quantities = queryParams.get('quantities');
-                const id = queryParams.get('id');
-                //TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)
+                // extract variaion_ids and quantities from the params.
+                const variation_ids = [];
+                const quantities = [];
+                var id ="";
+                queryParams.forEach(function(value, key){
+                    if(key.includes("variation_id")){
+                        variation_ids.push(value)
+                    }
+                    else if(key.includes("quantity")){
+                        quantities.push(value)
+                    }
+                    else if(key.includes("userId")){
+                        id = parseInt(value);
+                    }
+                });
+                 /* 
+                    console.log("Variation IDs:", variation_ids);
+                    console.log("Quantities:", quantities);
+                    console.log(id);
+                        Console Log output:
+                            Variation IDs: [ '30', '12', '46', '43', '58' ]
+                            Quantities: [ '9', '1', '3', '3', '2' ]
+                            1
+                */
+                
                 //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
                 // get the last order_id to increase it by 1 and get the new order_id for both tables.
-                const order_idQuery = "SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1"; 
-
-                const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
-                const orderQueryparameters = [
-                    queryParams.get("id")
-                ];
-                db.query(query,parameters, function(err, results) {
-                    if (err || results.length == 0) {
-                        response.writeHead(500, { "Content-Type": "application/json" });
-                        console.log("Inserting into shopping cart failed at: " + Date.now());
-                        response.end(JSON.stringify({ message: "Internal server error, try again later" }));
-                        return;
+                const order_idQuery = "SELECT order_id as order_id FROM orders ORDER BY order_id DESC LIMIT 1";
+                // get the order_total value based on variations selected and quantities and the user_id and if the item is in their cart:
+                var totalPriceQueryParameters = [id];
+                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv "; 
+                totalPriceQuery +=    "JOIN shopping_cart sc ON sc.variation_id = pv.variation_id WHERE sc.user_id = ? AND sc.in_cart = 1 AND (";
+                // looping through variation_ids and adding them to the query one by one.
+                for(let i = 0; i<variation_ids.length; i++){
+                     totalPriceQuery += " sc.variation_id = ? ";
+                    // if it's the last item, do not add OR
+                    if(i != variation_ids.length-1){
+                        totalPriceQuery += "OR";
                     }
-                        response.writeHead(200, { "Content-Type": "application/json" });
-                        response.end(JSON.stringify({ message: queryParams.get("quantity") +" Items added successfully" }));
+                    totalPriceQueryParameters.push(variation_ids[i]);
+                };
+                totalPriceQuery += ") AND sc.quantity != 0";
+                var orderQueryparameters = [];
+                var orderId;
+                db.beginTransaction();
+                db.query(order_idQuery, function(err, results) {
+                    // we got our new order_id, which is 1 more than the highest order_id in the orders table.
+                    if(results){
+                        orderId = parseInt(results[0].order_id + 1);
+                        // Now we get total_price
+                        var totalPrice;
+                        db.query(totalPriceQuery ,totalPriceQueryParameters, function(err2, totalPriceResults) {
+                            if(totalPriceResults){
+                                totalPrice = parseFloat(totalPriceResults[0].total_price);
+                                /*  we got total_price, we have everything we need to insert into orders
+                                        but first, we must get the price for order_details 
+                                        TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method) */
+                                const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
+                                orderQueryparameters.push(orderId,id,totalPrice);
+                                /* Note to self, create a query that gets price for each variation_id using the forEach method above and execute it here.*/
+                            }
+                        });
+                    }
                 });
             }
              //request isn't any of the previous pathnames           
