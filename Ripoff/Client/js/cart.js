@@ -16,8 +16,8 @@ function fetchCartItems(){
             /* 
                 columns: (user_id, variation_id, total_variation_quantity, product_id, variation_name, variation_price, variation_stock, name, image);
             */
-            const cart = document.getElementById('cart');
-             // clearing HTML contents of the div before filling it
+            const cart = getElementById('cart');
+             // clearing children of the div before filling it
              cart.replaceChildren();
             cartItems.forEach(function(item){
                 // cart item container
@@ -57,7 +57,7 @@ function fetchCartItems(){
                 cartItemDiv.appendChild(infoDiv);
 
                 // Total (Per item) Price + Checkboxes
-                const totalItemPrice = parseFloat(item.variation_price) * parseFloat(item.total_variation_quantity);
+                const totalItemPrice = parseFloat(item.variation_price) * parseInt(item.total_variation_quantity);
                 const priceDiv = document.createElement('div');
                 priceDiv.classList.add('cart-item-price');
                 priceDiv.innerHTML = `<label for="checkbox-${item.variation_id}">Total: RM${totalItemPrice}</label>
@@ -130,7 +130,19 @@ function placeOrder(){
     const finalTotalItemsCount = getElementById('finalTotalItemsCount');
     const finalOrderPrice = getElementById('finalOrderPrice');
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
-    
+    var variation_prices = [];
+    var variation_ids = [];
+    for (let i = 0; i < cartCheckboxes.length; i++) {
+        // check if the checkbox is checked before pushing the information to the array.
+        if(cartCheckboxes[i].checked){
+        variation_prices.push(parseFloat(cartCheckboxes[i].value));
+        // id looks something like this: checkbox-44 where the 44 is the variation_id in the database.
+        variation_ids.push(cartCheckboxes[i].id.split('-')[1]);
+        console.log("Price: ",parseFloat(cartCheckboxes[i].value));
+        console.log("ID: ", cartCheckboxes[i].id.split('-')[1]);
+        }
+        
+    }
 }
 function checkAll(cartCheckboxes, state){
     for(let i=0; i<cartCheckboxes.length; i++){
