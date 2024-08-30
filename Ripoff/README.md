@@ -83,3 +83,29 @@ window.location.replace("http://www.w3schools.com");
   -- Top sales in index
   -- 5 categories per row in home page
  -->
+
+
+ <!-- 
+ START TRANSACTION;
+
+
+SELECT products_variations.variation_id, shopping_cart.quantity
+INTO @variation_id0, @quantity0 
+FROM products_variations
+join shopping_cart on shopping_cart.variation_id = products_variations.product_id
+WHERE shopping_cart.variation_id = 43 AND shopping_cart.in_cart = 1;
+
+SELECT variation_id, @quantity2
+INTO @variation_id2, @quantity2 
+FROM products_variations 
+WHERE variation_id = 2;
+
+
+SELECT  SUM(pv.variation_price * sc.quantity) INTO @total_price
+FROM Products_variations pv
+JOIN shopping_cart sc ON sc.variation_id = pv.variation_id
+WHERE pv.variation_id = @variation_id0 OR pv.variation_id = @variation_id2;
+
+COMMIT;
+
+  -->

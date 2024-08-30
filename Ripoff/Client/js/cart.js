@@ -127,22 +127,38 @@ function fetchCartItems(){
         });
 }
 function placeOrder(){
+    //TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)
+    //              (AUTO, int secondary key, auto, decimal, completed ,can be null, "FPX Online Banking" )
+    //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
     const finalTotalItemsCount = getElementById('finalTotalItemsCount');
-    const finalOrderPrice = getElementById('finalOrderPrice');
+    const total_price = 0;
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
-    var variation_prices = [];
+    const userId = localStorage.getItem('id');
+    //var variation_prices = [];
     var variation_ids = [];
     for (let i = 0; i < cartCheckboxes.length; i++) {
         // check if the checkbox is checked before pushing the information to the array.
         if(cartCheckboxes[i].checked){
-        variation_prices.push(parseFloat(cartCheckboxes[i].value));
+        const checkBoxValue = parseFloat(cartCheckboxes[i].value);
+        //variation_prices.push(checkBoxValue);
+        //adding the value to the total.
+        total_price += checkBoxValue;
         // id looks something like this: checkbox-44 where the 44 is the variation_id in the database.
         variation_ids.push(cartCheckboxes[i].id.split('-')[1]);
-        console.log("Price: ",parseFloat(cartCheckboxes[i].value));
-        console.log("ID: ", cartCheckboxes[i].id.split('-')[1]);
+        /* console.log("Price: ",parseFloat(cartCheckboxes[i].value));
+        console.log("ID: ", cartCheckboxes[i].id.split('-')[1]); */
         }
-        
     }
+    axios.get(domain+"/order", {
+        params: {parameters}
+      }).then(function(response) {
+        if(response.data.message){
+            showToast(response.data.message);
+        }
+    })
+    .catch(function(error) {
+        console.error("Error fetching data:", error);
+    });
 }
 function checkAll(cartCheckboxes, state){
     for(let i=0; i<cartCheckboxes.length; i++){

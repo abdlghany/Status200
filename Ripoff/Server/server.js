@@ -469,12 +469,42 @@ const server = http.createServer(function(request, response) {
                 });
             });
         }
-        
-     //request isn't any of the previous pathnames           
-    else {
-        response.writeHead(404, { "Content-Type": "text/plain" });
-        response.end("Not Found");
-    }
+        /*  Resources:
+            MYSQL Start transaction:
+            https://dev.mysql.com/doc/refman/8.4/en/commit.html
+
+            MYSQL variable declaration: You can initialize a variable using SET or SELECT statement: SET/SELECT @VARIABLENAME
+            https://stackoverflow.com/questions/11754781/how-to-declare-a-variable-in-mysql
+        */
+            else if (pathname === "/order" && queryParams) {
+                const variation_ids = queryParams.get("variation_ids");
+                const quantities = queryParams.get('quantities');
+                const id = queryParams.get('id');
+                //TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)
+                //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
+                // get the last order_id to increase it by 1 and get the new order_id for both tables.
+                const order_idQuery = "SELECT order_id FROM orders ORDER BY order_id DESC LIMIT 1"; 
+
+                const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
+                const orderQueryparameters = [
+                    queryParams.get("id")
+                ];
+                db.query(query,parameters, function(err, results) {
+                    if (err || results.length == 0) {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        console.log("Inserting into shopping cart failed at: " + Date.now());
+                        response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                        return;
+                    }
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: queryParams.get("quantity") +" Items added successfully" }));
+                });
+            }
+             //request isn't any of the previous pathnames           
+            else {
+                response.writeHead(404, { "Content-Type": "text/plain" });
+                response.end("Not Found");
+            }
 });
 
 function doesAccountExist(username, email = "", callback){
