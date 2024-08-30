@@ -501,49 +501,84 @@ const server = http.createServer(function(request, response) {
                             Quantities: [ '9', '1', '3', '3', '2' ]
                             1
                 */
-                
-                //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
-                // get the last order_id to increase it by 1 and get the new order_id for both tables.
-                const order_idQuery = "SELECT order_id as order_id FROM orders ORDER BY order_id DESC LIMIT 1";
                 // get the order_total value based on variations selected and quantities and the user_id and if the item is in their cart:
+                var priceQueryParameters = [];
                 var totalPriceQueryParameters = [id];
+                var pricesQuery = "SELECT variation_price as price from products_variations where ("
                 var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv "; 
                 totalPriceQuery +=    "JOIN shopping_cart sc ON sc.variation_id = pv.variation_id WHERE sc.user_id = ? AND sc.in_cart = 1 AND (";
                 // looping through variation_ids and adding them to the query one by one.
                 for(let i = 0; i<variation_ids.length; i++){
                      totalPriceQuery += " sc.variation_id = ? ";
+                     pricesQuery += " variation_id = ? "
                     // if it's the last item, do not add OR
                     if(i != variation_ids.length-1){
                         totalPriceQuery += "OR";
+                        pricesQuery += "OR";
                     }
                     totalPriceQueryParameters.push(variation_ids[i]);
+                    priceQueryParameters.push(variation_ids[i]);
                 };
                 totalPriceQuery += ") AND sc.quantity != 0";
+                pricesQuery +=")";
                 var orderQueryparameters = [];
                 var orderId;
                 db.beginTransaction();
+                // get the last order_id to increase it by 1 and get the new order_id for both tables.
+                const order_idQuery = "SELECT order_id as order_id FROM orders ORDER BY order_id DESC LIMIT 1";
                 db.query(order_idQuery, function(err, results) {
+                    if(err){console.error("err:", err);}
                     // we got our new order_id, which is 1 more than the highest order_id in the orders table.
                     if(results){
                         orderId = parseInt(results[0].order_id + 1);
                         // Now we get total_price
                         var totalPrice;
-                        db.query(totalPriceQuery ,totalPriceQueryParameters, function(err2, totalPriceResults) {
+                        db.query(totalPriceQuery, totalPriceQueryParameters, function(err2, totalPriceResults) {
+                            if(err2){console.error("err2:", err2);}
                             if(totalPriceResults){
                                 totalPrice = parseFloat(totalPriceResults[0].total_price);
                                 /*  we got total_price, we have everything we need to insert into orders
                                         but first, we must get the price for order_details 
-                                        TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method) */
-                                const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
-                                orderQueryparameters.push(orderId,id,totalPrice);
-                                /* Note to self, create a query that gets price for each variation_id using the forEach method above and execute it here.*/
+                                 */
+                                /* Note to self, create a query that gets price for each variation_id using the forEach method above and execute it here. */
+                                var prices = [];
+                                db.query(pricesQuery, priceQueryParameters, function(err3, priceResults){
+                                    if(err3){console.error("err3:", err3);}
+                                    if(priceResults){
+                                        for(let i = 0; i<priceResults.length; i++){
+                                            prices.push(priceResults[i].price);
+                                        }
+                                         /* We got all the needed columns to insert into order_details now, and we can begin inserting to both tables */
+                                         /* TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)  */
+                                        const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
+                                        orderQueryparameters.push(orderId, id, totalPrice);
+                                        db.query(orderQuery, orderQueryparameters, function(err4, ordersResults){
+                                            if(err4){console.error("err4:", err4);}
+                                            if(ordersResults){
+                                                  //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
+                                                var order_detailsQuery = "";
+                                                var order_detailsQueryParameters = [];
+                                                for(let i = 0; i<variation_ids.length; i++){
+                                                    // Push the appropriate amount of parameters, and repeat the query as needed.
+                                                    order_detailsQueryParameters.push(orderId, variation_ids[i], quantities[i], prices[i]);
+                                                    order_detailsQuery += "INSERT INTO ORDER_DETAILS VALUES (NULL, ?,?,?,?);";
+                                                }
+                                                db.query(order_detailsQuery, order_detailsQueryParameters, function(err5, order_detailsResults){
+                                                    if(err5){console.error("err5:", err5);}
+                                                    if(order_detailsResults){
+                                                        
+                                                    }
+                                                });
+                                            }
+                                        });
+                                    }
+                                });
                             }
                         });
                     }
                 });
-            }
-             //request isn't any of the previous pathnames           
-            else {
+            }     
+            else {//request isn't any of the previous pathnames     
                 response.writeHead(404, { "Content-Type": "text/plain" });
                 response.end("Not Found");
             }

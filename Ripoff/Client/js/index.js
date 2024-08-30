@@ -40,6 +40,11 @@ window.addEventListener("load", function() {
         localStorage.removeItem("message");
         localStorage.removeItem("messageColor");
     }
+    // if the user manages to reach the login page when they're already logged in, take them to the main page.
+    if(this.window.location.href.includes("login.html") && this.localStorage.getItem("id")){
+        this.window.location.assign("./index.html");
+    }
+   
 });
 
 function loadNavigationBar(){
