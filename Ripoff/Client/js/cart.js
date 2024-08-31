@@ -2,6 +2,8 @@ var maxAvailableQuantity = 0;
 window.onload = function() {
     fetchCartItems();
 };
+var totalCartRM = 0;
+var totalSelectedItemsCount = 0;
 
 function fetchCartItems(){
     // Show a message if the view reloaded and there's a message. then remove it.
@@ -130,18 +132,14 @@ function placeOrder(){
     //TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)
     //              (AUTO, int secondary key, auto, decimal, completed ,can be null, "FPX Online Banking" )
     //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
-    //const finalTotalItemsCount = getElementById('finalTotalItemsCount');
-    //var total_price = 0;
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
     const cartProductsCount = document.getElementsByClassName('cartProductCount');
     const userId = localStorage.getItem('id');
-    //var variation_prices = [];
     var variation_ids = [];
     var quantities = [];
     for (let i = 0; i < cartCheckboxes.length; i++) {
         // check if the checkbox is checked before pushing the information to the array.
         if(cartCheckboxes[i].checked){
-        //const checkBoxValue = parseFloat(cartCheckboxes[i].value);
         // id (of the HTML element 'checkbox') looks something like this: checkbox-44 where the 44 is the variation_id in the database.
         variation_ids.push(cartCheckboxes[i].id.split('-')[1]);
         // get quantity from the input value.
@@ -165,6 +163,7 @@ function placeOrder(){
         console.error("Error fetching data:", error);
     });
 }
+
 function checkAll(cartCheckboxes, state){
     for(let i=0; i<cartCheckboxes.length; i++){
         cartCheckboxes[i].checked = state;
@@ -176,8 +175,6 @@ function checkAll(cartCheckboxes, state){
         
     }
 }
-var totalCartRM = 0;
-var totalSelectedItemsCount = 0;
 
 function addToTotal(value, checked){
     const finalTotalItemsCount = getElementById('finalTotalItemsCount');
@@ -191,6 +188,7 @@ function addToTotal(value, checked){
     finalOrderPrice.innerHTML = "RM"+formatNumber(parseFloat(totalCartRM));
     finalTotalItemsCount.innerHTML = "Total ("+totalSelectedItemsCount+" Items)"
 }
+
 function preUpdateCartItemCount(variation_id, variation_stock, cartProductCountValue){
     //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than the item.total_variation_quantity
     if(cartProductCountValue > variation_stock){
@@ -205,6 +203,7 @@ function preUpdateCartItemCount(variation_id, variation_stock, cartProductCountV
     }
     updateCartItemCount(variation_id, cartProductCountValue);
 }
+
 function updateCartItemCount(variation_id, cartProductCountValue){
     const urlExtension = "/updateCartItemCount?variation_id="+variation_id+"&id="+localStorage.getItem('id')+"&quantity="+cartProductCountValue;
     axiosQuery(urlExtension, function(response){
@@ -215,6 +214,7 @@ function updateCartItemCount(variation_id, cartProductCountValue){
         }
     });
 }
+
 function formatNumber(num) {
     // Ensure the number has two decimal points
     let formattedNumber = num.toFixed(2);
