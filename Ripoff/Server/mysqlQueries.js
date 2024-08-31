@@ -63,6 +63,14 @@ class MysqlQueries{
             }
         });
     }
+    rollback(){
+        this.#connection.rollback(function(err){
+            if(err) {
+                console.error("Error querying data:", err.message);
+                callback(err, null);
+            }
+        });
+    }
 
 }
 

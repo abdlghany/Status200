@@ -82,4 +82,8 @@ window.location.replace("http://www.w3schools.com");
   -- red noti text
   -- Top sales in index
   -- 5 categories per row in home page
+  -- add product price to product.html
+  -- Create PDF File.
+  -- add Dowmload PDF button
+  -- Send Email
  -->

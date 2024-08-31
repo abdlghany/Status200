@@ -20,7 +20,7 @@ function fetchCartItems(){
             */
             const cart = getElementById('cart');
              // clearing children of the div before filling it
-             cart.replaceChildren();
+            cart.replaceChildren();
             cartItems.forEach(function(item){
                 // cart item container
                 const cartItemDiv = document.createElement('div');
@@ -45,7 +45,7 @@ function fetchCartItems(){
                 const infoDiv = document.createElement('div');
                 infoDiv.classList.add('cart-item-info');
                 infoDiv.innerHTML = `
-                <h3 title="View product"><a href="./product.html?product=${item.product_id}">${item.product_name}</a></h3>
+                <h3><a title="View product" href="./product.html?product=${item.product_id}">${item.product_name}</a></h3>
                 <div class="variation-quantity-price">
                     <p>Variation: ${item.variation_name}</p>
                     <p>${item.variation_stock} pieces available</p>
@@ -227,4 +227,129 @@ function formatNumber(num) {
     formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 
     return formattedNumber;
+}
+// When the user clicks on the header "Shopping Cart" in cart.html
+function shoppingCart(){
+    const orderHistory = getElementById('history');
+    const cart = getElementById('cart');
+    const shoppingCartHeader = getElementById('shoppingCartHeader');
+    const historyHeader = getElementById('historyHeader');
+    cart.style.display = "flex";
+    orderHistory.style.display = "none";
+    shoppingCartHeader.classList.remove('notSelected');
+    shoppingCartHeader.classList.add('selected');
+    historyHeader.classList.add('notSelected');
+    historyHeader.classList.remove('selected');
+}
+// When the user clicks on the header "Order History" in cart.html
+function orderHistory(){
+    const orderHistory = getElementById('history');
+    const cart = getElementById('cart');
+    const shoppingCartHeader = getElementById('shoppingCartHeader');
+    const historyHeader = getElementById('historyHeader');
+    cart.style.display = "none";
+    orderHistory.style.display = "flex";
+    shoppingCartHeader.classList.add('notSelected');
+    shoppingCartHeader.classList.remove('selected');
+    historyHeader.classList.remove('notSelected');
+    historyHeader.classList.add('selected');
+    fetchOrderHistory();
+}
+
+function fetchOrderHistory() {
+    axiosQuery("/orderHistory?id=" + localStorage.getItem('id'), function (results) {
+        const history = results.data;
+        const ordersList = [];
+
+        history.forEach(function (item) {
+            // Check if the order_id already exists in the ordersList
+            let existingOrder = ordersList.find(order => order.order_id === item.order_id);
+
+            if (!existingOrder) {
+                // If not found (means we haven't pushed order information yet), create a new order then push it to ordersList
+                existingOrder = {
+                    order_id: item.order_id,
+                    date: item.date,
+                    total_order_price: item.total_order_price,
+                    status: item.status,
+                    receipt: item.receipt,
+                    items: [] // Array to store variations
+                };
+                ordersList.push(existingOrder);
+            }
+
+            // Add the current item (variation) to the corresponding order
+            existingOrder.items.push({
+                product: item.product,
+                variation: item.variation,
+                price: item.price,
+                quantity: item.quantity
+            });
+        });
+
+        // Convert the orders object back to an array for easier handling 
+        //(values(): Returns an array of values of the enumerable properties of an object)
+        const tableBody = getElementById('historyTableBody');
+        tableBody.innerHTML = ""; // Clearing any existing rows
+        
+        // Now we can display orderList, which is an array of grouped orders
+        // Loop through the orders to create table rows
+        ordersList.forEach(function (order) {
+            // Loop through each item in the order
+            order.items.forEach(function (item, index) {
+                const row = document.createElement('tr');
+                //add a bottom border to the row if it's the last row of the order
+                if(index == (order.items.length-1)){
+                    row.classList.add('bottom-border');
+                }
+
+                // Add product, variation, price, and quantity for each item (from order_details)
+                const productCell = document.createElement('td');
+                productCell.textContent = item.product;
+                row.appendChild(productCell);
+
+                const variationCell = document.createElement('td');
+                variationCell.textContent = item.variation;
+                row.appendChild(variationCell);
+
+                const priceCell = document.createElement('td');
+                priceCell.textContent = "RM"+formatNumber(parseFloat(item.price));
+                row.appendChild(priceCell);
+
+                const quantityCell = document.createElement('td');
+                quantityCell.textContent = item.quantity;
+                row.appendChild(quantityCell);
+                // Only include order details on the first row for each order
+                if (index === 0) {
+                    const dateCell = document.createElement('td');
+                    dateCell.rowSpan = order.items.length; // Span across multiple rows if there are multiple items in this order (from Orders)
+                    var date = order.date.split("T")[0];
+                    date = date.split("-");
+                    date = date[2]+"/"+date[1]+"/"+date[0];
+                    dateCell.textContent = date; // date format as follows 2024-08-31TmeZ...etc we don't need the time here.
+                    row.appendChild(dateCell);
+
+                    const totalPriceCell = document.createElement('td');
+                    totalPriceCell.rowSpan = order.items.length;
+                    totalPriceCell.textContent = "RM"+formatNumber(parseFloat(order.total_order_price));
+                    row.appendChild(totalPriceCell);
+
+                    const statusCell = document.createElement('td');
+                    statusCell.rowSpan = order.items.length;
+                    statusCell.textContent = order.status;
+                    if(order.status == "completed"){
+                        statusCell.style.color = "green";
+                    }
+                    row.appendChild(statusCell);
+
+                    const receiptCell = document.createElement('td');
+                    receiptCell.rowSpan = order.items.length;
+                    receiptCell.textContent = order.receipt;
+                    row.appendChild(receiptCell);
+                }
+                // Append the row to the table body
+                tableBody.appendChild(row);
+            });
+        });
+    });
 }

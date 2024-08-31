@@ -358,6 +358,7 @@ input[type=number] {
 .fullWidth{
     width: 100%;
 }
+
 .bold {
     font-weight: bold;
     font-size: 1.1rem;
@@ -491,9 +492,6 @@ input[type=number] {
 .rightArrow {
     right: 0;
 }
-.display_none{
-    display: none;
-}
 
 /* Styling the label to look like a button because the variation radio-button is hidden  */
 .label_radio {
@@ -589,7 +587,7 @@ input[type=number] {
     padding: 0;
     height: 120px;
     padding-right: 10px;
-    border: 1px solid #ccc;
+    border: 1px solid rgba(255,255,255,.54);
     border-radius: 5px;
     width: 75%;
     margin: 0 auto;
@@ -660,3 +658,41 @@ input[type=number] {
 #placeOrderButton{
     margin-right: 2rem;
 }
+.center{
+    text-align: center;
+}
+.inline{
+    display: inline-block;
+}
+.selected{
+    color: #007bff;
+}
+.selected, .notSelected{
+    cursor:pointer;
+}
+.notSelected{
+    color: rgba(255,255,255,.54);
+}
+.notSelected:hover{
+    color: rgba(255,255,255,.75);;
+}
+.display_none{
+    display: none;
+}
+#history{
+    justify-content: center;
+    margin-top: 20px;
+}
+
+#history table td{
+   padding: 20px 20px;
+   vertical-align: middle;
+   max-width: 450px;
+}
+
+.bottom-border {
+    border-bottom: 1px solid rgba(255,255,255,.54);
+}
+table {
+    border-collapse: collapse;
+  }

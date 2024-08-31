@@ -427,7 +427,7 @@ const server = http.createServer(function(request, response) {
                 if (err || results.length == 0) {
                     response.writeHead(500, { "Content-Type": "application/json" });
                     console.log("Fetching cart items (/fetchCartItems) failed at: " + Date.now());
-                    response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                    response.end(JSON.stringify({ message: "Internal server error '/fetchCartItems', try again later" }));
                     return;
                 }
                     response.writeHead(200, { "Content-Type": "application/json" });
@@ -460,7 +460,7 @@ const server = http.createServer(function(request, response) {
                     if(err || results.length == 0){
                         response.writeHead(500, { "Content-Type": "application/json" });
                         console.log("Inserting Into shopping cart (updateCartItemCount) for user_id "+queryParams.get("id")+" failed at: " + Date.now());
-                        response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                        response.end(JSON.stringify({ message: "Internal server error '/updateCartItemCount', try again later" }));
                         return;
                     }
                     response.writeHead(200, { "Content-Type": "application/json" });
@@ -471,6 +471,7 @@ const server = http.createServer(function(request, response) {
         }
         /*  
             --- THIS IS WHERE THE FUN BEGINS ---
+            --- Note that using async would've made this so much cleaner-looking, but here we go...---
             Resources:
             MYSQL Start transaction:
             https://dev.mysql.com/doc/refman/8.4/en/commit.html
@@ -526,14 +527,15 @@ const server = http.createServer(function(request, response) {
                 // get the last order_id to increase it by 1 and get the new order_id for both tables.
                 const order_idQuery = "SELECT order_id as order_id FROM orders ORDER BY order_id DESC LIMIT 1";
                 db.query(order_idQuery, function(err, results) {
-                    if(err){console.error("err:", err);}
+                    //Rollingback to make sure no changes are applies if any statement fails within the transaction
+                    if(err){console.error("err:", err); db.rollback();}
                     // we got our new order_id, which is 1 more than the highest order_id in the orders table.
                     if(results){
                         orderId = parseInt(results[0].order_id + 1);
                         // Now we get total_price
                         var totalPrice;
                         db.query(totalPriceQuery, totalPriceQueryParameters, function(err2, totalPriceResults) {
-                            if(err2){console.error("err2:", err2);}
+                            if(err2){console.error("err2:", err2); db.rollback();}
                             if(totalPriceResults){
                                 totalPrice = parseFloat(totalPriceResults[0].total_price);
                                 /*  we got total_price, we have everything we need to insert into orders
@@ -541,9 +543,9 @@ const server = http.createServer(function(request, response) {
                                  */
                                 var prices = [];
                                 db.query(pricesQuery, priceQueryParameters, function(err3, priceResults){
-                                    if(err3){console.error("err3:", err3);}
+                                    if(err3){console.error("err3:", err3); db.rollback();}
                                     if(priceResults){
-                                        for(let i = 0; i<priceResults.length; i++){
+                                        for(let i = priceResults.length-1; i>=0; i--){
                                             prices.push(priceResults[i].price);
                                         }
                                          /* We got all the needed columns to insert into order_details now, and we can begin inserting to both tables */
@@ -551,7 +553,7 @@ const server = http.createServer(function(request, response) {
                                         const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
                                         orderQueryparameters.push(orderId, id, totalPrice);
                                         db.query(orderQuery, orderQueryparameters, function(err4, ordersResults){
-                                            if(err4){console.error("err4:", err4);}
+                                            if(err4){console.error("err4:", err4); db.rollback();}
                                             if(ordersResults){
                                                   //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
                                                 var order_detailsQuery = "INSERT INTO ORDER_DETAILS VALUES";
@@ -589,16 +591,16 @@ const server = http.createServer(function(request, response) {
                                                 // set product inactive (out of stock) if all of it's variations are inactive.
                                                 updateProductsvariations += "UPDATE products SET is_active = 0 WHERE product_id IN (SELECT pv.product_id FROM products_variations pv GROUP BY pv.product_id HAVING SUM(pv.is_active) = 0);";
                                                 db.query(order_detailsQuery, order_detailsQueryParameters, function(err5, order_detailsResults){
-                                                    if(err5){console.error("err5:", err5);}
+                                                    if(err5){console.error("err5:", err5); db.rollback();}
                                                     if(order_detailsResults){
                                                         db.query(updateCartQuery, updateCartQueryParameters, function(err6, updateCartResults){
-                                                            if(err6){console.error("err6:", err6);}
+                                                            if(err6){console.error("err6:", err6); db.rollback();}
                                                             if(updateCartResults){
                                                                 db.query(updateProductsvariations, updateProductsvariationsParameters, function(err7, updateProductsVariationsResults){
-                                                                    if(err7){console.error("err7:", err7);}
+                                                                    if(err7){console.error("err7:", err7); db.rollback();}
                                                                     if(updateProductsVariationsResults){
                                                                         db.query(updateSoldProducts, updateSoldProductsParameters, function(err8, updateSoldProductsResults){
-                                                                            if(err8){console.error("err8:", err8);}
+                                                                            if(err8){console.error("err8:", err8); db.rollback();}
                                                                             if(updateSoldProductsResults){
                                                                                 db.commit();
                                                                                 //Finally...
@@ -620,7 +622,49 @@ const server = http.createServer(function(request, response) {
                         });
                     }
                 });
-            }     
+            }
+            else if (pathname === "/orderHistory" && queryParams) {
+                /* "/orderHistory?id=?"
+                    returned columns: (order_id, product, variation, price, quantity, date, total_order_price, status, receipt)
+                */
+                const query = `SELECT 
+                                    od.order_id,
+                                    p.product_name as product,
+                                    pv.variation_name AS variation,
+                                    od.price,
+                                    od.quantity,
+                                    o.datetime AS date,
+                                    o.total_price AS total_order_price,
+                                    o.order_status as status,
+                                    o.order_pdf AS receipt
+                                FROM 
+                                    Order_details od
+                                JOIN 
+                                    Orders o ON od.order_id = o.order_id
+                                JOIN 
+                                    Products_variations pv ON od.variation_id = pv.variation_id
+                                JOIN 
+                                    products p ON p.product_id = pv.product_id
+                                WHERE 
+                                    o.user_id = ?
+                                ORDER BY 
+                                    date DESC;
+                                      `;
+                const parameters = [
+                    queryParams.get("id")
+                ];
+                db.query(query,parameters, function(err, results) {
+                    if (err || results.length == 0) {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        console.log("Fetching cart items (/fetchCartItems) failed at: " + Date.now());
+                        response.end(JSON.stringify({ message: "Internal server error '/orderHistory', try again later" }));
+                        return;
+                    }
+
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify(results));
+                });
+            }  
             else {//request isn't any of the previous pathnames     
                 response.writeHead(404, { "Content-Type": "text/plain" });
                 response.end("Not Found");

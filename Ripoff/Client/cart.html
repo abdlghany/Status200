@@ -11,8 +11,28 @@
     <nav id="navigationBar"></nav>
 
     <div id="mainContent">
+        <span class="center"><h1 class="inline selected" id="shoppingCartHeader" onclick="javascript:shoppingCart();">Shopping Cart</h1><h1 class="inline separator">|</h1><h1 class="inline notSelected" id="historyHeader" onclick="javascript:orderHistory();">Order History</h1></span>
         <div id="cart">
             <!-- Cart items will be dynamically inserted here -->
+        </div>
+        <div id="history" class="display_none">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Variation</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Date</th>
+                        <th>Total Paid</th>
+                        <th>Status</th>
+                        <th>Receipt</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <!-- Order history will be dynamically inserted here -->
+                </tbody>
+            </table>
         </div>
     </div>    
     <div id="toast">Empty, invisible toast message</div>
