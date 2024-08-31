@@ -469,12 +469,11 @@ const server = http.createServer(function(request, response) {
                 });
             });
         }
-        /*  Resources:
+        /*  
+            --- THIS IS WHERE THE FUN BEGINS ---
+            Resources:
             MYSQL Start transaction:
             https://dev.mysql.com/doc/refman/8.4/en/commit.html
-
-            MYSQL variable declaration: You can initialize a variable using SET or SELECT statement: SET/SELECT @VARIABLENAME
-            https://stackoverflow.com/questions/11754781/how-to-declare-a-variable-in-mysql
         */
             else if (pathname === "/order" && queryParams) {
                 // extract variaion_ids and quantities from the params.
@@ -540,7 +539,6 @@ const server = http.createServer(function(request, response) {
                                 /*  we got total_price, we have everything we need to insert into orders
                                         but first, we must get the price for order_details 
                                  */
-                                /* Note to self, create a query that gets price for each variation_id using the forEach method above and execute it here. */
                                 var prices = [];
                                 db.query(pricesQuery, priceQueryParameters, function(err3, priceResults){
                                     if(err3){console.error("err3:", err3);}
@@ -556,17 +554,62 @@ const server = http.createServer(function(request, response) {
                                             if(err4){console.error("err4:", err4);}
                                             if(ordersResults){
                                                   //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
-                                                var order_detailsQuery = "";
+                                                var order_detailsQuery = "INSERT INTO ORDER_DETAILS VALUES";
                                                 var order_detailsQueryParameters = [];
+                                                // remove items from cart (do not delete from database):
+                                                var updateCartQuery = "UPDATE shopping_cart SET in_cart = FALSE WHERE user_id = ? AND ("
+                                                var updateCartQueryParameters = [id];
+                                                // deduct from the available variation stock based on the order quantity
+                                                var updateProductsvariations = "";
+                                                var updateProductsvariationsParameters = [];
+                                                // update number of sold items for this product
+                                                var updateSoldProducts = "";
+                                                var updateSoldProductsParameters = [];
                                                 for(let i = 0; i<variation_ids.length; i++){
-                                                    // Push the appropriate amount of parameters, and repeat the query as needed.
+                                                    // Push the appropriate amount of parameters, and repeat the queries as needed.
                                                     order_detailsQueryParameters.push(orderId, variation_ids[i], quantities[i], prices[i]);
-                                                    order_detailsQuery += "INSERT INTO ORDER_DETAILS VALUES (NULL, ?,?,?,?);";
+                                                    updateCartQueryParameters.push(variation_ids[i]);
+                                                    updateProductsvariationsParameters.push(quantities[i], variation_ids[i]);
+                                                    updateSoldProductsParameters.push(quantities[i], variation_ids[i]);
+                                                    order_detailsQuery += " (NULL, ?,?,?,?)";
+                                                    updateCartQuery += " variation_id = ? ";
+                                                    updateProductsvariations += "UPDATE products_variations SET variation_stock = variation_stock - ? WHERE variation_id = ?;";
+                                                    updateSoldProducts += "UPDATE products set sold = sold + ? WHERE product_id = (SELECT product_id from products_variations WHERE variation_id = ?);";
+                                                    // add a comma + OR if it's not the last index.
+                                                    if(i != (variation_ids.length-1)){
+                                                        order_detailsQuery += ",";
+                                                        updateCartQuery += "OR";
+                                                    }
+                                                    else{
+                                                        updateCartQuery += ")";
+                                                    }
                                                 }
+                                                // set variation inactive (out of stock) if it's out of stock after the order was placed
+                                                updateProductsvariations += "UPDATE products_variations SET is_active = 0 WHERE variation_stock = 0;";
+                                                // set product inactive (out of stock) if all of it's variations are inactive.
+                                                updateProductsvariations += "UPDATE products SET is_active = 0 WHERE product_id IN (SELECT pv.product_id FROM products_variations pv GROUP BY pv.product_id HAVING SUM(pv.is_active) = 0);";
                                                 db.query(order_detailsQuery, order_detailsQueryParameters, function(err5, order_detailsResults){
                                                     if(err5){console.error("err5:", err5);}
                                                     if(order_detailsResults){
-                                                        
+                                                        db.query(updateCartQuery, updateCartQueryParameters, function(err6, updateCartResults){
+                                                            if(err6){console.error("err6:", err6);}
+                                                            if(updateCartResults){
+                                                                db.query(updateProductsvariations, updateProductsvariationsParameters, function(err7, updateProductsVariationsResults){
+                                                                    if(err7){console.error("err7:", err7);}
+                                                                    if(updateProductsVariationsResults){
+                                                                        db.query(updateSoldProducts, updateSoldProductsParameters, function(err8, updateSoldProductsResults){
+                                                                            if(err8){console.error("err8:", err8);}
+                                                                            if(updateSoldProductsResults){
+                                                                                db.commit();
+                                                                                //Finally...
+                                                                                response.writeHead(200, { "Content-Type": "application/json" });
+                                                                                response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
+                                                                            }
+                                                                        });
+                                                                    }
+                                                                });
+                                                            }
+                                                        });
                                                     }
                                                 });
                                             }

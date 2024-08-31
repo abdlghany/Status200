@@ -130,7 +130,7 @@ function placeOrder(){
     //TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)
     //              (AUTO, int secondary key, auto, decimal, completed ,can be null, "FPX Online Banking" )
     //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
-    const finalTotalItemsCount = getElementById('finalTotalItemsCount');
+    //const finalTotalItemsCount = getElementById('finalTotalItemsCount');
     //var total_price = 0;
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
     const cartProductsCount = document.getElementsByClassName('cartProductCount');
@@ -141,7 +141,7 @@ function placeOrder(){
     for (let i = 0; i < cartCheckboxes.length; i++) {
         // check if the checkbox is checked before pushing the information to the array.
         if(cartCheckboxes[i].checked){
-        const checkBoxValue = parseFloat(cartCheckboxes[i].value);
+        //const checkBoxValue = parseFloat(cartCheckboxes[i].value);
         // id (of the HTML element 'checkbox') looks something like this: checkbox-44 where the 44 is the variation_id in the database.
         variation_ids.push(cartCheckboxes[i].id.split('-')[1]);
         // get quantity from the input value.

@@ -37,6 +37,13 @@ class MysqlQueries{
             }
         });
     }
+    commit(){
+        this.#connection.commit(function(err){
+            if(err){
+                console.err("Error beginning a transaction");
+            }
+        });
+    }
     createTable(query) {
         this.#connection.query(query, function(err, result) {
             if (err) {
