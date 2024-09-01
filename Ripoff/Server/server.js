@@ -1,6 +1,7 @@
 import http from "http";
 import { URL } from "url";
 import MysqlQueries from "./mysqlQueries.js";
+import createNewReceipt from "./pdfGenerator.js";
 
 const db = new MysqlQueries();
 db.connect();
@@ -492,6 +493,7 @@ const server = http.createServer(function(request, response) {
                         id = parseInt(value);
                     }
                 });
+                
                  /* 
                     console.log("Variation IDs:", variation_ids);
                     console.log("Quantities:", quantities);
@@ -550,7 +552,8 @@ const server = http.createServer(function(request, response) {
                                         }
                                          /* We got all the needed columns to insert into order_details now, and we can begin inserting to both tables */
                                          /* TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)  */
-                                        const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', NULL, 'FPX Online Banking')`;
+                                        const pdfLocation = "./orderReceipts/order"+orderId+".pdf";
+                                        const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', pdfLocation, 'FPX Online Banking')`;
                                         orderQueryparameters.push(orderId, id, totalPrice);
                                         db.query(orderQuery, orderQueryparameters, function(err4, ordersResults){
                                             if(err4){console.error("err4:", err4); db.rollback();}
@@ -603,7 +606,9 @@ const server = http.createServer(function(request, response) {
                                                                             if(err8){console.error("err8:", err8); db.rollback();}
                                                                             if(updateSoldProductsResults){
                                                                                 db.commit();
-                                                                                //Finally...
+                                                                                //Finally...we generate PDF Invoice and send a success message back to the front-end
+                                                                                const PDF = createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id);
+                                                                                PDF.newReceipt();
                                                                                 response.writeHead(200, { "Content-Type": "application/json" });
                                                                                 response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
                                                                             }
@@ -671,6 +676,77 @@ const server = http.createServer(function(request, response) {
             }
 });
 
+function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id){
+    var email = "";
+    // get the user email to use in the PDF.
+    getUserEmail(id, function(email){
+        // get products names and variations to use in the PDF.
+        getProductsNamesAndVariations(variation_ids, function({products, variations}) {
+            var Products = products;
+            for(let i = 0; i < Products.length; i++) {
+                // get the first 4 words of every product name (because some products might have really long names)
+                const splitProduct = Products[i].split(" ");
+                Products[i] = "";  // Initialize as an empty string to build the new product name
+        
+                splitProduct.forEach(function(prod, index) {
+                    // limit the name to 4 words
+                    if(index <= 3) {
+                        Products[i] += prod;
+                        if(index != 3){
+                            Products[i] += " ";
+                        }
+                    }
+                });
+        
+                // add 3 dots to indicate that this is not the end of the product name if the name was truncated
+                if(splitProduct.length >= 4) {
+                    Products[i] += "...";
+                }
+            }
+            const receipt = new createNewReceipt(orderId, getReceiptDate(), email, products, variations, prices, quantities, totalPrice );
+            receipt.newReceipt();
+        });
+        
+    });
+    
+}
+
+function getUserEmail(id, callback){
+    db.query("SELECT email from users where user_id = ?;", [id], function(err, results){
+        if(err){console.error("getting email error: ", err);}
+        if(results){
+            // return the email after the query executes
+            callback(results[0].email);
+        }
+    });
+}
+
+function getProductsNamesAndVariations(variation_ids, callback){
+    var products = [];
+    var variations = [];
+    var productsVariationsQuery = "SELECT p.product_name as name, pv.variation_name as variation FROM products_variations pv JOIN products p ON p.product_id = pv.product_id WHERE";
+    var productsVariationsParameters = [];
+    // loop through variaion ID's to create the query and populate the parameters array.
+    variation_ids.forEach(function(value, index){
+        productsVariationsQuery += " pv.variation_id = ? ";
+        if(index != parseInt(variation_ids.length-1)){
+            productsVariationsQuery += "OR";
+        }
+        productsVariationsParameters.push(value);
+    });
+    db.query(productsVariationsQuery, productsVariationsParameters, function(err, results){
+        if(err){console.error("getting products names and variation names error: ", err);}
+        if(results){
+            results.forEach(function(result){
+                products.push(result.name);
+                variations.push(result.variation);
+            });
+        }
+        callback({products, variations});
+    });
+    
+}
+
 function doesAccountExist(username, email = "", callback){
     db.query("SELECT * FROM USERS WHERE user_name = ? OR email = ? LIMIT 1", [username, email], function(err, results){
         if(err){callback("DBError")}
@@ -690,6 +766,7 @@ function doesAccountExist(username, email = "", callback){
         }
     });
 }
+
 function doesEmailExist(id, email = "", callback){
     db.query("SELECT * FROM USERS WHERE email = ? AND user_id != ? LIMIT 1", [email, id], function(err, results){
         if(err){callback("DBError")}
@@ -703,6 +780,22 @@ function doesEmailExist(id, email = "", callback){
         }
     });
 }
+
+function getReceiptDate(){
+    var date = new Date();
+    var day = date.getDate().toString();
+    var month = parseInt(date.getMonth()+1).toString();
+    var year = date.getFullYear();
+
+    if(day.length == 1){
+        day = "0"+day.toString();
+    }
+    if(month.length == 1){
+        month = "0"+month.toString();
+    }
+    return(day + "/" + month + "/" + year);
+}
+
 server.listen(3000, function() {
     console.log("Listening on port 3000...");
 });

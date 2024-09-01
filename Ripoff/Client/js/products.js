@@ -2,11 +2,6 @@
 let images = [];
 let currentImageIndex = 0;
 var maxAvailableQuantity = 0
-// return query parameter.
-function getQueryParam(parameter) {
-    const urlParameters = new URLSearchParams(window.location.search);
-    return urlParameters.get(parameter);
-}
 
 // Singular product query for (product.html?product=product_id)
 function fetchProduct(){

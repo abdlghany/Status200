@@ -1,6 +1,6 @@
-Final assignment: Web-shop
+# Final assignment: Web-shop
 
-Functional requirements:
+### Functional requirements:
 - create a user account, login
 - Login, forgot pw, chnage pw, change username (can't have duplicate emails).
 - account information needs to be secure.
@@ -11,26 +11,21 @@ Functional requirements:
 - store bill in DB (No real transactions)
 - shopping cart, past purchases, show products in your basket.....
 -----------
-Technical requirements:
+### Technical requirements:
 - WAMPSERVER, Mysql, Mysql packages
 - Design a database
 - No hard coding information, no duplicate JS code.
 - Node.js / Axios / JSON.
 ----------
-Timeline: Now -> 07/09/2024
+### Timeline: Until 07/09/2024
 Submission: All of your code (HTML, CSS, JS, SQL, MP4 Video that contains a demo of the website and the code design)
 Notes: CSS design matters, "do not design an ugly website".
 
-- Email validator usage (as per documentation):
-// var validator = require("email-validator");
-// validator.validate("test@email.com"); // true
-
-
-# PDF Example
+# PDF Example (pdfkit node.js module)
 - (from the documentation of pdfkit Nodejs module)
 ```js
-const PDFDocument = require('pdfkit');
-const fs = require('fs');
+import PDFDocument from'pdfkit';
+import fs from 'fs';
 ```
 ### Create a document
 ```js
@@ -68,6 +63,7 @@ doc
 ```js
 doc.end();
 ```
+### JS docs
 - Simulate a mouse click:
 ```js
 window.location.href = "http://www.w3schools.com";

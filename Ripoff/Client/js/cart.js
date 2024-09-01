@@ -1,6 +1,6 @@
 var maxAvailableQuantity = 0;
 window.onload = function() {
-    fetchCartItems();
+        shoppingCart();
 };
 var totalCartRM = 0;
 var totalSelectedItemsCount = 0;
@@ -240,6 +240,7 @@ function shoppingCart(){
     shoppingCartHeader.classList.add('selected');
     historyHeader.classList.add('notSelected');
     historyHeader.classList.remove('selected');
+    fetchCartItems();
 }
 // When the user clicks on the header "Order History" in cart.html
 function orderHistory(){
@@ -258,6 +259,7 @@ function orderHistory(){
 
 function fetchOrderHistory() {
     axiosQuery("/orderHistory?id=" + localStorage.getItem('id'), function (results) {
+        // Columns: (order_id, product, variation, price, quantity, date, total_order_price, status, receipt)
         const history = results.data;
         const ordersList = [];
 
@@ -344,7 +346,7 @@ function fetchOrderHistory() {
 
                     const receiptCell = document.createElement('td');
                     receiptCell.rowSpan = order.items.length;
-                    receiptCell.innerHTML ="<a href='"+domain+"/"+order.receipt+"'>Download</a>" ;
+                    receiptCell.innerHTML ="<a href='"+order.receipt+"'>Download</a>" ;
                     row.appendChild(receiptCell);
                 }
                 // Append the row to the table body

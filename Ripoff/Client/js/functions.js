@@ -90,3 +90,9 @@ function showToast(message) {
         toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
     }, 3000);
 }
+
+// return query parameter.
+function getQueryParam(parameter) {
+    const urlParameters = new URLSearchParams(window.location.search);
+    return urlParameters.get(parameter);
+}
