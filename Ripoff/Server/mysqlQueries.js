@@ -15,7 +15,7 @@ class MysqlQueries{
     connect() {
         this.#connection.connect(function(err) {
             if (err) {
-                console.error("Error connecting to the database:", err.message);
+                console.error("Error connecting to the database", err.message);
             } else {
                 console.log("Connected to the database.");
             }

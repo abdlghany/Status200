@@ -157,6 +157,7 @@ function placeOrder(){
       }).then(function(response) {
         if(response.data.message){
             showToast(response.data.message);
+            orderHistory();
         }
     })
     .catch(function(error) {
@@ -215,19 +216,6 @@ function updateCartItemCount(variation_id, cartProductCountValue){
     });
 }
 
-function formatNumber(num) {
-    // Ensure the number has two decimal points
-    let formattedNumber = num.toFixed(2);
-    /* 
-        Add thousands separators
-        \B matches a position that is not a word boundary
-        (?=(\d{3})+(?!\d)) is a positive lookahead to find positions followed by groups of three digits.
-        /g ensures that every 3 numbers, there's a separator.
-    */
-    formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-
-    return formattedNumber;
-}
 // When the user clicks on the header "Shopping Cart" in cart.html
 function shoppingCart(){
     const orderHistory = getElementById('history');

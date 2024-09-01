@@ -114,7 +114,6 @@ function fetchProduct(){
                 if(variation.variation_is_active == 0 || availableQuantity == 0){
                     radio.disabled = true;
                     label.classList.add("disabledRadioButton");
-                    console.log(radio.classList.value);
                     addToCartButton.onclick = function(){
                         showToast("This item is out of stock.");
                     }

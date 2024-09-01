@@ -40,10 +40,11 @@ class createNewReceipt{
                 doc.addPage(); // Add a new page, because the old page is full
                 y = 75; // Resetting y-coordinate for the new page
             }
+            const price = this.prices[index];
             doc.fontSize(15)
                 .text('Product: ' + product, 50, y)
                 .text('Variation: ' + this.variations[index], 50, y + 25)
-                .text('Price: RM' + this.prices[index].toFixed(2), 50, y + 50)
+                .text('Price: RM' + price, 50, y + 50)
                 .text('Quantity: ' + this.quantities[index], 50, y + 75)
                 .text(hr,50,y+100);;
     
@@ -56,7 +57,7 @@ class createNewReceipt{
             y = 75;
         }
         doc.fontSize(15)
-            .text('Total Price: RM' + this.totalPrice.toFixed(2), 50, y + 25)
+            .text('Total Price: RM' + parseFloat(this.totalPrice), 50, y + 25)
             .text(hr, 50, y+50)
             .text('Hope you enjoy your purchase!', 50, y+75);
     

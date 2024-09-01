@@ -553,8 +553,8 @@ const server = http.createServer(function(request, response) {
                                          /* We got all the needed columns to insert into order_details now, and we can begin inserting to both tables */
                                          /* TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)  */
                                         const pdfLocation = "./orderReceipts/order"+orderId+".pdf";
-                                        const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', pdfLocation, 'FPX Online Banking')`;
-                                        orderQueryparameters.push(orderId, id, totalPrice);
+                                        const orderQuery = `INSERT INTO orders VALUES (?, ?, NOW(), ?, 'completed', ?, 'FPX Online Banking')`;
+                                        orderQueryparameters.push(orderId, id, totalPrice, pdfLocation);
                                         db.query(orderQuery, orderQueryparameters, function(err4, ordersResults){
                                             if(err4){console.error("err4:", err4); db.rollback();}
                                             if(ordersResults){
@@ -607,11 +607,12 @@ const server = http.createServer(function(request, response) {
                                                                             if(updateSoldProductsResults){
                                                                                 db.commit();
                                                                                 //Finally...we generate PDF Invoice and send a success message back to the front-end
-                                                                                const PDF = createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id);
-                                                                                PDF.newReceipt(function(){
+                                                                                const PDF = createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id, function(){
                                                                                     response.writeHead(200, { "Content-Type": "application/json" });
                                                                                     response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
                                                                                 });
+                                                                                
+
                                                                                 
                                                                             }
                                                                         });
@@ -678,7 +679,7 @@ const server = http.createServer(function(request, response) {
             }
 });
 
-function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id){
+function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id, callback){
     // get the user email to use in the PDF.
     getUserEmail(id, function(email){
         // get products names and variations to use in the PDF.
@@ -704,7 +705,10 @@ function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id
                 }
             }
             const receipt = new createNewReceipt(orderId, getReceiptDate(), email, products, variations, prices, quantities, totalPrice );
-            receipt.newReceipt();
+            receipt.newReceipt(function(){
+                // if we reach here, everything should be good to go.
+                callback();
+            });
         });
         
     });

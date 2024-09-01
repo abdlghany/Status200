@@ -1,7 +1,7 @@
 {
   "name": "ripoff",
   "version": "1.0.0",
-  "type":"module",
+  "type": "module",
   "description": "Ripoff is a webshop designed for status200 stage 2 final project.",
   "main": "server.js",
   "scripts": {
@@ -12,6 +12,7 @@
   "dependencies": {
     "email-validator": "^2.0.4",
     "mysql2": "^3.11.0",
+    "nodemailer": "^6.9.14",
     "pdfkit": "^0.15.0"
   }
 }

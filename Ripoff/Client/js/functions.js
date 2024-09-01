@@ -96,3 +96,16 @@ function getQueryParam(parameter) {
     const urlParameters = new URLSearchParams(window.location.search);
     return urlParameters.get(parameter);
 }
+
+function formatNumber(num) {
+    // Ensure the number has two decimal points
+    let formattedNumber = num.toFixed(2);
+    /* 
+        Add thousands separators
+        \B matches a position that is not a word boundary
+        (?=(\d{3})+(?!\d)) is a positive lookahead to find positions followed by groups of three digits.
+        /g ensures that every 3 numbers, there's a separator.
+    */
+    formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    return formattedNumber;
+}
