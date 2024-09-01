@@ -278,7 +278,7 @@ function fetchOrderHistory() {
                 ordersList.push(existingOrder);
             }
 
-            // Add the current item (variation) to the corresponding order
+            // Add the current (variation) to the corresponding order
             existingOrder.items.push({
                 product: item.product,
                 variation: item.variation,
@@ -322,7 +322,7 @@ function fetchOrderHistory() {
                 // Only include order details on the first row for each order
                 if (index === 0) {
                     const dateCell = document.createElement('td');
-                    dateCell.rowSpan = order.items.length; // Span across multiple rows if there are multiple items in this order (from Orders)
+                    dateCell.rowSpan = order.items.length; // Span across multiple rows if there are multiple items in this order (from Orders Table)
                     var date = order.date.split("T")[0];
                     date = date.split("-");
                     date = date[2]+"/"+date[1]+"/"+date[0];
@@ -344,7 +344,7 @@ function fetchOrderHistory() {
 
                     const receiptCell = document.createElement('td');
                     receiptCell.rowSpan = order.items.length;
-                    receiptCell.textContent = order.receipt;
+                    receiptCell.innerHTML ="<a href='"+domain+"/"+order.receipt+"'>Download</a>" ;
                     row.appendChild(receiptCell);
                 }
                 // Append the row to the table body

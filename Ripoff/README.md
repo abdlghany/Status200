@@ -21,7 +21,7 @@ Timeline: Now -> 07/09/2024
 Submission: All of your code (HTML, CSS, JS, SQL, MP4 Video that contains a demo of the website and the code design)
 Notes: CSS design matters, "do not design an ugly website".
 
-// Email validator usage (as per documentation):
+- Email validator usage (as per documentation):
 // var validator = require("email-validator");
 // validator.validate("test@email.com"); // true
 
