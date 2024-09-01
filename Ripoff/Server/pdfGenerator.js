@@ -13,7 +13,7 @@ class createNewReceipt{
         this.quantities = quantities;
         this.totalPrice = totalPrice;
     }
-    newReceipt() {
+    newReceipt(callback) {
         const doc = new PDFDocument();
         doc.pipe(fs.createWriteStream('../Client/orderReceipts/Order' + this.orderId + ".pdf"));
         const hr = "---------------------------------------";
@@ -61,7 +61,8 @@ class createNewReceipt{
             .text('Hope you enjoy your purchase!', 50, y+75);
     
         doc.end();
-    }
+        callback();
+    }  
 }
 
 

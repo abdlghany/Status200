@@ -608,9 +608,11 @@ const server = http.createServer(function(request, response) {
                                                                                 db.commit();
                                                                                 //Finally...we generate PDF Invoice and send a success message back to the front-end
                                                                                 const PDF = createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id);
-                                                                                PDF.newReceipt();
-                                                                                response.writeHead(200, { "Content-Type": "application/json" });
-                                                                                response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
+                                                                                PDF.newReceipt(function(){
+                                                                                    response.writeHead(200, { "Content-Type": "application/json" });
+                                                                                    response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
+                                                                                });
+                                                                                
                                                                             }
                                                                         });
                                                                     }
@@ -677,7 +679,6 @@ const server = http.createServer(function(request, response) {
 });
 
 function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id){
-    var email = "";
     // get the user email to use in the PDF.
     getUserEmail(id, function(email){
         // get products names and variations to use in the PDF.
@@ -697,7 +698,6 @@ function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id
                         }
                     }
                 });
-        
                 // add 3 dots to indicate that this is not the end of the product name if the name was truncated
                 if(splitProduct.length >= 4) {
                     Products[i] += "...";
@@ -708,7 +708,6 @@ function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id
         });
         
     });
-    
 }
 
 function getUserEmail(id, callback){
