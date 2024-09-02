@@ -14,13 +14,20 @@ function fetchCartItems(){
     const userId = localStorage.getItem('id');
     axios.get(domain+"/fetchCartItems?id=" + userId)
         .then(function(response) {
+            const cart = getElementById('cart');
+            // clearing children of the div before filling it
+            cart.replaceChildren();
+            // if the server returns empty cart, display an empty cart message.
+            if(response.data.message == "empty cart"){
+                cart.innerHTML = "<h1 class='center'>You have no items in your shopping cart</h1>";
+            }
+            else{
             const cartItems = response.data;
             /* 
                 columns: (user_id, variation_id, total_variation_quantity, product_id, variation_name, variation_price, variation_stock, name, image);
             */
-            const cart = getElementById('cart');
-             // clearing children of the div before filling it
-            cart.replaceChildren();
+            
+             
             cartItems.forEach(function(item){
                 // cart item container
                 const cartItemDiv = document.createElement('div');
@@ -123,6 +130,7 @@ function fetchCartItems(){
                     checkAll(cartCheckboxes, false);
                 }
             });
+        }
         })
         .catch(function(error){
             console.error('Error fetching cart items:', error);
@@ -313,10 +321,10 @@ function fetchOrderHistory() {
                 if (index === 0) {
                     const dateCell = document.createElement('td');
                     dateCell.rowSpan = order.items.length; // Span across multiple rows if there are multiple items in this order (from Orders Table)
-                    var date = order.date.split("T")[0];
+                    var date = order.date.split("T")[0];  // date format as follows 2024-08-31TmeZ...etc we don't need the time here.
                     date = date.split("-");
                     date = date[2]+"/"+date[1]+"/"+date[0];
-                    dateCell.textContent = date; // date format as follows 2024-08-31TmeZ...etc we don't need the time here.
+                    dateCell.textContent = date;
                     row.appendChild(dateCell);
 
                     const totalPriceCell = document.createElement('td');

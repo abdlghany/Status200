@@ -2,7 +2,7 @@ import http from "http";
 import { URL } from "url";
 import MysqlQueries from "./mysqlQueries.js";
 import createNewReceipt from "./pdfGenerator.js";
-import send from "./emailSender.js";
+import { send, sendPDF } from './emailSender.js';
 const db = new MysqlQueries();
 db.connect();
 var passwordResetCodes = {};
@@ -425,10 +425,15 @@ const server = http.createServer(function(request, response) {
                 queryParams.get("id")
             ];
             db.query(query,parameters, function(err, results) {
-                if (err || results.length == 0) {
+                if (err) {
                     response.writeHead(500, { "Content-Type": "application/json" });
                     console.log("Fetching cart items (/fetchCartItems) failed at: " + Date.now());
                     response.end(JSON.stringify({ message: "Internal server error '/fetchCartItems', try again later" }));
+                    return;
+                }
+                else if(results.length == 0){
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({message: "empty cart"}));
                     return;
                 }
                     response.writeHead(200, { "Content-Type": "application/json" });
@@ -606,14 +611,27 @@ const server = http.createServer(function(request, response) {
                                                                             if(err8){console.error("err8:", err8); db.rollback();}
                                                                             if(updateSoldProductsResults){
                                                                                 db.commit();
-                                                                                //Finally...we generate PDF Invoice and send a success message back to the front-end
-                                                                                const PDF = createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id, function(){
-                                                                                    response.writeHead(200, { "Content-Type": "application/json" });
-                                                                                    response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
+                                                                                //Finally...we generate PDF Invoice and send an email to the user and a success message back to the front-end.
+                                                                                createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id, function(){
+                                                                                    db.query("SELECT email from users where user_id = ?", [id], function(err9, emailResults){
+                                                                                        if(emailResults){
+                                                                                            const to = emailResults[0].email;
+                                                                                            const subject = "Here's your order No."+orderId+ " receipt"; // FINISH THIS...
+                                                                                            const text = "Attached is the receipt for your latest order on RipOff, Hope you enjoyed your purchase!";
+                                                                                            const filename = '../Client/orderReceipts/Order'+orderId+'.pdf';
+                                                                                            sendPDF(to, subject, text, filename, function(result){
+                                                                                                if(result){
+                                                                                                    response.writeHead(200, { "Content-Type": "application/json" });
+                                                                                                    response.end(JSON.stringify({ message: "Your order was successfully placed!"}));
+                                                                                                }
+                                                                                                else{
+                                                                                                    response.writeHead(200, { "Content-Type": "application/json" });
+                                                                                                    response.end(JSON.stringify({ message: "Order placed successfully, but we had a problem Emailing you the receipt."}));
+                                                                                                }
+                                                                                        });
+                                                                                        }
+                                                                                    });
                                                                                 });
-                                                                                
-
-                                                                                
                                                                             }
                                                                         });
                                                                     }
@@ -664,7 +682,7 @@ const server = http.createServer(function(request, response) {
                 db.query(query,parameters, function(err, results) {
                     if (err || results.length == 0) {
                         response.writeHead(500, { "Content-Type": "application/json" });
-                        console.log("Fetching cart items (/fetchCartItems) failed at: " + Date.now());
+                        console.log("Fetching cart items (/orderHistory) failed at: " + Date.now());
                         response.end(JSON.stringify({ message: "Internal server error '/orderHistory', try again later" }));
                         return;
                     }
@@ -719,7 +737,7 @@ const server = http.createServer(function(request, response) {
                          response.end(JSON.stringify({ message:"Email does not exists" }));
                          return
                      }
-                     // get the user code that was saved earlier
+                     // get the user code that was saved (for 10 mins) earlier
                      if(passwordResetCodes["ID-"+results[0].user_id]){
                         savedCode = passwordResetCodes["ID-"+results[0].user_id];
                         if(code == savedCode){
@@ -769,7 +787,6 @@ function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id
                 // get the first 4 words of every product name (because some products might have really long names)
                 const splitProduct = Products[i].split(" ");
                 Products[i] = "";  // Initialize as an empty string to build the new product name
-        
                 splitProduct.forEach(function(prod, index) {
                     // limit the name to 4 words
                     if(index <= 3) {
@@ -784,13 +801,12 @@ function createNewPDF(orderId, prices, quantities, totalPrice, variation_ids, id
                     Products[i] += "...";
                 }
             }
-            const receipt = new createNewReceipt(orderId, getReceiptDate(), email, products, variations, prices, quantities, totalPrice );
+            const receipt = new createNewReceipt(orderId, getReceiptDate(), email, products, variations, prices, quantities, totalPrice);
             receipt.newReceipt(function(){
                 // if we reach here, everything should be good to go.
                 callback();
             });
-        });
-        
+        });    
     });
 }
 
