@@ -1,36 +1,27 @@
-import nodemailer from 'nodemailer ';
+import dotenv from 'dotenv';
+import sgMail from '@sendgrid/mail';
+dotenv.config({ path: './sendgrid.env' });
+sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+const from = "ripoffemailservice@gmail.com";
 
-class emailSender{
-    #sender;
-    #password;
-    constructor(){
-        this.#password = "w3'llTryNotToR!pYouOff";
-        this.#sender = "ripoffemailservice@gmail.com";
-    }
-    send(receiver, subject, text){
-        var transporter = nodemailer.createTransport({
-            service: 'gmail',
-            auth: {
-              user: this.#sender,
-              pass: this.#password
-            }
-          });
-          
-          var mailOptions = {
-            from: this.#sender,
-            to: receiver,
-            subject: subject,
-            text: text
-          };
-          
-          transporter.sendMail(mailOptions, function(error, info){
-            if (error) {
-              console.log(error);
-              return false
-            } else {
-              return true
-            }
-          }); 
-    }
+function send(to, Subject, text, callback){
+    const msg = {
+        to: to,
+        from: from, // Use the email address or domain you verified
+        subject: Subject,
+        text: text,
+      };
+
+    sgMail
+  .send(msg)
+  .then(() => {
+    console.log('Email sent');
+    callback(true);
+  })
+  .catch((error) => {
+    console.error(error);
+    callback(false);
+  });
 }
-export default emailSender;
+
+export default send;

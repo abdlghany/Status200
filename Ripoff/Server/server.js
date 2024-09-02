@@ -2,7 +2,7 @@ import http from "http";
 import { URL } from "url";
 import MysqlQueries from "./mysqlQueries.js";
 import createNewReceipt from "./pdfGenerator.js";
-
+import send from "./emailSender.js";
 const db = new MysqlQueries();
 db.connect();
 
@@ -799,6 +799,18 @@ function getReceiptDate(){
     return(day + "/" + month + "/" + year);
 }
 
+function sendEmail(to, subject, message){
+    send(to,
+        subject,
+        message, function(status){
+            if(status){
+                console.log(subject, " Email sent successfully.");
+            }
+            else{
+                console.error(subject, " Email failed to send, reason unknown yet.");
+            }
+        });
+}
 server.listen(3000, function() {
     console.log("Listening on port 3000...");
 });

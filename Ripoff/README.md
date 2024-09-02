@@ -63,40 +63,6 @@ doc
 ```js
 doc.end();
 ```
-# Nodemailer Package
-- Importing the package to your application
-```js
-import nodemailer from 'nodemailer ';
-```
-- Send an email
-```js
-var transporter = nodemailer.createTransport({
-  service: 'gmail',
-  auth: {
-    user: 'youremail@gmail.com',
-    pass: 'yourpassword'
-  }
-});
-
-var mailOptions = {
-  from: 'youremail@gmail.com',
-  to: 'myfriend@yahoo.com',
-  subject: 'Sending Email using Node.js',
-  text: 'That was easy!'
-};
-
-transporter.sendMail(mailOptions, function(error, info){
-  if (error) {
-    console.log(error);
-  } else {
-    console.log('Email sent: ' + info.response);
-  }
-}); 
-```
-- Source:
-[W3Schools docs](https://www.w3schools.com/nodejs/nodejs_email.asp)
-
-
 
 ### JS docs
 - Simulate a mouse click:

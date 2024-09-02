@@ -1,4 +1,4 @@
-function getProductsNamesAndVariations(variation_ids, callback){
+/* function getProductsNamesAndVariations(variation_ids, callback){
     var products = [];
     var variations = [];
     var productsVariationsQuery = "SELECT p.product_name as name, pv.variation_name as variation FROM products_variations pv JOIN products p ON p.product_id = pv.product_id WHERE";
@@ -51,3 +51,17 @@ getProductsNamesAndVariations([1,2,3,4,5,6,7,8], function({products, variations}
     }
 });
 
+ */
+
+/* import send from "./emailSender.js";
+
+const emailStatus = send("abdalghanyy1996@gmail.com",
+     "Ripoff password reset code",
+      "Please enter your password reset code on the website to regain access to your account");
+
+if(emailStatus){
+    console.log("Email sent successfully.");
+}
+else{
+    console.error("Email failed to send, reason unknown yet.");
+} */
