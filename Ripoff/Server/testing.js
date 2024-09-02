@@ -65,3 +65,16 @@ if(emailStatus){
 else{
     console.error("Email failed to send, reason unknown yet.");
 } */
+/*     var biggest = -50;
+    var smallest = 999999999;
+    for(let i =0; i<999;i++){
+        const code = Math.floor(100000 + Math.random() * 900000);
+        if(code > biggest){
+            biggest = code;
+        }
+        if(code < smallest){
+            smallest = code;
+        }
+    }
+    console.log("Biggest generated number: "+ biggest);
+    console.log("Smallest generated number: "+ smallest); */

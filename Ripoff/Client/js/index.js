@@ -89,7 +89,7 @@ function axiosQuery(urlExtension, callback){
                 callback(response)
             })
             .catch(function(error) {
-                console.error("Error fetching data:", error);
+                console.error("Error fetching data from the server:", error);
             });
 }
 
@@ -604,3 +604,70 @@ function deleteAddress(address_id){
     });    
 }
 
+function sendCode(){
+    // ids: email (input), code (input), newpassword (input), sendCodeButton (button)
+    const email = getElementById('email');
+    const code = getElementById('code');
+    const newPassword = getElementById('newPassword');
+    const sendCodeButton = getElementById('sendCodeButton');
+    // Empty all messages before running the code
+    resetMessages(["emailError", "codeError", "errorMessage", "passwordError"]);
+    // Validate email
+    if (!validateName(email.value, new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'))) {
+        return passMessageToElement("emailError", "Invalid email format", "red", 1);
+    }
+    // if the email is correct, we send a code request to the server, the server should check the email against the existing emails in the database
+    // then send the code if the email is correct, otherwise, display an error message.
+    axiosQuery("/resetPassword?email="+email.value, function(response){
+        if(response.data.message == "Email exists"){
+            passMessageToElement("codeError", "Code sent, expires in 10 minutes", "green", 1);
+            passMessageToElement("errorMessage", "Please enter the code and your new password then click 'Submit'", "gray", 1);
+            code.disabled= false;
+            newPassword.disabled = false;
+            email.disabled = true;
+            // make the button a submit button and change its onclick event
+            sendCodeButton.innerHTML = "Submit"
+            sendCodeButton.onclick = function() {
+                verifyCode();
+            };
+        }
+        else{
+            passMessageToElement("emailError", "Email doesn't exist", "red", 1);
+        }
+    });
+}
+
+function verifyCode(){
+    const email = getValueOfElementById('email').trim();
+    const code = getValueOfElementById('code').trim();
+    const newPassword = getValueOfElementById('newPassword').trim();
+    resetMessages(["emailError", "codeError", "errorMessage", "passwordError"]);
+
+    // Validate email again in case the user tries to be funny and change their email somehow even tho the email field is disabled.
+    if (!validateName(email, new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$'))) {
+        return passMessageToElement("emailError", "Nice try changing the email format", "red", 1);
+    }
+    //Code  code must have 6 numbers.
+    if (code.length != 6 || isNaN(code) || !code) {
+        return passMessageToElement("codeError", "Must be 6 numbers", "red", 1);
+    }
+    if (!validateName(newPassword, new RegExp('^[a-zA-Z0-9]+(?:[ ][a-zA-Z0-9]+)*$'))) {
+        return passMessageToElement("passwordError", "Please enter a valid password", "red", 1);
+    }
+    // if the user input passes all validations, then it's time to request the password change from the server
+    const urlExtension = "/submitResetPassword?email="+email+"&code="+code+"&newPassword="+newPassword;
+    axiosQuery(urlExtension, function(response){
+        if(response.data.message == "Email does not exist"){
+            passMessageToElement("emailError", "How did you manage to change the email?", "red", 1);
+        }
+        else if(response.data.message == "Wrong code"){
+            passMessageToElement("codeError", "Please verify that the code is correct", "red", 1);
+        }
+        else if(response.data.message == "code expired"){
+            passMessageToElement("errorMessage", "Code has expired, please refresh the page and try again.", "red", 1);
+        }
+        else if(response.data.message == "password changed successfully"){
+            passMessageToElement("errorMessage", "Password has been changed, please <a href='./login.html'>login using the new password</a>", "green", 1);
+        }
+    });
+}

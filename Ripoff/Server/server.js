@@ -5,7 +5,7 @@ import createNewReceipt from "./pdfGenerator.js";
 import send from "./emailSender.js";
 const db = new MysqlQueries();
 db.connect();
-
+var passwordResetCodes = {};
 const server = http.createServer(function(request, response) {
     // Set CORS headers
     response.setHeader("Access-Control-Allow-Origin", "*");
@@ -472,7 +472,7 @@ const server = http.createServer(function(request, response) {
         }
         /*  
             --- THIS IS WHERE THE FUN BEGINS ---
-            --- Note that using async would've made this so much cleaner-looking, but here we go...---
+            --- Here we go... ---
             Resources:
             MYSQL Start transaction:
             https://dev.mysql.com/doc/refman/8.4/en/commit.html
@@ -672,7 +672,87 @@ const server = http.createServer(function(request, response) {
                         response.writeHead(200, { "Content-Type": "application/json" });
                         response.end(JSON.stringify(results));
                 });
-            }  
+            }
+            else if (pathname === "/resetPassword" && queryParams) {
+               //Table: Users (user_id, user_name, password, email, phone, first_name, last_name, is_Active)
+                const query = "SELECT user_id, email from users where email = ?;";
+                // queryParams: "/resetPassword?email=?";
+                const parameters = [
+                    queryParams.get("email")
+                ];
+                db.query(query,parameters, function(err, results) {
+                    if (err) {
+                        response.writeHead(500, { "Content-Type": "application/json" });
+                        console.log("Inserting into shopping cart failed at: " + Date.now());
+                        response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                        return;
+                    }else if(results.length == 0){
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message:"Email does not exists" }));
+                        return
+                    }
+                        // Generate a user-specific key and save it in the variable passwordResetCodes (Dictionary).
+                        const code = generateAndStoreCode("ID-"+results[0].user_id);
+                        sendEmail(results[0].email, "Password reset requested", "Your password reset code is: "+ code + " Please do not share this code with anyone else.");
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message:"Email exists" }));
+                });
+            }
+            else if (pathname === "/submitResetPassword" && queryParams) {
+                var savedCode = 0;
+                const code = queryParams.get("code");
+                //Table: Users (user_id, user_name, password, email, phone, first_name, last_name, is_Active)
+                 const query = "SELECT user_id from users where email = ?;";
+                 // queryParams: "/resetPassword?email=?";
+                 const parameters = [
+                     queryParams.get("email")
+                 ];
+                 db.query(query,parameters, function(err, results) {
+                     if (err) {
+                         response.writeHead(500, { "Content-Type": "application/json" });
+                         console.log("Inserting into shopping cart failed at: " + Date.now());
+                         response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                         return;
+                     }else if(results.length == 0){
+                         response.writeHead(200, { "Content-Type": "application/json" });
+                         // the user changed the email they initially used to get the code
+                         response.end(JSON.stringify({ message:"Email does not exists" }));
+                         return
+                     }
+                     // get the user code that was saved earlier
+                     if(passwordResetCodes["ID-"+results[0].user_id]){
+                        savedCode = passwordResetCodes["ID-"+results[0].user_id];
+                        if(code == savedCode){
+                            const query2 = "UPDATE users set password = ? where user_id = ?";
+                            const parameters2 = [
+                                queryParams.get("newPassword"),
+                                results[0].user_id
+                            ]
+                            // Email is correct, code is correct, we insert the new password into the database.
+                            db.query(query2, parameters2, function(err2, results2){
+                                if(err2 || results2.length == 0){
+                                    response.writeHead(500, { "Content-Type": "application/json" });
+                                    console.log("Resetting user password failed at: " + Date.now());
+                                    response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                                    return;
+                                }
+                                response.writeHead(200, { "Content-Type": "application/json" });
+                                response.end(JSON.stringify({ message:"password changed successfully" }));
+                            });
+                        }
+                        else{
+                            // wrong code entered by the user.
+                            response.writeHead(200, { "Content-Type": "application/json" });
+                            response.end(JSON.stringify({ message:"Wrong code" }));
+                        }
+                     }
+                     else{
+                        // if the code doesn't exist, that means it has expired.
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message:"code expired" }));
+                     }
+                 });
+             }
             else {//request isn't any of the previous pathnames     
                 response.writeHead(404, { "Content-Type": "text/plain" });
                 response.end("Not Found");
@@ -804,13 +884,25 @@ function sendEmail(to, subject, message){
         subject,
         message, function(status){
             if(status){
-                console.log(subject, " Email sent successfully.");
+                //console.log(subject, " Email sent successfully.");
             }
             else{
-                console.error(subject, " Email failed to send, reason unknown yet.");
+                console.error(subject, " Email failed to send");
             }
         });
 }
+
+function generateAndStoreCode(userId) {
+    // Generateing a random 6-digit number
+    const code = Math.floor(100000 + Math.random() * 900000);
+    passwordResetCodes[userId] = code;
+    // Set a timeout to delete the code after 10 minutes (600,000 milliseconds)
+    setTimeout(() => {
+        delete passwordResetCodes[userId];
+    }, 600000);
+    return code;
+}
+
 server.listen(3000, function() {
     console.log("Listening on port 3000...");
 });
