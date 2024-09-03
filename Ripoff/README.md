@@ -6,7 +6,8 @@ Ripoff is a webshop that was made especially to rip people off and steal their m
 
 ## Screenshots
 - index.html
-[Index.html](Screenshots/index.png)
+![Index.html](Screenshots/index.png)
+
 ### Functional requirements:
 - create a user account, login
 - Login, forgot pw, chnage pw, change username (can't have duplicate emails).
