@@ -15,7 +15,8 @@ class createNewReceipt{
     }
     newReceipt(callback) {
         const doc = new PDFDocument();
-        doc.pipe(fs.createWriteStream('../Client/orderReceipts/Order' + this.orderId + ".pdf"));
+        const writeStream = fs.createWriteStream('../Client/orderReceipts/Order' + this.orderId + ".pdf");
+        doc.pipe(writeStream);
         const hr = "---------------------------------------";
         doc.image('./img/ripoffLogo.png',170,0, {
             fit: [75, 75]
@@ -62,10 +63,13 @@ class createNewReceipt{
             .text('Hope you enjoy your purchase!', 50, y+75);
     
         doc.end();
-        callback();
+        // Add an event listener to check if the file has finished being written to the hard drive before callback() is run
+        // to make sure the PDF is fully created before sending it via Email in the next step...
+        writeStream.on('finish', function() {
+            //console.log('PDF creation finished for order: ' + this.orderId);
+            callback();
+        }.bind(this));
     }  
 }
-
-
 export default createNewReceipt;
 //createNewReceipt(3, '31/08/2024', 'abdalghany@windowslive.com', ['Lenovo All in One ThinkCentre', 'JBL Wave 200TWS True', 'Surrounded by Idiots :'], ['Black', 'Black', 'Malay'], [3600, 180, 40], [1, 9, 2], 5300);

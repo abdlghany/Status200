@@ -619,6 +619,7 @@ const server = http.createServer(function(request, response) {
                                                                                             const subject = "Here's your order No."+orderId+ " receipt"; // FINISH THIS...
                                                                                             const text = "Attached is the receipt for your latest order on RipOff, Hope you enjoyed your purchase!";
                                                                                             const filename = '../Client/orderReceipts/Order'+orderId+'.pdf';
+
                                                                                             sendPDF(to, subject, text, filename, function(result){
                                                                                                 if(result){
                                                                                                     response.writeHead(200, { "Content-Type": "application/json" });

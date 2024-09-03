@@ -21,7 +21,7 @@ export function sendPDF(to, subject, text, filename, callback) {
     let receipt = fs.readFileSync(filename, { encoding: 'base64' });
     const msg = {
         to: to,
-        from: from, // Replace with your actual email
+        from: from,
         subject: subject,
         text: text,
         attachments: [
@@ -36,7 +36,6 @@ export function sendPDF(to, subject, text, filename, callback) {
     sendMsg(msg, function(status){
       callback(status);
     });
-    //callback(sendMsg(msg));
 }
 
 function sendMsg(msg, callback){
