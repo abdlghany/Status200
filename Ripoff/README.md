@@ -1,6 +1,5 @@
 # RipOff
-\
-\
+
 
 ## Table of contents
 
