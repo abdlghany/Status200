@@ -629,7 +629,7 @@ const server = http.createServer(function(request, response) {
                                                                                                     response.writeHead(200, { "Content-Type": "application/json" });
                                                                                                     response.end(JSON.stringify({ message: "Order placed successfully, but we had a problem Emailing you the receipt."}));
                                                                                                 }
-                                                                                        });
+                                                                                            });
                                                                                         }
                                                                                     });
                                                                                 });
@@ -682,10 +682,15 @@ const server = http.createServer(function(request, response) {
                     queryParams.get("id")
                 ];
                 db.query(query,parameters, function(err, results) {
-                    if (err || results.length == 0) {
+                    if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
                         console.log("Fetching cart items (/orderHistory) failed at: " + Date.now());
                         response.end(JSON.stringify({ message: "Internal server error '/orderHistory', try again later" }));
+                        return;
+                    }
+                    else if(results.length == 0){
+                        response.writeHead(200, { "Content-Type": "application/json" });
+                        response.end(JSON.stringify({ message: "empty history" }));
                         return;
                     }
 

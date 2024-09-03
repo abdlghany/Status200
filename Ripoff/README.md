@@ -1,4 +1,5 @@
-<p align="center"># RipOff</p>
+# RipOff
+
 ## Table of contents
 - [What is RipOff?](#what-is-ripoff)
 - [Screenshots](#screenshots)
@@ -7,9 +8,47 @@
 Ripoff is a webshop that was made especially to rip people off and steal their money without sending them the products they ordered.
 
 ## Screenshots
-- index.html
-![Index.html](Screenshots/index.png)
+#### Home page [index.html](Client/index.html)
 
+![Home page picture](Screenshots/index.png)
+
+#### Signup page [signup.html](Client/signup.html)
+
+![Signup page picture](Screenshots/signup.png)
+
+#### Login page [login.html](Client/login.html)
+
+![login page picture](Screenshots/login.png)
+
+#### Shopping Cart Page [cart.html](Client/cart.html)
+
+##### Empty Shopping Cart
+
+![Empty Cart Picture](Screenshots/emptyCart.png)
+
+##### Full Shopping Cart
+
+![Full Cart Picture](Screenshots/fullCart.png)
+
+##### Empty order history
+
+![Empty order history picture](Screenshots/emptyHistory.png)
+
+##### Full order history
+
+![Full order history picture](Screenshots/fullHistory.png)
+
+### Products page [products.html](Client/products.html)
+
+![Products page picture](Screenshots/products.png)
+
+### Singular product page [product.html](Client/product.html)
+
+![Product page picture](Screenshots/product.png)
+
+### User profile page [user.html](Client/user.html)
+
+![User profile page picture](Screenshots/user.png)
 ### Functional requirements:
 - create a user account, login
 - Login, forgot pw, chnage pw, change username (can't have duplicate emails).
@@ -31,7 +70,7 @@ Ripoff is a webshop that was made especially to rip people off and steal their m
 Submission: All of your code (HTML, CSS, JS, SQL, MP4 Video that contains a demo of the website and the code design)
 Notes: CSS design matters, "do not design an ugly website".
 
-# PDF Example (pdfkit node.js module)
+## PDF Example (pdfkit node.js module)
 - (from the documentation of pdfkit Nodejs module)
 ```js
 import PDFDocument from'pdfkit';
@@ -72,16 +111,6 @@ doc
 ### Finalize PDF file
 ```js
 doc.end();
-```
-
-### JS docs
-- Simulate a mouse click:
-```js
-window.location.href = "http://www.w3schools.com";
-```
-- Simulate an HTTP redirect:
-```js
-window.location.replace("http://www.w3schools.com");
 ```
 
 <!-- 
