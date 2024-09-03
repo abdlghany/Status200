@@ -7,18 +7,18 @@
     <link rel="stylesheet" href="./css/styles.css">
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
-<body>
+<body onload="javascript:fetchProduct()">
     <nav id="navigationBar"></nav>
     <div id="mainContent">
         <div id="product">
             <div id="productImageDiv">
                 <button class="leftArrow" onclick="prevImage()" title="Previous image">&#9668;</button><!-- left arrow HTML https://graphemica.com/%E2%97%84 -->
-                <div id="productImageContainer">
-                </div>
+                <div id="productImageContainer"><!-- Product Images will load in this div --></div>
                 <button class="rightArrow" onclick="nextImage()" title="Next image">&#9658;</button><!-- Right arrow HTML https://graphemica.com/%E2%96%BA -->
             </div>
             <div id="productDetails">
                 <h2 id="productName"></h2>
+                <p id="productSold"></p>
                 <div id="productVariations">
                     <ul id="productVariationsUl"></ul>
                 </div>
@@ -29,8 +29,8 @@
                         <input type="number" name="productCount" id="productCount" value="0" max="999">
                         <button id="rightProductCountButton" title="Increase quantity">+</button>
                     </div>
-                    <p id="variation_stock"></p>
-                    
+                    <p id="variation_stock"><!-- No. items will load here --></p>
+                    <p id="variation_price"><!-- Variation price will load here --></p>
                 </div>
                 <button id="addToCartButton" title="Add to cart">ADD TO CART</button>
                 <p id="errorMessage"></p>
@@ -46,8 +46,5 @@
     <script src="./js/functions.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/products.js"></script>
-    <script>
-        fetchProduct();
-    </script>
 </body>
 </html>

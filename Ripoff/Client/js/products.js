@@ -11,6 +11,8 @@ function fetchProduct(){
     const productNameHeader = getElementById('productName');
     const productVariationsUl = getElementById('productVariationsUl');
     const productDesc = getElementById('productDesc');
+    const soldParagraph = getElementById('productSold');
+    const variationPrice = getElementById('variation_price');
     //if there's a productId fetch the data from the server and display it
     if(productId){
         axiosQuery(urlExtension, function(response){
@@ -33,7 +35,7 @@ function fetchProduct(){
             const products = response.data[1];
             const variations = response.data[2];
 
-            // IMAGES
+            // PRODUCT IMAGES
             productImages.forEach(function(image, index){
                 const leftArrow = document.getElementsByClassName('leftArrow');
                 const rightArrow = document.getElementsByClassName('rightArrow');
@@ -69,8 +71,14 @@ function fetchProduct(){
                 soldOutImage.classList.add("soldout-overlay");
                 productImageContainer.appendChild(soldOutImage);
             }
-
-            // VARIATIONS.
+            if(products[0].sold){
+                soldParagraph.innerHTML = products[0].sold + " Sold";
+            }
+            else{
+                soldParagraph.innerHTML = "0 Sold";
+            }
+           /* console.log(products[0].sold); */
+            // PRODUCT VARIATIONS.
             var variationsStock = 0;
             variations.forEach(function(variation, index){
                 const li = document.createElement('li');

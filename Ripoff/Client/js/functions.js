@@ -109,3 +109,14 @@ function formatNumber(num) {
     formattedNumber = formattedNumber.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     return formattedNumber;
 }
+// return data from the server based on the urlExtension passed for example 
+// (./products?category_id=9) will return products that are in the specified category_id
+function axiosQuery(urlExtension, callback){
+    axios.get(domain + urlExtension )
+            .then(function(response) {
+                callback(response)
+            })
+            .catch(function(error) {
+                console.error("Error fetching data from the server:", error);
+            });
+}

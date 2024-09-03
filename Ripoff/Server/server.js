@@ -332,7 +332,7 @@ const server = http.createServer(function(request, response) {
                         p.product_description,
                         p.category_id,
                         p.created_at,
-                        p.Sold,
+                        p.sold,
                         p.is_active AS product_is_active,
                         ci.category_name
                       FROM Products p
