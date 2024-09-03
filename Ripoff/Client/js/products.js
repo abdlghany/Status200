@@ -12,7 +12,7 @@ function fetchProduct(){
     const productVariationsUl = getElementById('productVariationsUl');
     const productDesc = getElementById('productDesc');
     const soldParagraph = getElementById('productSold');
-    const variationPrice = getElementById('variation_price');
+    const variationPrice = getElementById('variationPrice');
     //if there's a productId fetch the data from the server and display it
     if(productId){
         axiosQuery(urlExtension, function(response){
@@ -102,7 +102,7 @@ function fetchProduct(){
                     if(productCount.value > maxAvailableQuantity){
                         productCount.value = maxAvailableQuantity;
                     }
-                    changeStockCount(maxAvailableQuantity);
+                    changeStockCount(maxAvailableQuantity, variation.variation_price);
                     // Change the button's variationId and stock quantity for the product that's being added to the cart.
                     addToCartButton.onclick = function(){
                         addToCart(variationId, maxAvailableQuantity);
@@ -141,14 +141,16 @@ function fetchProduct(){
                     // Increase variationsStock count if there's more than 1 variation and it's active and it's not out of stock
                     variationsStock += availableQuantity;
                 }
+                variationPrice.innerText = "RM" + variation.variation_price;
             });
             /* 
                 Note to self: Keep these inside the callback function to make sure they run after the page loads db information, otherwise they don't work.
             */
             // Set the number of available 
-            const variation_stock_paragraph = getElementById('variation_stock');
+            const variation_stock_paragraph = getElementById('variationStock');
             // variationsStock is the total stock available for this product that includes all variations that are active 
             variation_stock_paragraph.innerText = variationsStock + " pieces available.";
+           
 
             // assign an onclick event for the + and the - buttons around the quantity input field.
             const leftProductCountButton = getElementById('leftProductCountButton');
@@ -229,9 +231,11 @@ function addToCart(variationId, maxItemCount){
     }
 }
 
-function changeStockCount(newCount){
-    const variation_stock = getElementById('variation_stock');
+function changeStockCount(newCount, newPrice){
+    const variation_stock = getElementById('variationStock');
+    const variationPrice = getElementById('variationPrice');
     variation_stock.innerText = newCount + " pieces available.";
+    variationPrice.innerHTML = "RM"+newPrice;
 }
 
 // Fetch and display products for the selected category (for products.html?category_id=category_id)

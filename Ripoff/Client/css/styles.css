@@ -82,6 +82,9 @@ nav {
     width: 16rem;
     border-radius: 0.25rem;
     padding: 0 0.5rem;
+    background-color: #242424;
+    border: 1px solid #AAAAAA;
+    color: #E0E0E0;
 }
 
 .nav-li img, #cartButton {
@@ -709,4 +712,9 @@ table {
     font-weight: bold;
     font-size: 1.1rem;
     color: #007bff;
+}
+#variationPrice{
+    font-weight: bold;
+    font-size: 1.5rem;
+    color: #E0E0E0;
 }
