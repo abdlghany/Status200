@@ -19,7 +19,7 @@ function fetchCartItems(){
             cart.replaceChildren();
             // if the server returns empty cart, display an empty cart message.
             if(response.data.message == "empty cart"){
-                cart.innerHTML = "<h1 class='center'>You have no items in your shopping cart</h1>";
+                cart.innerHTML = "<h1 class='center'>You haven't added items to your shopping cart yet</h1>";
             }
             else{
             const cartItems = response.data;
@@ -260,7 +260,7 @@ function fetchOrderHistory() {
         const ordersList = [];
         if(history.message == "empty history"){
             const orderHistory = getElementById('history');
-            orderHistory.innerHTML = "<h1 class='center'>You have no order history yet</h1>"
+            orderHistory.innerHTML = "<h1 class='center'>You haven't ordered anything yets</h1>"
         }
         else{
             history.forEach(function (item) {
