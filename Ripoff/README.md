@@ -1,5 +1,6 @@
 # RipOff
-
+## Table of contents
+- [What is RipOff?](#what-is-ripoff)
 ## What is RipOff?
 
 Ripoff is a webshop that was made especially to rip people off and steal their money without sending them the products they ordered.
