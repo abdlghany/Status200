@@ -1,5 +1,12 @@
-# Final assignment: Web-shop
+# RipOff
 
+## What is RipOff?
+
+Ripoff is a webshop that was made especially to rip people off and steal their money without sending them the products they ordered.
+
+## Screenshots
+- index.html
+[Index.html](Screenshots/index.png)
 ### Functional requirements:
 - create a user account, login
 - Login, forgot pw, chnage pw, change username (can't have duplicate emails).
