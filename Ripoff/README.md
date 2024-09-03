@@ -42,22 +42,37 @@ Ripoff is a webshop that was made especially to rip people off and steal their m
 
 ![Products page picture](Screenshots/products.png)
 
+#### Sort menu
+
+![Sort menu picture](Screenshots/sort.png)
+
+#### Search example
+
+![Search example picture](Screenshots/search.png)
+
 ### Singular product page [product.html](Client/product.html)
 
 ![Product page picture](Screenshots/product.png)
 
 ### User profile page [user.html](Client/user.html)
 
+#### User profile without addresses shown
+
 ![User profile page picture](Screenshots/user.png)
+
+#### User profile with addresses shown 
+
+![User profile page with addresses picture](Screenshots/addresses.png)
+
+### Add new address page [addaddress.html](Client/addaddress.html)
+
+![Add new address page picture](Screenshots/addaddress.png)
+
+### Edit address page [editaddress.html](Client/editaddress.html)
+
+![Edit address page picture](Screenshots/editaddress.png)
+
 ### Functional requirements:
-- create a user account, login
-- Login, forgot pw, chnage pw, change username (can't have duplicate emails).
-- account information needs to be secure.
-- Able to view & order products / services
-- using filters to choose products / services
-- order(customerNo, order_id, order_details, products in this order)
-- order confirmation -> PDF To EMAIL
-- store bill in DB (No real transactions)
 - shopping cart, past purchases, show products in your basket.....
 -----------
 ### Technical requirements:

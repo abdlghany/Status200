@@ -286,7 +286,7 @@ input[type=number] {
 .product p{
     width: 300px;
     height: 36px;
-    -webkit-line-clamp: 2; /* Limit number of lines to 2 (overwrite existing limit to 1)*/
+    -webkit-line-clamp: 2; /* Limit number of lines to 2 */
 }
 
 .product img{
@@ -614,14 +614,29 @@ input[type=number] {
 }
 .cart-item-info h3,
 .variation-quantity-price p,
-.product p{
+.product p,
+.productLinkInHistory{
     overflow: hidden;
     text-overflow: ellipsis;
     display: -webkit-box;
-    -webkit-line-clamp: 1; /* Limit number of lines to 1 */
     -webkit-box-orient: vertical;
 }
-
+#historyTableHead{
+    position: sticky;
+    top: 3.4rem;
+    background-color: #0D0D0D;
+}
+#historyTableHead th{
+    padding: 25px ;
+}
+.cart-item-info h3,
+.variation-quantity-price p,
+.product p{
+    -webkit-line-clamp: 1; /* Limit number of lines to 1 */
+}
+.productLinkInHistory{
+    -webkit-line-clamp: 2; /* Limit number of lines to 2 */
+}
 .cart-item-price label{
     font-size: 1.2rem;
     font-weight: bold;
