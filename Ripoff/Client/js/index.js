@@ -1,5 +1,4 @@
 const navigationBar = getElementById("navigationBar");
-const categories = getElementById("categories");
 const domain = "http://ripoff.local:3000";
 // 1-2 cities per state...
 const stateCityData = {
@@ -94,6 +93,7 @@ function axiosQuery(urlExtension, callback){
 }
 
 function loadMainMenu(){
+    const categories = getElementById("categories");
     axiosQuery("/index", function(response){
         const responseCategories = response.data;
         responseCategories.forEach(function(category){

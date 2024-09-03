@@ -297,7 +297,7 @@ function fetchProducts() {
                     categoryNameHeader.textContent = responseProducts[0].category_name;
                 }
                 else if(searchValue){
-                    categoryNameHeader.textContent = "Search results for '"+ searchValue.toLowerCase()+"'";
+                    categoryNameHeader.textContent = "Showing search results for '"+ searchValue.toLowerCase()+"'";
                     const navigationSearch = getElementById("navigationSearch");
                     navigationSearch.value = searchValue.toLowerCase();
                     if(responseProducts.message == "Product not found"){

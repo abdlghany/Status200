@@ -255,7 +255,7 @@ function orderHistory(){
 
 function fetchOrderHistory() {
     axiosQuery("/orderHistory?id=" + localStorage.getItem('id'), function (results) {
-        // Columns: (order_id, product, variation, price, quantity, date, total_order_price, status, receipt)
+        // Columns: (order_id, product (name), product_id variation, price, quantity, date, total_order_price, status, receipt)
         const history = results.data;
         const ordersList = [];
 
@@ -279,6 +279,7 @@ function fetchOrderHistory() {
             // Add the current (variation) to the corresponding order
             existingOrder.items.push({
                 product: item.product,
+                product_id: item.product_id,
                 variation: item.variation,
                 price: item.price,
                 quantity: item.quantity
@@ -303,7 +304,7 @@ function fetchOrderHistory() {
 
                 // Add product, variation, price, and quantity for each item (from order_details)
                 const productCell = document.createElement('td');
-                productCell.textContent = item.product;
+                productCell.innerHTML = "<a class='productLinkInHistory' href='./product.html?product="+item.product_id+"'>"+item.product+"</a>";
                 row.appendChild(productCell);
 
                 const variationCell = document.createElement('td');

@@ -652,11 +652,12 @@ const server = http.createServer(function(request, response) {
             }
             else if (pathname === "/orderHistory" && queryParams) {
                 /* "/orderHistory?id=?"
-                    returned columns: (order_id, product, variation, price, quantity, date, total_order_price, status, receipt)
+                    returned columns: (order_id, product (name), product_id variation, price, quantity, date, total_order_price, status, receipt)
                 */
                 const query = `SELECT 
                                     od.order_id,
                                     p.product_name as product,
+                                    p.product_id,
                                     pv.variation_name AS variation,
                                     od.price,
                                     od.quantity,
