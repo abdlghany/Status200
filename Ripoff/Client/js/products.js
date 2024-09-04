@@ -4,6 +4,7 @@ let currentImageIndex = 0;
 
 // Singular product query for (product.html?product=product_id)
 function fetchProduct(){
+    console.log(localStorage.getItem("id"));
     const productId = getQueryParam('product');
     const urlExtension = "/product?product="+productId;
 
@@ -219,7 +220,7 @@ function addToCart(variationId, maxItemCount){
             return;
         }
         else if(productCountValue <= maxItemCount){
-
+            // no need to display a message when the user inputs more then the available quantity
         }
         // making sure that the value is not bigger than the maxItemCount available for the variation.
         else{

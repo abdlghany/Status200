@@ -27,7 +27,6 @@ function fetchCartItems(){
                 columns: (user_id, variation_id, total_variation_quantity, product_id, variation_name, variation_price, variation_stock, name, image);
             */
             
-             
             cartItems.forEach(function(item){
                 // cart item container
                 const cartItemDiv = document.createElement('div');
@@ -51,6 +50,16 @@ function fetchCartItems(){
                 // Product and Variation Info
                 const infoDiv = document.createElement('div');
                 infoDiv.classList.add('cart-item-info');
+                /* 
+                        TODO:
+                        there's currently a bug in the website that allows the same user to click 
+                        'add to cart' to a product, even if they already have the max quantity available of the specific variation 
+                        in their cart, so this should fix it for now...
+                */
+                var totalQuantityInUserCart = item.total_variation_quantity;
+                if(totalQuantityInUserCart > item.variation_stock){ 
+                    totalQuantityInUserCart = item.variation_stock;                                                 
+                }
                 infoDiv.innerHTML = `
                 <h3><a title="View product" href="./product.html?product=${item.product_id}">${item.product_name}</a></h3>
                 <div class="variation-quantity-price">
@@ -59,14 +68,14 @@ function fetchCartItems(){
                     <p>Price: RM${item.variation_price}</p>
                     <div class="cartProductCountDiv">
                         <button id="${cartLeftProductCountButtonId}" class="cartLeftProductCountButton" title="Decrease quantity">-</button>
-                        <input type="number" value="${item.total_variation_quantity}" id="${cartProductCountInputId}" class="cartProductCount">
+                        <input type="number" value="${totalQuantityInUserCart}" id="${cartProductCountInputId}" class="cartProductCount">
                         <button id="${cartRightProductCountButtonId}" class="cartRightProductCountButton" title="Increase quantity">+</button>
                     </div>
                 </div>`;
                 cartItemDiv.appendChild(infoDiv);
 
                 // Total (Per item) Price + Checkboxes
-                const totalItemPrice = parseFloat(item.variation_price) * parseInt(item.total_variation_quantity);
+                const totalItemPrice = parseFloat(item.variation_price) * parseInt(totalQuantityInUserCart);
                 const priceDiv = document.createElement('div');
                 priceDiv.classList.add('cart-item-price');
                 priceDiv.innerHTML = `<label for="checkbox-${item.variation_id}">Total: RM${totalItemPrice}</label>
@@ -133,7 +142,8 @@ function fetchCartItems(){
         }
         })
         .catch(function(error){
-            console.error('Error fetching cart items:', error);
+            showToast("Error fetching cart items");
+            // console.error('Error fetching cart items:', error);
         });
 }
 function placeOrder(){
@@ -169,19 +179,20 @@ function placeOrder(){
         }
     })
     .catch(function(error) {
-        console.error("Error fetching data:", error);
+        showToast("Error placing your order");
     });
 }
 // check all checkboxes in the shopping cart
 function checkAll(cartCheckboxes, state){
     for(let i=0; i<cartCheckboxes.length; i++){
-        cartCheckboxes[i].checked = state;
-        if(state){
-            addToTotal(parseFloat(cartCheckboxes[i].value), state);
-        }else{
-            addToTotal(-parseFloat(cartCheckboxes[i].value), state);
-        }
-        
+        if(cartCheckboxes[i].checked != state){ // Prevent select all from selecting/deselecting already selected/deselected item
+            cartCheckboxes[i].checked = state;
+            if(state){
+                addToTotal(parseFloat(cartCheckboxes[i].value), state);
+            }else{
+                addToTotal(-parseFloat(cartCheckboxes[i].value), state);
+            }
+        }       
     }
 }
 // adds to the total selected (item count, price sum) Shopping cart 
