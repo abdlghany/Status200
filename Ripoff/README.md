@@ -84,9 +84,11 @@ Ripoff is a webshop that was made especially to rip people off and steal their m
 
 - Install node.js from [https://nodejs.org/en/download/prebuilt-installer](https://nodejs.org/en/download/prebuilt-installer)
 
-- Clone this repo to
-```/xampp/htdocs/HERE```
-- Launch XAMPP, startup the Apache and MySQL services, then Import the database from [ripoff.sql](./Server/ripoff.sql) into your MySQL at [localhost/phpmyadmin](localhost/phpmyadmin)
+- Clone the repo: open command prompt and navigate to
+```/xampp/htdocs/```
+then run the command
+``` git clone https://github.com/abdlghany/Status200 ```
+- Launch XAMPP, startup the Apache and MySQL services, then Import the database and its tables from [ripoff.sql](./Server/ripoff.sql) into your MySQL database at [localhost/phpmyadmin](localhost/phpmyadmin)
 
 - navigate to [/xampp/htdocs/Status200/Ripoff/Server/](/xampp/htdocs/Status200/Ripoff/Server/) and open a command prompt there, then run the command
 ```bash
@@ -104,12 +106,9 @@ in your command prompt
 [localhost/Status200/Ripoff/Client](http://localhost/Status200/Ripoff/Client) (The link might differ for you).
 
 
-
 ## Documentations for the used PDF Node Module.
 
-### PDF Example
-
-
+Importing the file into the app
 ```js
 import PDFDocument from'pdfkit';
 import fs from 'fs';
