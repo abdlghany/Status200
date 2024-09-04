@@ -31,6 +31,8 @@ function fetchProduct(){
                         [variations (Query3)]
                     ]
         */
+            // Server returns Product not found if the rows of Query2 were 0.
+            if(response.data.message != "Product not found"){
             const productImages = response.data[0];
             const products = response.data[1];
             const variations = response.data[2];
@@ -189,6 +191,12 @@ function fetchProduct(){
                     productCount.value = 0;
                 }
             }
+        }
+        else{
+            // redirect the user back to the products page because this product does not exist.
+            // (maybe the user manually entered a wrong product ID in the URL parameter?) Example: "/product.html?product=310" << will not show an empty product page now.
+            window.location.assign("./products.html");
+        }
         });
     }
     // if there's no productId, navigate to the products page because this product does not exist.
@@ -249,7 +257,7 @@ function changeStockCount(newCount, newPrice){
 function fetchProducts() {
     //get query parameters
     const categoryId = getQueryParam('category');
-    const searchValue = getQueryParam('search');
+    var searchValue = getQueryParam('search');
     var order_by = getQueryParam('order_by');
     // get relevant HTML elements from products.html
     const productsDiv = getElementById("products");
@@ -310,22 +318,18 @@ function fetchProducts() {
     
     axiosQuery(urlExtension, function(response){
         const responseProducts = response.data;
+        const navigationSearch = getElementById("navigationSearch");
                 /* 
                     responseproducts.product's values include: id, name, sold, category_name, category_id, image, created_at, price, is_active
                  */
-                if(responseProducts){
+                if(!responseProducts.message){
                     if(categoryId){
                         categoryNameHeader.textContent = responseProducts[0].category_name;
                     }
                     // if the search bar is used.
                     else if(searchValue){
                         categoryNameHeader.textContent = "Showing search results for '"+ searchValue+"'";
-                        const navigationSearch = getElementById("navigationSearch");
                         navigationSearch.value = searchValue;
-                        if(responseProducts.message == "Product not found"){
-                            categoryNameHeader.textContent = "There are no results for your search '"+ searchValue+"'";
-                            return
-                        }
                     }
                     else{
                         categoryNameHeader.textContent = "All Products";
@@ -355,9 +359,13 @@ function fetchProducts() {
                         else sortBy.value = "";
                     });
                 }
+                else if(responseProducts.message == "No search results"){
+                    categoryNameHeader.textContent = "There are no results for your search '"+ searchValue+"'";
+                    navigationSearch.value = searchValue; // keep the search bar filled with the search value
+                }
                 else{
-                    // redirect the user to the products page if the server did not respond 
-                    // (maybe the user manually entered a wrong category ID in the URL parameter?) Example case: "/products.html?category=200"
+                    // Redirect the user to 'All Products' page if the server returned 'category not found', if a certain category was deleted and someone has it favorited (?)
+                    // (maybe the user manually entered a wrong category ID in the URL parameter?) Example case: "/products.html?category=200" << will not show an empty category page now.
                     window.location.assign("./products.html");
                 }
     });

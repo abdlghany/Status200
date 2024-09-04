@@ -255,6 +255,7 @@ const server = http.createServer(function(request, response) {
         }
         else if (pathname === "/products") {
             var parameters = [];
+            var searchMessage = false;
                 var query = [`SELECT DISTINCT 
                                 p.product_id as id,
                                 p.product_name as name,
@@ -287,9 +288,14 @@ const server = http.createServer(function(request, response) {
                 query.push(`AND ci.category_id = ? `);
                 parameters.push(queryParams.get("category_id"));
             }
-            // if search Parameters contain Search, then add this to the query.
+            // if search Parameters contain Search, then add this to the query, search product name and description.
             if(queryParams.get("search")){
-                query.push('AND (LOWER(p.product_name) LIKE LOWER("%'+queryParams.get("search")+'%") OR LOWER(p.product_description) LIKE LOWER("%'+queryParams.get("search")+'%")) ')
+                searchMessage = true;
+                // split the search query and search one word at a time
+                const searchArray = queryParams.get("search").split(" "); 
+                searchArray.forEach(function(searchParameter){
+                    query.push('AND (LOWER(p.product_name) LIKE LOWER("%'+searchParameter+'%") OR LOWER(p.product_description) LIKE LOWER("%'+searchParameter+'%")) ')
+                }); 
             }
             // if searchParameters contain order_by
             if(queryParams.get("order_by")){
@@ -316,7 +322,11 @@ const server = http.createServer(function(request, response) {
                     return;
                 }else if(results.length == 0){
                     response.writeHead(200, { "Content-Type": "application/json" });
-                    response.end(JSON.stringify({ message: "Product not found" }));
+                    if(searchMessage){
+                        response.end(JSON.stringify({ message: "No search results" }));
+                    }else{
+                        response.end(JSON.stringify({ message: "Category not found" }));
+                    }
                     return;
                 }
                     response.writeHead(200, { "Content-Type": "application/json" });
@@ -359,12 +369,18 @@ const server = http.createServer(function(request, response) {
             ];
             //console.log("query:", query, "Parameters: ", parameters);
             db.query(query,parameters, function(err, results) {
-                if (err || results.length == 0) {
+                if (err) {
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    response.end(JSON.stringify({ message: "Address Not found." }));
+                    response.end(JSON.stringify({ message: "Error while fetching product ", err }));
                     return;
                 }
-                //console.log("results:", results);
+                // 2nd query returns the product name and desc based on its id, if it returns nothing, that means the product doesn't exist (invalid ID)
+                else if(results[1].length == 0){
+                    response.writeHead(200, { "Content-Type": "application/json" });
+                    response.end(JSON.stringify({ message: "Product not found" }));
+                    
+                    return;
+                }
                     response.writeHead(200, { "Content-Type": "application/json" });
                     response.end(JSON.stringify(results));
             });
@@ -381,7 +397,7 @@ const server = http.createServer(function(request, response) {
             db.query(query,parameters, function(err, results) {
                 if (err || results.length == 0) {
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    console.log("Inserting into shopping cart failed at: " + Date.now());
+                    console.error("Inserting into shopping cart failed at: " + Date.now());
                     response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                     return;
                 }
@@ -428,7 +444,7 @@ const server = http.createServer(function(request, response) {
             db.query(query,parameters, function(err, results) {
                 if (err) {
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    console.log("Fetching cart items (/fetchCartItems) failed at: " + Date.now());
+                    console.error("Fetching cart items (/fetchCartItems) failed at: " + Date.now());
                     response.end(JSON.stringify({ message: "Internal server error '/fetchCartItems', try again later" }));
                     return;
                 }
@@ -452,7 +468,7 @@ const server = http.createServer(function(request, response) {
             db.query(query,parameters, function(err, results) {
                 if (err || results.affectedRows == 0) {
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    console.log("Updating shopping cart for user_id "+queryParams.get("id")+" failed at: " + Date.now());
+                    console.error("Updating shopping cart for user_id "+queryParams.get("id")+" failed at: " + Date.now());
                     response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                     return;
                 }
@@ -466,7 +482,7 @@ const server = http.createServer(function(request, response) {
                 db.query(query2, parameters2, function(err, results){
                     if(err || results.length == 0){
                         response.writeHead(500, { "Content-Type": "application/json" });
-                        console.log("Inserting Into shopping cart (updateCartItemCount) for user_id "+queryParams.get("id")+" failed at: " + Date.now());
+                        console.error("Inserting Into shopping cart (updateCartItemCount) for user_id "+queryParams.get("id")+" failed at: " + Date.now());
                         response.end(JSON.stringify({ message: "Internal server error '/updateCartItemCount', try again later" }));
                         return;
                     }
@@ -685,7 +701,7 @@ const server = http.createServer(function(request, response) {
                 db.query(query,parameters, function(err, results) {
                     if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
-                        console.log("Fetching cart items (/orderHistory) failed at: " + Date.now());
+                        console.error("Fetching cart items (/orderHistory) failed at: " + Date.now());
                         response.end(JSON.stringify({ message: "Internal server error '/orderHistory', try again later" }));
                         return;
                     }
@@ -709,7 +725,7 @@ const server = http.createServer(function(request, response) {
                 db.query(query,parameters, function(err, results) {
                     if (err) {
                         response.writeHead(500, { "Content-Type": "application/json" });
-                        console.log("Inserting into shopping cart failed at: " + Date.now());
+                        console.error("Inserting into shopping cart failed at: " + Date.now());
                         response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                         return;
                     }else if(results.length == 0){
@@ -736,7 +752,7 @@ const server = http.createServer(function(request, response) {
                  db.query(query,parameters, function(err, results) {
                      if (err) {
                          response.writeHead(500, { "Content-Type": "application/json" });
-                         console.log("Inserting into shopping cart failed at: " + Date.now());
+                         console.error("Inserting into shopping cart failed at: " + Date.now());
                          response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                          return;
                      }else if(results.length == 0){
@@ -758,7 +774,7 @@ const server = http.createServer(function(request, response) {
                             db.query(query2, parameters2, function(err2, results2){
                                 if(err2 || results2.length == 0){
                                     response.writeHead(500, { "Content-Type": "application/json" });
-                                    console.log("Resetting user password failed at: " + Date.now());
+                                    console.error("Resetting user password failed at: " + Date.now());
                                     response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                                     return;
                                 }
