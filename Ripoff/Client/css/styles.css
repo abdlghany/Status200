@@ -2,10 +2,10 @@
 body, html{
     padding: 0;
     margin: 0;
-    background-color:#1C1C1C;
-    font-family: sans-serif; 
+    background-color:#1C1C1C; /* in case of empty divs, don't leave the background white. */
+    font-family: sans-serif; /* whole website font */
 }
-/* overwrite the sans-serif with seriffor headers */
+/* overwrite the sans-serif with serif for headers */
 h1, h2, h3, h4{
     font-family: serif;
 }
@@ -14,7 +14,7 @@ nav {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background-color: #0D0D0D;
+    background-color: #0D0D0D; /* slightly darker than the body bg */
     position: fixed;
     top: 0;
     right: 0;
@@ -48,9 +48,21 @@ nav {
 .cart-item-info a,
 .productLinkInHistory{
     text-decoration: none;
-    color: #E0E0E0;
 }
-.nav-li span {
+.nav-li span,
+#addresses_profile_body h2,
+#userProfile a,
+table,
+.nav-li a,
+#category a,
+.nav-li p,
+#sort a,
+#categoryName,
+.cart-item-info a,
+.productLinkInHistory,
+table a,
+table a:visited,
+#variationPrice {
     color: #E0E0E0;
 }
 .separator{
@@ -61,7 +73,8 @@ nav {
 #sort a:hover,
 #description #categoryName:hover,
 .cart-item-info a:hover,
-#historyTableBody a:hover{
+#historyTableBody a:hover,
+#userProfile a:hover{
     color: #AAAAAA;
 }
 /* navbar lists' contents styles here */
@@ -160,9 +173,6 @@ nav {
     padding-left: 10px;
 }
 /* text color of table contents */
-table{
-    color: #E0E0E0;
-}
 
 td {
     padding: 0 15px;
@@ -188,9 +198,7 @@ table input, table Select{
 table Select, #sort select, #sort label{
     height: 3rem;
 }
-table a, table a:visited{
-    color: #E0E0E0;
-}
+
 .tdSelect{
     padding-bottom: 1.5rem;
 }
@@ -255,13 +263,9 @@ input[type=number] {
 #addresses_profile_body{
     display: none;
     width: 100%;
-    padding: 0 1rem;
+    padding: 3rem 1rem;
 }
 
-#addresses_profile_body h2,
-#userProfile a {
-    color: white;
-}
 #categoryName{
     text-align: center;
     margin-top:3rem;
@@ -351,8 +355,6 @@ input[type=number] {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100%;
-    height: 100%;
     object-fit: contain;
     z-index: 1;
 }
@@ -454,14 +456,14 @@ input[type=number] {
     background-color: white;
 }
 
-#productImageContainer {
+#productImageContainer,
+.productImage,
+.soldout-overlay {
     width: 100%;
     height: 100%;
 }
 
 .productImage {
-    width: 100%;
-    height: 100%;
     object-fit: contain;
     position: absolute;
     top: 0;
@@ -473,7 +475,7 @@ input[type=number] {
     top: 50%;
     transform: translateY(-50%);
     background-color: rgba(0, 0, 0, 0.5);
-    color: white;
+    color: #E0E0E0;
     border: none;
     font-size: 2rem;
     padding: 0 10px;
@@ -549,7 +551,7 @@ input[type=number] {
     visibility: hidden;
     min-width: 200px;
     margin-left: -100px; 
-    background-color: rgba(0, 0, 0, 0.8); /* Slightly transparent background */
+    background-color: rgba(0, 0, 0, 0.8); /* slightly transparent background */
     color: #fff;
     text-align: center;
     border-radius: 5px;
@@ -565,7 +567,7 @@ input[type=number] {
 
 #toast.show {
     visibility: visible; /* Show the toast */
-    opacity: 1; /* Fully opaque */
+    opacity: 1;
 }
 
 /* cart related CSS */
@@ -716,5 +718,4 @@ table {
 #variationPrice{
     font-weight: bold;
     font-size: 1.5rem;
-    color: #E0E0E0;
 }

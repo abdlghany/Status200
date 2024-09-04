@@ -1,30 +1,30 @@
 // This js file is designed to work with ./products.html & product.html
 let images = [];
 let currentImageIndex = 0;
-var maxAvailableQuantity = 0
 
 // Singular product query for (product.html?product=product_id)
 function fetchProduct(){
     const productId = getQueryParam('product');
     const urlExtension = "/product?product="+productId;
+
     const productImageContainer = getElementById('productImageContainer');
     const productNameHeader = getElementById('productName');
     const productVariationsUl = getElementById('productVariationsUl');
     const productDesc = getElementById('productDesc');
     const soldParagraph = getElementById('productSold');
     const variationPrice = getElementById('variationPrice');
+    var maxAvailableQuantity = 0
     //if there's a productId fetch the data from the server and display it
     if(productId){
         axiosQuery(urlExtension, function(response){
             /* 
-            **casually execute 3 Queries and return the results as follows**
+            ** executes 3 Queries and returns the results as follows **
 
             Query1 productImages = returned columns (image_id, image).
 
             Query2 products = returned columns (product_id, product_name, product_description, category_id, created_at, sold, product_is_active, category_name)
 
             Query3 variations = returned columns (product_id, variation_id, variation_name, variation_price, variation_stock, variation_is_active)
-
             response: [
                         [productImages (Query1)],
                         [products (Query2)],
@@ -34,25 +34,26 @@ function fetchProduct(){
             const productImages = response.data[0];
             const products = response.data[1];
             const variations = response.data[2];
-
+            // Left and right arrows for images
+            const leftArrow = document.getElementsByClassName('leftArrow');
+            const rightArrow = document.getElementsByClassName('rightArrow');
             // PRODUCT IMAGES
             productImages.forEach(function(image, index){
-                const leftArrow = document.getElementsByClassName('leftArrow');
-                const rightArrow = document.getElementsByClassName('rightArrow');
+                // Create a new HTML element for each product image we have.
                 const img = document.createElement("img");
                 img.src= image.image;
                 img.classList.add("productImage");
                 // hide all images after the first one.
                 img.style.display = "none";
                 productImageContainer.appendChild(img);
-                // add this image to the list of global images in this file.
+                // add this image to the list of global images in this file (page).
                 images[index] = img;
-                //this will hide the arrows on the first loop pass 
+                // hide the arrows on the first loop pass 
                 if(index == 0){
                     leftArrow[0].classList.add('display_none');
                     rightArrow[0].classList.add('display_none'); 
                 }
-                //then display them if there's more than 1 image in the database. (index = 1 on the second pass.)
+                // display them if there's more than 1 image in the database. (index = 1 on the second pass.)
                 else{
                 leftArrow[0].classList.remove('display_none');
                 rightArrow[0].classList.remove('display_none');
@@ -61,30 +62,33 @@ function fetchProduct(){
 
             // PRODUCTS: Since there's only 1 product, there's no need for a forEach loop.
             productNameHeader.innerText = products[0].product_name;
-            //ADD SUPPORT FOR 1 IMAGE (HIDE THEM ARROWS FROM THE VIEW).
             productDesc.innerHTML = products[0].product_description
             categoryName.innerHTML += products[0].category_name
+            // add a category link to its label
             categoryName.href = "./products.html?category="+products[0].category_id;
+            // Sold Out image if the product is not active
             if(products[0].product_is_active == 0){
                 const soldOutImage = document.createElement("img");
                 soldOutImage.src = "./img/soldout.png";
                 soldOutImage.classList.add("soldout-overlay");
                 productImageContainer.appendChild(soldOutImage);
             }
+            // No. of items sold
             if(products[0].sold){
                 soldParagraph.innerHTML = products[0].sold + " Sold";
             }
             else{
-                soldParagraph.innerHTML = "0 Sold";
+                soldParagraph.innerHTML = "0 Sold"; /* Default value if no value returned from the DB */
             }
-           /* console.log(products[0].sold); */
+
             // PRODUCT VARIATIONS.
             var variationsStock = 0;
-            variations.forEach(function(variation, index){
+            variations.forEach(function(variation){
                 const li = document.createElement('li');
                 const radio = document.createElement('input');
                 const label = document.createElement('label');
                 const addToCartButton = getElementById('addToCartButton');
+
                 const variationId = variation.variation_id;
                 const availableQuantity = variation.variation_stock;
                 // Radio button that'll allow the user to select a variation
@@ -167,11 +171,13 @@ function fetchProduct(){
                     changeProductCount(1, 'productCount', maxAvailableQuantity);
                 }
             }
-            //shows Image number 'currentImageIndex' which is Image 1 and hide the rest
+            // shows Image number 'currentImageIndex' which is Image[0] and hide the rest
             showImage(currentImageIndex);
+            // Input field type="number" id="productCount"
             const productCount = getElementById('productCount');
             productCount.onchange = function(){
-                //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than the maxAvailableQuantity
+                // do not allow values less than 0 when the user changes this field's value manually
+                // also do not allow values higher than the maxAvailableQuantity
                 if(productCount.value > maxAvailableQuantity){
                     productCount.value = maxAvailableQuantity;
                 }
@@ -179,7 +185,7 @@ function fetchProduct(){
                     productCount.value = 0;
                 }
                 else if(!productCount.value){
-                    // do not allow an empty field, fill it witl 0
+                    // do not allow an empty field, fill it with 0
                     productCount.value = 0;
                 }
             }
@@ -190,16 +196,17 @@ function fetchProduct(){
         window.location.assign("./products.html");
     }
 }
-
+// runs after the Add to cart button is clicked
 function addToCart(variationId, maxItemCount){
     if(localStorage.getItem("id")){
-        // if the user is logged in, and the maximum count of the selected variation is bigger or equals to the amount they're trying to add to cart, add to cart
+        // if the user is logged in, and the maximum count of the selected variation is bigger or equals to the amount they're trying to add to cart
+        // add to cart
         const productCountInput = getElementById('productCount');
         const productCountValue = productCountInput.value;
-        //reset all text in the errorMessage paragraph to prepare for a new message (if any).
+        // reset all text in the errorMessage paragraph to prepare for a new message (if any).
         resetMessages(['errorMessage']);
         if(productCountValue <= 0){
-            // faintly colored error message to not draw the user's attention away from the product
+            // faintly colored error message to not draw the user's attention away from the product itself
             passMessageToElement("errorMessage", "Quantity can't be lower than 1.", "gray", 1);
             return;
         }
@@ -283,6 +290,7 @@ function fetchProducts() {
     }
     if(searchValue){
         urlExtension += "&search=" + searchValue;
+        searchValue = searchValue.toLowerCase()
     }
     axiosQuery("/index",function(response){
         const responseCategories = response.data;
@@ -305,43 +313,53 @@ function fetchProducts() {
                 /* 
                     responseproducts.product's values include: id, name, sold, category_name, category_id, image, created_at, price, is_active
                  */
-                if(categoryId){
-                    categoryNameHeader.textContent = responseProducts[0].category_name;
-                }
-                else if(searchValue){
-                    categoryNameHeader.textContent = "Showing search results for '"+ searchValue.toLowerCase()+"'";
-                    const navigationSearch = getElementById("navigationSearch");
-                    navigationSearch.value = searchValue.toLowerCase();
-                    if(responseProducts.message == "Product not found"){
-                        categoryNameHeader.textContent = "There are no results for your search '"+ searchValue.toLowerCase()+"'";
-                        return
+                if(responseProducts){
+                    if(categoryId){
+                        categoryNameHeader.textContent = responseProducts[0].category_name;
                     }
-                }
-                else categoryNameHeader.textContent = "All Products";
-                // Loop through products and display them in productsDiv one by one
-                responseProducts.forEach(function(product) {
-                    const productDiv = document.createElement("div");
-                    // get the first 2 words of a product's name and set them as img alt if it fails to load.
-                    var productName = product.name.split(' ');
-                    productName = productName[0]+" "+ productName[1] + " image" 
-                    productDiv.innerHTML = "<img src='"+ product.image+"' alt='"+ productName+"'><div class='product_text'><p class='product_name'>"+ product.name+"</p><div class='product_footer'><p class='product_price'>RM"+ product.price+"</p><p class='product_sold'>"+product.sold+" Sold</p></div></div>";
-                    productDiv.style.cursor = "pointer";
-                    // product(S)Div below me (parent of productDiv).
-                    productsDiv.appendChild(productDiv);
-                    productDiv.title = "View product";
-                    productDiv.classList.add("product");
-                    productDiv.onclick = function(){
-                        window.location.assign("./product.html?product="+product.id);
-                    };
-                    //use image sold out on top of the product picture to indicate that it's been sold out.
-                    if (product.is_active === 0) {
-                        productDiv.innerHTML += "<img src='./img/soldout.png' class='soldout-overlay'>";
+                    // if the search bar is used.
+                    else if(searchValue){
+                        categoryNameHeader.textContent = "Showing search results for '"+ searchValue+"'";
+                        const navigationSearch = getElementById("navigationSearch");
+                        navigationSearch.value = searchValue;
+                        if(responseProducts.message == "Product not found"){
+                            categoryNameHeader.textContent = "There are no results for your search '"+ searchValue+"'";
+                            return
+                        }
                     }
-                    const sortBy = getElementById("sortBy");
-                    if(getQueryParam('order_by'))
-                        sortBy.value = getQueryParam('order_by');
-                    else sortBy.value = "";
-                });
+                    else{
+                        categoryNameHeader.textContent = "All Products";
+                    }
+                    // Loop through products and display them in productsDiv one by one
+                    responseProducts.forEach(function(product) {
+                        const productDiv = document.createElement("div");
+                        // get the first 2 words of a product's name and set them as img alt if it fails to load.
+                        var productName = product.name.split(' ');
+                        productName = productName[0]+" "+ productName[1] + " image" 
+                        productDiv.innerHTML = "<img src='"+ product.image+"' alt='"+ productName+"'><div class='product_text'><p class='product_name'>"+ product.name+"</p><div class='product_footer'><p class='product_price'>RM"+ product.price+"</p><p class='product_sold'>"+product.sold+" Sold</p></div></div>";
+                        productDiv.style.cursor = "pointer";
+                        // product(S)Div below me (parent of productDiv).
+                        productsDiv.appendChild(productDiv);
+                        productDiv.title = "View product";
+                        productDiv.classList.add("product");
+                        productDiv.onclick = function(){
+                            window.location.assign("./product.html?product="+product.id);
+                        };
+                        //use image sold out on top of the product picture to indicate that it's been sold out.
+                        if (product.is_active === 0) {
+                            productDiv.innerHTML += "<img src='./img/soldout.png' class='soldout-overlay'>";
+                        }
+                        const sortBy = getElementById("sortBy");
+                        if(getQueryParam('order_by'))
+                            sortBy.value = getQueryParam('order_by');
+                        else sortBy.value = "";
+                    });
+                }
+                else{
+                    // redirect the user to the products page if the server did not respond 
+                    // (maybe the user manually entered a wrong category ID in the URL parameter?) Example case: "/products.html?category=200"
+                    window.location.assign("./products.html");
+                }
     });
 }
 // Sory by <select> in Products.html page
@@ -354,8 +372,6 @@ function sortBy() {
     window.location.assign("./products.html?" + urlParameters.toString()+"&order_by="+ sortByValue);
 }
 
-
-//querySelectorAll Returns all element descendants of the element that matches selectors
 function showImage(index) {
     images.forEach(function(img, i){
         if(i == index){
@@ -389,4 +405,3 @@ function nextImage() {
     }
     showImage(currentImageIndex);
 }
-

@@ -112,7 +112,7 @@ const server = http.createServer(function(request, response) {
                 var query = "UPDATE USERS SET email = ?, first_name = ?, last_name = ?, phone = ? ";
                 var parameters = [queryParams.get('email'), queryParams.get('firstName'), queryParams.get('lastName'), queryParams.get('phone')];
                 // Either there's a password change, get the password and old password (current), then put user_id.
-                var message = "No changes";
+                var message = "No changes have been made";
                 if (queryParams.get('password')) {
                     query += ", password = ? WHERE password = ? AND user_id = ?";
                     parameters.push(queryParams.get('password'));
@@ -166,7 +166,8 @@ const server = http.createServer(function(request, response) {
             queryParams.get('address_id')
         ];
         // otherwise the user is adding a new address to the list of their addresses! so the query is insert and not update.
-        }else{
+        }
+        else{
             //Table: users_addresses (`address_id`, `user_id`, `street`, `city`, `state`, `country`, `zip_code`, `label`)
          query = "INSERT INTO users_addresses VALUES (NULL, ?, ?, ?, ?, ?, ?, ?)";
          parameters = [

@@ -8,7 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 </head>
 <body>
-    <nav id="navigationBar"></nav>
+    <nav id="navigationBar"><!-- the navigation bar will be loaded here --></nav>
 
     <div id="mainContent">
         <span class="center"><h1 class="inline selected" id="shoppingCartHeader" onclick="javascript:shoppingCart();">Shopping Cart</h1><h1 class="inline separator">|</h1><h1 class="inline notSelected" id="historyHeader" onclick="javascript:orderHistory();">Order History</h1></span>
@@ -30,12 +30,12 @@
                     </tr>
                 </thead>
                 <tbody id="historyTableBody">
-                    <!-- Order history will be dynamically inserted here -->
+                    <!-- Order history will be loaded here -->
                 </tbody>
             </table>
         </div>
     </div>    
-    <div id="toast">Empty, invisible toast message</div>
+    <div id="toast">Empty, invisible toast message (well it's not really empty is it? because it contains this message now)</div>
     <script src="./js/functions.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/cart.js"></script>

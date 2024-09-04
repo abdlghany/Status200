@@ -72,9 +72,9 @@ Ripoff is a webshop that was made especially to rip people off and steal their m
 
 ![Add new address page picture](Screenshots/addaddress.png)
 
-### Edit address page [editaddress.html](Client/editaddress.html)
+### Edit address (Same HTML page as add)
 
-![Edit address page picture](Screenshots/editaddress.png)
+![Edit address picture](Screenshots/editaddress.png)
 
 
 
@@ -84,7 +84,9 @@ Ripoff is a webshop that was made especially to rip people off and steal their m
 
 - Install node.js from [https://nodejs.org/en/download/prebuilt-installer](https://nodejs.org/en/download/prebuilt-installer)
 
-- Clone this repo to /xampp/htdocs/HERE, then launch XAMPP startup the Apache and MySQL services, then Import the database [ripoff.sql](./Server/ripoff.sql) into your MySQL at [localhost/phpmyadmin](localhost/phpmyadmin)
+- Clone this repo to
+```/xampp/htdocs/HERE```
+- Launch XAMPP, startup the Apache and MySQL services, then Import the database from [ripoff.sql](./Server/ripoff.sql) into your MySQL at [localhost/phpmyadmin](localhost/phpmyadmin)
 
 - navigate to [/xampp/htdocs/Status200/Ripoff/Server/](/xampp/htdocs/Status200/Ripoff/Server/) and open a command prompt there, then run the command
 ```bash
@@ -98,7 +100,8 @@ Connected to the database.
 ```
 in your command prompt
 
-- Congratulations! the server is now running and you can navigate to [localhost/Status200/Ripoff/Client](localhost/Status200/Ripoff/Client) to test it (The link might differ for you).
+- Congratulations! the server is now running and you can access the website via this link 
+[localhost/Status200/Ripoff/Client](http://localhost/Status200/Ripoff/Client) (The link might differ for you).
 
 
 

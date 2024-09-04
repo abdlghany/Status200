@@ -18,22 +18,22 @@
             </div>
             <div id="productDetails">
                 <h2 id="productName"></h2>
-                <p id="productSold"></p>
-                <p id="variationPrice"><!-- Variation price will load here --></p>
+                <p id="productSold"><!-- Product price will be loaded here --></p>
+                <p id="variationPrice"><!-- Variation price will be loaded here --></p>
                 <div id="productVariations">
                     <ul id="productVariationsUl"></ul>
                 </div>
-                <!-- Had to add this class for contents to be on the same line... -->
+                <!-- this class keeps contents on the same line (stock count and add to cart div)... -->
                 <div id="parentOfProductAddtoCart">
                     <div id="productAddtoCart">
                         <button id="leftProductCountButton" title="Decrease quantity">-</button>
                         <input type="number" name="productCount" id="productCount" value="0" max="999">
                         <button id="rightProductCountButton" title="Increase quantity">+</button>
                     </div>
-                    <p id="variationStock"><!-- No. items will load here --></p>
+                    <p id="variationStock"><!-- No. items will be loaded here --></p>
                 </div>
                 <button id="addToCartButton" title="Add to cart">ADD TO CART</button>
-                <p id="errorMessage"></p>
+                <p id="errorMessage"><!-- An error/success message will appear here (if needed) --></p>
             </div>
             <div id="description">
                 <h3>Description</h3>
@@ -42,7 +42,7 @@
             </div>
         </div>
     </div>
-    <div id="toast">Empty, invisible toast message</div>
+    <div id="toast">Empty, invisible toast message (well it's not really empty is it? because it contains this message now)</div>
     <script src="./js/functions.js"></script>
     <script src="./js/index.js"></script>
     <script src="./js/products.js"></script>

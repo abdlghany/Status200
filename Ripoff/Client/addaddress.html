@@ -15,7 +15,7 @@
                 <thead>
                     <tr>
                         <td colspan="2">
-                            <h2>Add an Address</h2>
+                            <h2 id="addAddressHeader">Add an Address</h2>
                         </td>
                     </tr>
                 </thead>
@@ -35,7 +35,7 @@
                             <input type="text" name="address_label" id="address_label" placeholder="Work, Home, Moms place..."onfocus="this.select()">
                         </td>
                         <td>
-                            <span class="errorMessage" id="address_labelError">Filler text that's invisible to the naked eye</span>
+                            <span class="errorMessage" id="address_labelError">Filler text that's invisible to the naked eye<!-- Default opacity 0 --></span>
                         </td>
                     </tr>
                     <tr>
@@ -52,7 +52,7 @@
                             <input type="text" name="street" id="street" placeholder="5-9-3E, Block E, Sultan Abdulaziz..."onfocus="this.select()">
                         </td>
                         <td>
-                            <span class="errorMessage" id="streetError"></span>
+                            <span class="errorMessage" id="streetError"><!-- Default opacity 0 --></span>
                         </td>
                     </tr>
                     <tr>
@@ -72,7 +72,7 @@
                             </Select>
                         </td>
                         <td class="tdSelect">
-                            <span class="errorMessage" id="countryError"></span>
+                            <span class="errorMessage" id="countryError"><!-- Default opacity 0 --></span>
                         </td>
                     </tr>
                     <!-- State -->
@@ -87,7 +87,7 @@
                             </Select>
                         </td>
                         <td class="tdSelect">
-                            <span class="errorMessage" id="stateError"></span>
+                            <span class="errorMessage" id="stateError"><!-- Default opacity 0 --></span>
                         </td>
                     </tr>
                     <!-- City -->
@@ -102,7 +102,7 @@
                             </Select>
                         </td>
                         <td class="tdSelect">
-                            <span class="errorMessage" id="cityError"></span>
+                            <span class="errorMessage" id="cityError"><!-- Default opacity 0 --></span>
                         </td>
                     </tr>
                     <!-- Zipcode -->
@@ -114,7 +114,7 @@
                             <input type="text" name="zipcode" id="zipcode" placeholder="40100, 50201..."onfocus="this.select()">
                         </td>
                         <td>
-                            <span class="errorMessage" id="zipcodeError"></span>
+                            <span class="errorMessage" id="zipcodeError"><!-- Default opacity 0 --></span>
                         </td>
                     </tr>
                     <tr>
@@ -126,13 +126,13 @@
                     <tr>
                         <td></td>
                         <td>
-                            <button onclick="javascript:addAddress()" title="Add Address">Add Address</button>
+                            <button onclick="javascript:addAddress()" title="Add Address" id="addAddressButton">Add Address</button>
                         </td>
                         <td></td>
                     </tr>
                     <tr>
                         <td></td>
-                        <td><p id="errorMessage">All information are correct</p></td>
+                        <td><p id="errorMessage">All information are correct<!-- Default opacity 0 --></p></td>
                     </tr>
                 </tbody>
             </table>

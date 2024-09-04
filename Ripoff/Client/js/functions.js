@@ -91,7 +91,7 @@ function showToast(message) {
     }, 3000);
 }
 
-// return query parameter.
+// return query parameter value.
 function getQueryParam(parameter) {
     const urlParameters = new URLSearchParams(window.location.search);
     return urlParameters.get(parameter);

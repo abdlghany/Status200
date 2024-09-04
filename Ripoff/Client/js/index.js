@@ -231,7 +231,6 @@ function signup() {
     });
 }
 
-
 // My Profile, when the user clicks on their name in the navigation bar.
 const profileElements = ["username", "email","phone", "fName", "lName", "password", "oldPassword"];
 function profile(){
@@ -249,6 +248,10 @@ function profile(){
     email.value =  localStorage.getItem("email");
     phone.value = localStorage.getItem("phone");
     lastName.value = localStorage.getItem("last_name");
+    if(localStorage.getItem("showAddress")){
+        ShowAddresses();
+        localStorage.removeItem("showAddress");
+    }
 }
 // this function is being called from the HTML, which is why it has the variables again.
 function activateField(fieldIndex){
@@ -360,7 +363,12 @@ function addAddressLoaded(){
     stateDropdown.addEventListener("change", function() {
         populateDropdownMenu(cityDropdown, stateDropdown.value, stateCityData, "city");
     });
+    if(localStorage.getItem('address_id')){
+        // change the contents of addaddress.html to fit 'edit address' attributes.
+        editAddressLoaded();
+    }
 }
+
 function ShowAddresses(){
     const viewAddresses = getElementById("viewAddresses");
     const addresses_profile_body = getElementById("addresses_profile_body");
@@ -369,6 +377,8 @@ function ShowAddresses(){
             // hide "Show Addresses section" if callback was called.
             viewAddresses.style.display = "none";
             addresses_profile_body.style.display = "block";
+            // Scroll down to the addresses section
+            addresses_profile_body.scrollIntoView({ behavior: "smooth"}); /* https://developer.mozilla.org/en-US/docs/Web/API/Element/scrollIntoView */
         }
     });
 }
@@ -388,7 +398,7 @@ function populateDropdownMenu(dropdownMenuToFill, valueChanged, dictionary, name
         // Disable dropdown menu if no value is selected from the element selectionChangedId.
         else dropdownMenuToFill.disabled = true;  
 }
-
+// editing and adding an address both use this function
 function addAddress(){
     /* 
         HTML Input/Select IDs: address_label, street, country, state, city, zipcode
@@ -438,7 +448,8 @@ function addAddress(){
         city: addressInfo.city,
         zipcode: addressInfo.zipcode
     };
-    // if there's a localStorage address_id value that means the function is being called from editAddress.html page and the user is editing an existing address.
+    // if there's a localStorage address_id value that means the function is being called from editaddress() function page and the user is editing an existing address.
+    // The server will check for this parameter, if it exists, it'll UPDATE the existing address in the table instead of INSERT(ing) a new address.
     if(localStorage.getItem('address_id')){
         parameters.address_id = localStorage.getItem('address_id');
     }
@@ -453,6 +464,7 @@ function addAddress(){
         if(localStorage.getItem('address_id')){
             localStorage.removeItem('address_id');
         }
+        localStorage.setItem("showAddress", true);
         window.location.assign("./user.html");
     })
     .catch(function(error) {
@@ -497,13 +509,13 @@ function fetchAddresses(callback) {
                 });
                 // Add delete and edit buttons to each address.
                 const updateRow = document.createElement('tr');
-                const updateData1 = document.createElement('td');
-                const updateData2 = document.createElement('td');
-                //Pass the address id to the functions in order to determine which address 'Anchor' the user clicked.
-                updateData1.innerHTML = "<label><a href='javascript:deleteAddress("+address.address_id+");'>Delete</a></label>";
-                updateData2.innerHTML = "<label><a href='javascript:editAddress("+address.address_id+");'>Edit</a></label>";
-                updateRow.appendChild(updateData1);
-                updateRow.appendChild(updateData2);
+                const deleteButton = document.createElement('td');
+                const editButton = document.createElement('td');
+                // Pass the address id to the functions in order to determine which address 'Anchor' the user clicked when they click 'delete' or 'edit' the address (user profile)
+                deleteButton.innerHTML = "<label><a href='javascript:deleteAddress("+address.address_id+");'>Delete</a></label>";
+                editButton.innerHTML = "<label><a href='javascript:editAddress("+address.address_id+");'>Edit</a></label>";
+                updateRow.appendChild(deleteButton);
+                updateRow.appendChild(editButton);
                 table.appendChild(updateRow);
                 addressesProfileBody.appendChild(table);
                 // add a horizontal rule only if it's not the last address, to seperate addresses.
@@ -523,7 +535,7 @@ function fetchAddresses(callback) {
 
 function editAddress(address_id){
     localStorage.setItem("address_id", address_id);
-    window.location.assign("./editaddress.html");
+    window.location.assign("./addaddress.html");
 }
 
 function editAddressLoaded(){
@@ -574,7 +586,11 @@ function editAddressLoaded(){
     })
     .catch(function(error) {
         passMessageToElement("errorMessage", "An error happened while connecting to the server.", "red", 1);
-    });   
+    });
+    const addAddressHeader = getElementById('addAddressHeader');
+    addAddressHeader.innerText = "Edit Address";
+    const addAddressButton = getElementById('addAddressButton');
+    addAddressButton.innerText = "Save changes";
 }
 
 function deleteAddress(address_id){
