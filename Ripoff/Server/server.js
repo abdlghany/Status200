@@ -529,7 +529,7 @@ const server = http.createServer(function(request, response) {
                 var priceQueryParameters = [];
                 var totalPriceQueryParameters = [id];
                 var pricesQuery = "SELECT variation_price as price from products_variations where ("
-                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv "; 
+                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv "; /* TODO FIX THIS TOTAL PRICE IF THE USER HAS MORE THAN THE ALLOWED QUANTITY IN THEIR CART, BETTER TO FIX IT FROM THE /product query........ */
                 totalPriceQuery +=    "JOIN shopping_cart sc ON sc.variation_id = pv.variation_id WHERE sc.user_id = ? AND sc.in_cart = 1 AND (";
                 // looping through variation_ids and adding them to the query one by one.
                 for(let i = 0; i<variation_ids.length; i++){
