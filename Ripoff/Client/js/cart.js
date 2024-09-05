@@ -160,11 +160,12 @@ function placeOrder(){
     for (let i = 0; i < cartCheckboxes.length; i++) {
         // check if the checkbox is checked before pushing the information to the array.
         if(cartCheckboxes[i].checked){
-        // id (of the HTML element 'checkbox') looks something like this: checkbox-44 where the 44 is the variation_id in the database.
+        // ID (of the HTML element 'checkbox') looks something like this: checkbox-44 where the 44 is the variation_id in the database.
         variation_ids.push(cartCheckboxes[i].id.split('-')[1]);
         // get quantity from the input value.
         }
     }
+    if(variation_ids.length != 0){
     // using map() to fill the parameters with variation_ids and quantities and userId.
     const parameters = variation_ids.map((id) => ({
         userId: userId,
@@ -181,6 +182,10 @@ function placeOrder(){
     .catch(function(error) {
         showToast("Error placing your order");
     });
+    }else{
+        showToast("Please select at least 1 item");
+    }
+
 }
 // check all checkboxes in the shopping cart
 function checkAll(cartCheckboxes, state){
