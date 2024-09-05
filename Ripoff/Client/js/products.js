@@ -3,8 +3,7 @@ let images = [];
 let currentImageIndex = 0;
 
 // Singular product query for (product.html?product=product_id)
-function fetchProduct(){
-    console.log(localStorage.getItem("id"));
+function fetchProduct(){    
     const productId = getQueryParam('product');
     const urlExtension = "/product?product="+productId;
 
