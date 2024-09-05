@@ -149,12 +149,3 @@ doc
 ```js
 doc.end();
 ```
-
-<!-- 
-  -- Reverse sort order in Products.html page
-  -- red noti text
-  -- Top sales in index
-  -- 5 categories per row in home page
-  -- add product price to product.html
-  -- retern the user to where they  were before they where redirected to the login screen TODO
- -->

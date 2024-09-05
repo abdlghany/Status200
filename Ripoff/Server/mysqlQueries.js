@@ -67,7 +67,7 @@ class MysqlQueries{
 
 export default MysqlQueries;
 /*
-MYSQL statements that I used to create the tables: 
+MYSQL statements that I used to create the tables (there may have been a few adjustments to them later on): 
 
 CREATE TABLE Categories (
     category_id INT AUTO_INCREMENT PRIMARY KEY,
@@ -172,83 +172,5 @@ Categories (category_id, category_name, category_image, category_description);
 Users (user_id, user_name, password, email, phone, first_name, last_name);
 
 Users_addresses (address_id, user_id, street, city, state, country, zip_code, label);
-
-
-
--- Query that selects all relevant products information to show in the selected category (in products.html)
--- Explanation: Selects columns from relevant tables joining used tables based on columns, select 1 image from each product Grouping by product_id to select 1 image per product 
--- Select the lowest price per variation per product to display in the Products.html page, to show the user the lowest price per product (variations might have different prices based on quantity.)
-
-SELECT DISTINCT 
-p.product_id,
-p.product_name,
-p.sold,
-ci.category_name,
-ci.category_id,
-pi.image_location,
-p.created_at,
-pv.variation_price,
-p.is_active
-FROM Products p
-JOIN Categories ci ON p.category_id = ci.category_id
-JOIN (SELECT 
-         product_id, 
-         MIN(image_location) AS image_location
-     FROM 
-         Products_images
-     GROUP BY 
-         product_id
-    ) pi ON p.product_id = pi.product_id
-JOIN 
-    Products_variations pv ON p.product_id = pv.product_id
-WHERE pv.variation_price = (
-        SELECT MIN(pv2.variation_price)
-        FROM Products_variations pv2
-        WHERE pv2.product_id = p.product_id
-    )
-ORDER BY
-p.is_active DESC;
-
--- 3 Queries that selects all products information from all products tables, returns the desired product information for (product.html?product_id=id)
--- The first one (returns 2 variations for product_id=1: 1,1 1,2 Black, White 15, 10 399.99, 399.99 1,1 )
---                                  product_id,var_id, var_name, stock, price, is_active?
-
-SELECT 
-p.product_id,
-pv.variation_id,
-pv.variation_name,
-pv.variation_price,
-pv.variation_stock,
-pv.is_active AS variation_is_active
-FROM Products p
-LEFT JOIN Products_variations pv ON p.product_id = pv.product_id
-WHERE p.product_id = ?
-ORDER BY p.product_id, pv.variation_id;
-
--- output example for product_id = 1:
--- product_id 	product_name 	                                         product_description 	                            category_id 	created_at 	  Sold 	product_is_active 	category_name 	
--- 1 	        'Asus Prime B450M-A II Motherboard, AM4 Socket, maA...' 'Brand    ASUS CPU socket    Socket 1 Compatible ...' 	1 	'2024-08-27 08:06:40' 	0 	        1 	         Electronics
-SELECT 
-p.product_id,
-p.product_name,
-p.product_description,
-p.category_id,
-p.created_at,
-p.Sold,
-p.is_active AS product_is_active,
-ci.category_name
-FROM Products p
-LEFT JOIN  Categories ci ON p.category_id = ci.category_id
-WHERE p.product_id = ?
-ORDER BY product_is_active DESC;
-
--- Example output of the below query: image_id, image_location,             product_id
---                                      1           ./img/products/1/1.png      1
---                                      2           ./img/products/1/2.png      1
--- Images are stored as follows: ./img/products/[product_id]/[1++].[extension], extensions (png, jpeg)
-
-SELECT image_id, image_location as image, product_id 
-FROM products_images 
-WHERE product_id = ? ORDER BY image_id;
 
 */
