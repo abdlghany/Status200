@@ -191,6 +191,11 @@ function fetchProduct(){
                     productCount.value = 0;
                 }
             }
+            // if the user got redirected to the login screen, and they have increased the quantity before clicking 'add to cart', then refill the quantity input field
+            if(localStorage.getItem("productCountValue")){
+                productCount.value = localStorage.getItem("productCountValue");
+                localStorage.removeItem("productCountValue")
+            }
         }
         else{
             // redirect the user back to the products page because this product does not exist.
@@ -198,6 +203,7 @@ function fetchProduct(){
             window.location.assign("./products.html");
         }
         });
+
     }
     // if there's no productId, navigate to the products page because this product does not exist.
     else{
@@ -206,11 +212,11 @@ function fetchProduct(){
 }
 // runs after the Add to cart button is clicked
 function addToCart(variationId, maxItemCount){
+    const productCountInput = getElementById('productCount');
+    const productCountValue = productCountInput.value;
     if(localStorage.getItem("id")){
         // if the user is logged in, and the maximum count of the selected variation is bigger or equals to the amount they're trying to add to cart
         // add to cart
-        const productCountInput = getElementById('productCount');
-        const productCountValue = productCountInput.value;
         // reset all text in the errorMessage paragraph to prepare for a new message (if any).
         resetMessages(['errorMessage']);
         if(productCountValue <= 0){
@@ -244,6 +250,7 @@ function addToCart(variationId, maxItemCount){
     else{
         const productId = getQueryParam('product');
         localStorage.setItem("lastPage", "./product.html?product="+productId); // to redirect the user back to the product page once they login
+        localStorage.setItem("productCountValue", productCountValue); // save the value of the input field to retrieve it later when the user logs in or makes an account then logs in.
         window.location.assign("./login.html");
     }
 }
