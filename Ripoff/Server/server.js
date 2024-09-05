@@ -407,7 +407,7 @@ const server = http.createServer(function(request, response) {
                     response.writeHead(500, { "Content-Type": "application/json" });
                     response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                     return;
-                }else if(results[0][0].quantity == 0){
+                }else  if (!results[0] || !results[0][0] || !results[0][0].quantity) {
                     // if it's 0 it means this item does not exist in the user's cart. go head with insertQuery
                     insertStatus = true;
                 }else{
@@ -426,7 +426,6 @@ const server = http.createServer(function(request, response) {
                             }
                             return;
                         }
-                    
                 }
                 if(insertStatus){
                     const insertQuery = "INSERT INTO shopping_cart VALUES (NULL, ?, 1, ?, ?)";
@@ -543,16 +542,13 @@ const server = http.createServer(function(request, response) {
             https://dev.mysql.com/doc/refman/8.4/en/commit.html
         */
             else if (pathname === "/order" && queryParams) {
-                // extract variaion_ids and quantities from the params.
+                // extract variaion_ids and userId from the params.
                 const variation_ids = [];
                 const quantities = [];
                 var id ="";
                 queryParams.forEach(function(value, key){
                     if(key.includes("variation_id")){
                         variation_ids.push(value)
-                    }
-                    else if(key.includes("quantity")){
-                        quantities.push(value)
                     }
                     else if(key.includes("userId")){
                         id = parseInt(value);
@@ -569,25 +565,39 @@ const server = http.createServer(function(request, response) {
                             1
                 */
                 // get the order_total value based on variations selected and quantities and the user_id and if the item is in their cart:
+                var quantitiesQuery = "SELECT SUM(quantity) as quantity FROM shopping_cart WHERE in_cart = 1 AND ("
+                var quantitiesQueryOrderBy = "ORDER BY FIELD(variation_id";
+                var quantitiesQueryParameters = [];
                 var priceQueryParameters = [];
                 var totalPriceQueryParameters = [id];
                 var pricesQuery = "SELECT variation_price as price from products_variations where ("
-                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv ";
-                totalPriceQuery +=    "JOIN shopping_cart sc ON sc.variation_id = pv.variation_id WHERE sc.user_id = ? AND sc.in_cart = 1 AND (";
+                var pricesQueryOrderBy = ") ORDER BY FIELD(variation_id";
+                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv "
+                                    + "JOIN shopping_cart sc ON sc.variation_id = pv.variation_id WHERE sc.user_id = ? AND sc.in_cart = 1 AND (";
                 // looping through variation_ids and adding them to the query one by one.
                 for(let i = 0; i<variation_ids.length; i++){
                      totalPriceQuery += " sc.variation_id = ? ";
-                     pricesQuery += " variation_id = ? "
+                     pricesQuery += " variation_id = ? ";
+                     quantitiesQuery += " variation_id = ? ";
+                     pricesQueryOrderBy += ", ?"; // add this to the 'order by' part of the query, for each variation;
+                     quantitiesQueryOrderBy += ", ?";
                     // if it's the last item, do not add OR
                     if(i != variation_ids.length-1){
                         totalPriceQuery += "OR";
                         pricesQuery += "OR";
+                        quantitiesQuery += "OR";
                     }
                     totalPriceQueryParameters.push(variation_ids[i]);
                     priceQueryParameters.push(variation_ids[i]);
+                    quantitiesQueryParameters.push(variation_ids[i])
                 };
+                priceQueryParameters = priceQueryParameters.concat(variation_ids); // add them again for the order by clause
+                quantitiesQueryParameters = quantitiesQueryParameters.concat(variation_ids);
+                priceQueryParameters = priceQueryParameters.concat(quantitiesQueryParameters); // put them all in 1 array for the query.
                 totalPriceQuery += ") AND sc.quantity != 0";
-                pricesQuery +=")";
+                pricesQuery += pricesQueryOrderBy + ");";
+                quantitiesQuery += ") GROUP BY variation_id "+quantitiesQueryOrderBy + ");";
+                pricesQuery += quantitiesQuery;
                 var orderQueryparameters = [];
                 var orderId;
                 db.beginTransaction();
@@ -612,9 +622,10 @@ const server = http.createServer(function(request, response) {
                                 db.query(pricesQuery, priceQueryParameters, function(err3, priceResults){
                                     if(err3){console.error("err3:", err3); db.rollback();}
                                     if(priceResults){
-                                        for(let i = priceResults.length-1; i>=0; i--){
-                                            prices.push(priceResults[i].price);
-                                        }
+                                        priceResults[0].forEach(function(element, index) {
+                                            prices.push(priceResults[0][index].price);
+                                            quantities.push(priceResults[1][index].quantity);
+                                        });
                                          /* We got all the needed columns to insert into order_details now, and we can begin inserting to both tables */
                                          /* TABLE: orders(order_id, user_id, datetime, total_price, order_status, order_pdf, payment_method)  */
                                         const pdfLocation = "./orderReceipts/order"+orderId+".pdf";

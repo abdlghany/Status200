@@ -58,18 +58,19 @@ function loadNavigationBar(){
                '<li class="nav-li"><a href="javascript:search();" title="Search"><img src="./img/search.png" alt="Search Button" id="searchButton"></a></li>'+
           '</div>'+
            '<div id="cartDiv">';
-            if(localStorage.getItem("id")){
+            if(localStorage.getItem("id")){ // if the user is logged in, add 'Welcome USERNAME | logout'
                 navigationBarContents += 
               '<li class="nav-li"><span>Welcome&nbsp;</span><a href="./user.html" title="My Profile"> '+localStorage.getItem("first_name")+'</li>'+
               ' <li class="nav-li"><p class="separator"> | </p></li>'+
                ' <li class="nav-li"><a href="javascript:logout()" title="Logout of your account">Logout</a></li>';
             }
-            else{
+            else{ // add 'signup | login' if the user is not logged in
                 navigationBarContents += 
                ' <li class="nav-li"><a href="./signup.html">Sign Up</a></li>'+
                ' <li class="nav-li"><p class="separator">|</p></li>'+
                ' <li class="nav-li"><a href="./login.html">Login</a></li>';
             }
+            // Cart
             navigationBarContents += 
            ' <li class="nav-li"><a href="javascript:cart()"><img src="./img/cart.png" alt="Cart Image" id="cartButton" title="Shopping Cart"></a></li>'+
            ' </div>'+
@@ -102,7 +103,7 @@ function loadMainMenu(){
 }
 // On Enter keydown (when the user is typing in the searh input), run the search() function.
 function logKey(e) {
-    if(e.code === "Enter"){
+    if(e.key === "Enter" || e.keyCode === 13){ // 13 is keycode for Enter on older browsers...
         search();
     }
   }
@@ -122,6 +123,7 @@ function cart(){
     }
     // if not logged in, redirect them to the login screen.
     else{
+        localStorage.setItem("lastPage", "./cart.html");
         window.location.assign("./login.html");
     }
 }
@@ -163,9 +165,16 @@ function login(){
                 ['id', 'name', 'email', 'phone', 'first_name', 'last_name'].forEach(function(field) {
                     localStorage.setItem(field, userData[0][field]);
                 });
-
-                // Redirect to the homepage
-                window.location.assign("./index.html");
+                /*  if there's a lastPage that means the user got redirected to the 'login.html' page
+                    from a product's page to login, so take them back to the product's page...    */  
+                if(localStorage.getItem("lastPage")){
+                    window.location.assign(localStorage.getItem("lastPage"));
+                    localStorage.removeItem("lastPage");
+                }else{
+                    // Redirect to the homepage
+                    window.location.assign("./index.html");
+                }
+                
             }
         })
         .catch(function(error) {

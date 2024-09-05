@@ -78,3 +78,9 @@ else{
     }
     console.log("Biggest generated number: "+ biggest);
     console.log("Smallest generated number: "+ smallest); */
+
+/* db.query(pricesQuery, priceQueryParameters, function(err, results){
+    console.log(results);
+    
+    //console.log(results[0], results[1]);
+}); */

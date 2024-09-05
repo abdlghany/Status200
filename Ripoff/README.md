@@ -156,4 +156,5 @@ doc.end();
   -- Top sales in index
   -- 5 categories per row in home page
   -- add product price to product.html
+  -- retern the user to where they  were before they where redirected to the login screen TODO
  -->

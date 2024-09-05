@@ -75,7 +75,7 @@ function fetchCartItems(){
                 cartItemDiv.appendChild(infoDiv);
 
                 // Total (Per item) Price + Checkboxes
-                const totalItemPrice = parseFloat(item.variation_price) * parseInt(totalQuantityInUserCart);
+                const totalItemPrice = (parseFloat(item.variation_price) * parseInt(totalQuantityInUserCart)).toFixed(2); // only show 2 numbers after the decimal
                 const priceDiv = document.createElement('div');
                 priceDiv.classList.add('cart-item-price');
                 priceDiv.innerHTML = `<label for="checkbox-${item.variation_id}">Total: RM${totalItemPrice}</label>
@@ -99,9 +99,13 @@ function fetchCartItems(){
                      preUpdateCartItemCount(item.variation_id, item.variation_stock, cartProductCountValue)
                  }
                  cartRightProductCountButton.onclick = function(){
-                     changeProductCount(1, cartProductCountInputId, item.variation_stock);
-                     const cartProductCountValue = cartProductCount.value;
-                     preUpdateCartItemCount(item.variation_id, item.variation_stock, cartProductCountValue)
+                    if(cartProductCount.value != item.variation_stock){
+                        changeProductCount(1, cartProductCountInputId, item.variation_stock);
+                        const cartProductCountValue = cartProductCount.value;
+                        preUpdateCartItemCount(item.variation_id, item.variation_stock, cartProductCountValue);
+                    }else{
+                        showToast("Max available quantity reached")
+                    }
                  }
             });
             // create a cartItemDiv for the Place order information
@@ -151,24 +155,20 @@ function placeOrder(){
     //              (AUTO, int secondary key, auto, decimal, completed ,can be null, "FPX Online Banking" )
     //TABLE: order_details(order_detail_id, order_id, variation_id, quantity, price)
     const cartCheckboxes = document.getElementsByClassName('cartCheckbox');
-    const cartProductsCount = document.getElementsByClassName('cartProductCount');
     const userId = localStorage.getItem('id');
     var variation_ids = [];
-    var quantities = [];
     for (let i = 0; i < cartCheckboxes.length; i++) {
         // check if the checkbox is checked before pushing the information to the array.
         if(cartCheckboxes[i].checked){
         // id (of the HTML element 'checkbox') looks something like this: checkbox-44 where the 44 is the variation_id in the database.
         variation_ids.push(cartCheckboxes[i].id.split('-')[1]);
         // get quantity from the input value.
-        quantities.push(cartProductsCount[i].value);
         }
     }
     // using map() to fill the parameters with variation_ids and quantities and userId.
-    const parameters = variation_ids.map((id, index) => ({
+    const parameters = variation_ids.map((id) => ({
         userId: userId,
-        variation_id: id,
-        quantity: quantities[index]
+        variation_id: id
     }));
     axios.get(domain+"/order", {
         params: {parameters}
@@ -210,7 +210,7 @@ function addToTotal(value, checked){
 }
 // function to prepare the updating of a cart item count when the user clicks - or + 
 function preUpdateCartItemCount(variation_id, variation_stock, cartProductCountValue){
-    //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than the item.total_variation_quantity
+    //do not allow values less than 0 when the user changes this field's value manually, also do not allow values higher than 'variation_stock'
     if(cartProductCountValue > variation_stock){
         cartProductCountValue = variation_stock;
     }

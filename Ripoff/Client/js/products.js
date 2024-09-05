@@ -243,6 +243,8 @@ function addToCart(variationId, maxItemCount){
     }
     // if not logged in, redirect them to the login screen.
     else{
+        const productId = getQueryParam('product');
+        localStorage.setItem("lastPage", "./product.html?product="+productId); // to redirect the user back to the product page once they login
         window.location.assign("./login.html");
     }
 }
