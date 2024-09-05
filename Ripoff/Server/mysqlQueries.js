@@ -44,15 +44,6 @@ class MysqlQueries{
             }
         });
     }
-    createTable(query) {
-        this.#connection.query(query, function(err, result) {
-            if (err) {
-                console.error("Error creating table:", err.message);
-            } else {
-            }
-        });
-    }
-
     query(query, values, callback){
         this.#connection.query(query,values, function(err, results){
             if (err) {

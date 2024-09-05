@@ -386,24 +386,68 @@ const server = http.createServer(function(request, response) {
             });
         }
         else if (pathname === "/addToCart" && queryParams) {
-            /* Table: Shopping_cart (cart_item_id, user_id, in_cart, variation_id, quantity)*/
-            const query = "INSERT INTO shopping_cart VALUES (NULL, ?, 1, ?, ?)";
             // queryParams: "/addToCart?variation_id=?&quantity=?&id=?;
-            const parameters = [
-                queryParams.get("id"),
-                queryParams.get("variation_id"),
-                queryParams.get("quantity")
-            ];
-            db.query(query,parameters, function(err, results) {
-                if (err || results.length == 0) {
+            const id = queryParams.get("id");
+            const variation_id = queryParams.get("variation_id");
+            const toBeInsertedQuantity = queryParams.get("quantity");
+            var insertStatus = false;
+            /*  Table: Shopping_cart (cart_item_id, user_id, in_cart, variation_id, quantity);
+                Table: products_variations(variation_id, variation_price, variation_stock, variation_name, product_id, is_active);
+            */
+            // First, must check how much the user already has in their cart, then insert the quantity if it's + the existing amount is lower or equals to the total quantity
+            var selectQuery = "SELECT SUM(quantity) as quantity FROM shopping_cart where in_cart = 1 AND user_id = ? AND variation_id = ? GROUP BY variation_id;";
+            selectQuery += "SELECT variation_stock as stock from products_variations WHERE variation_id = ?;";
+            const selectParams = [
+                id,
+                variation_id,
+                variation_id
+            ]
+            db.query(selectQuery,selectParams, function(err, results) {
+                if (err) {
                     response.writeHead(500, { "Content-Type": "application/json" });
-                    console.error("Inserting into shopping cart failed at: " + Date.now());
                     response.end(JSON.stringify({ message: "Internal server error, try again later" }));
                     return;
+                }else if(results[0][0].quantity == 0){
+                    // if it's 0 it means this item does not exist in the user's cart. go head with insertQuery
+                    insertStatus = true;
+                }else{
+                        var totalQuantityInCartAfterInserting = parseInt(toBeInsertedQuantity) + parseInt(results[0][0].quantity);
+                        var allowedQuantity = results[1][0].stock - results[0][0].quantity;
+                        if(totalQuantityInCartAfterInserting <= results[1][0].stock){
+                            // we're good. go ahead with insertQuery
+                            insertStatus = true;
+                        }else{// user trying to insert more than the total stock in their cart, reject it.
+                            insertStatus = false;
+                            response.writeHead(200, {"Content-Type": "application/json"});
+                            if(allowedQuantity == 0){
+                                response.end(JSON.stringify({message: "You already have the maximum variation amount available in your cart"}));
+                            }else{
+                                response.end(JSON.stringify({message: "You can only add " + allowedQuantity + " of this variation to your cart"}));
+                            }
+                            return;
+                        }
+                    
                 }
-                    response.writeHead(200, { "Content-Type": "application/json" });
-                    response.end(JSON.stringify({ message: queryParams.get("quantity") +" Items added successfully" }));
+                if(insertStatus){
+                    const insertQuery = "INSERT INTO shopping_cart VALUES (NULL, ?, 1, ?, ?)";
+                    const insertParams = [
+                        id,
+                        variation_id,
+                        toBeInsertedQuantity
+                    ];
+                    db.query(insertQuery,insertParams, function(err, results) {
+                        if (err || results.length == 0) {
+                            response.writeHead(500, { "Content-Type": "application/json" });
+                            console.error("Inserting into shopping cart failed at: " + Date.now());
+                            response.end(JSON.stringify({ message: "Internal server error, try again later" }));
+                            return;
+                        }
+                            response.writeHead(200, { "Content-Type": "application/json" });
+                            response.end(JSON.stringify({ message: queryParams.get("quantity") +" Items added successfully" }));
+                    });
+                }        
             });
+           
         }
         else if (pathname === "/fetchCartItems" && queryParams) {
             /* "/fetchCartItems?id=?"
@@ -494,7 +538,6 @@ const server = http.createServer(function(request, response) {
         }
         /*  
             --- THIS IS WHERE THE FUN BEGINS ---
-            --- Here we go... ---
             Resources:
             MYSQL Start transaction:
             https://dev.mysql.com/doc/refman/8.4/en/commit.html
@@ -529,7 +572,7 @@ const server = http.createServer(function(request, response) {
                 var priceQueryParameters = [];
                 var totalPriceQueryParameters = [id];
                 var pricesQuery = "SELECT variation_price as price from products_variations where ("
-                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv "; /* TODO FIX THIS TOTAL PRICE IF THE USER HAS MORE THAN THE ALLOWED QUANTITY IN THEIR CART, BETTER TO FIX IT FROM THE /product query........ */
+                var totalPriceQuery = "SELECT SUM(pv.variation_price * sc.quantity) as total_price FROM products_variations pv ";
                 totalPriceQuery +=    "JOIN shopping_cart sc ON sc.variation_id = pv.variation_id WHERE sc.user_id = ? AND sc.in_cart = 1 AND (";
                 // looping through variation_ids and adding them to the query one by one.
                 for(let i = 0; i<variation_ids.length; i++){
