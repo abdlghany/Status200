@@ -4,8 +4,8 @@ class MysqlQueries{
     #connection ;
     #config = {
         host: "localhost",
-        user: "abdalghany",
-        password: "ohitsme",
+        user: "root",
+        password: "",
         database:"ripoff",
         multipleStatements: true
       };
