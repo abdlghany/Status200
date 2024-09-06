@@ -18,7 +18,7 @@ function fetchProduct(){
     if(productId){
         axiosQuery(urlExtension, function(response){
             /* 
-            ** executes 3 Queries and returns the results as follows **
+            ** Executes 3 Queries and returns the results as follows **
 
             Query1 productImages = returned columns (image_id, image).
 
