@@ -153,4 +153,4 @@ doc.end();
 
 ## Video demo
 
-<iframe width="560" height="315" src="https://www.youtube.com/embed/mILr_8HvMG4?si=avNQQ1WOL8vwqZLV" title="Ripoff webstop | Status200 Stage2 project" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+[![Ripoff webstop | Status200 Stage2 project video](https://img.youtube.com/vi/mILr_8HvMG4/maxresdefault.jpg)](https://youtu.be/mILr_8HvMG4)
