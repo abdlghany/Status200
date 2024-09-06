@@ -153,4 +153,5 @@ doc.end();
 
 ## Video demo
 
+Click on the image below to watch the video
 [![Ripoff webstop | Status200 Stage2 project video](https://img.youtube.com/vi/mILr_8HvMG4/maxresdefault.jpg)](https://youtu.be/mILr_8HvMG4)
