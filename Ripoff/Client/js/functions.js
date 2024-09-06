@@ -10,7 +10,7 @@ function getValueOfElementById(elementId){
 }
 /* 
     default regex accepts letters and spaces only. 
-    (Examples of acceptable usernames: "aaaaa aaaa aaaaaa aaa", "abhdabsdhmdaks")
+    (Examples of acceptable usernames: "aaaaa aaaa aaaaaa aaa", "abhdabsdhmdaks", " ")
  */
 function validateName(name, regex = new RegExp('^[a-zA-Z]+(?:[ ][a-zA-Z]+)*$')){
     //remove extra empty spaces (even between words) (\s finds whitespace characters) and replcae replaces them with nothing. '/g/ finds all that match

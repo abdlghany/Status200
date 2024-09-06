@@ -178,7 +178,7 @@ function login(){
             }
         })
         .catch(function(error) {
-            passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+            passMessageToElement("errorMessage", "Server is not reachable", "red", 1);
             console.error(error);
         });
     } else {
@@ -236,7 +236,7 @@ function signup() {
         passMessageToElement("errorMessage", response.data.message, "green", 1);
     })
     .catch(function(error) {
-        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+        passMessageToElement("errorMessage", "Server is not reachable", "red", 1);
     });
 }
 
@@ -345,7 +345,7 @@ function saveProfile(){
         window.location.assign("./user.html");
     })
     .catch(function(error) {
-        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+        passMessageToElement("errorMessage", "Server is not reachable", "red", 1);
     });    
 }
 // Load <select> options in each of the select elements
@@ -477,7 +477,7 @@ function addAddress(){
         window.location.assign("./user.html");
     })
     .catch(function(error) {
-        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+        passMessageToElement("errorMessage", "Server is not reachable", "red", 1);
     });    
 }
 
@@ -538,7 +538,7 @@ function fetchAddresses(callback) {
             callback(true);
         })
         .catch(function (error) {
-            passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+            passMessageToElement("errorMessage", "Server is not reachable", "red", 1);
         });
 }
 
@@ -615,7 +615,7 @@ function deleteAddress(address_id){
         window.location.assign("./user.html");
     })
     .catch(function(error) {
-        passMessageToElement("errorMessage", "Error happened while connecting to the server.", "red", 1);
+        passMessageToElement("errorMessage", "Server is not reachable", "red", 1);
     });    
 }
 
