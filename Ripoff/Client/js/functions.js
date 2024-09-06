@@ -1,5 +1,5 @@
 /* 
-    A collection of reusable functions made by yours truly.
+    A collection of reusable functions.
 */
 function getElementById(elementId){
     return document.getElementById(elementId);
@@ -10,7 +10,7 @@ function getValueOfElementById(elementId){
 }
 /* 
     default regex accepts letters and spaces only. 
-    (Examples of acceptable usernames: "aaaaa aaaa aaaaaa aaa", "abhdabsdhmdaks", " ")
+    (Examples of acceptable usernames: "aaaaa aaaa aaaaaa aaa", "abhdabsdhmdaks", " ") a         b          c
  */
 function validateName(name, regex = new RegExp('^[a-zA-Z]+(?:[ ][a-zA-Z]+)*$')){
     //remove extra empty spaces (even between words) (\s finds whitespace characters) and replcae replaces them with nothing. '/g/ finds all that match
@@ -62,7 +62,7 @@ function enableElement(elementId){
 }
 // Increase or decrease the number of variations in a product quantity input field (before/after bineg added to cart)
 function changeProductCount(change, elementId, max){
-    // if change == 0 decrease, otherwise increase
+    // if change == 0 decrease, otherwise increase // 1
     const inputField = getElementById(elementId);
     // input "type = Number"  that has a default value of '0' so it doesn't require any further validation.
     var inputFieldValue = parseInt(inputField.value);
@@ -88,7 +88,7 @@ function showToast(message) {
     toast.className = "show"; // display the toast by adding the "show" class
     setTimeout(function(){
         toast.className = toast.className.replace("show", ""); // Remove the "show" class after 2 seconds
-    }, 3000);
+    }, 3000); // 3 seconds
 }
 
 // return query parameter value.
@@ -100,7 +100,7 @@ function getQueryParam(parameter) {
 function formatNumber(num) {
     // Ensure the number has two decimal points
     let formattedNumber = num.toFixed(2);
-    /* 
+    /*  12,987,520.00
         Add thousands separators
         \B matches a position that is not a word boundary
         (?=(\d{3})+(?!\d)) is a positive lookahead to find positions followed by groups of three digits.

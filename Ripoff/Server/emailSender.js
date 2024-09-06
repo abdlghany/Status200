@@ -13,7 +13,9 @@ export function send(to, subject, text, callback){
         subject: subject,
         text: text,
       };
-      callback(sendMsg(msg));
+      sendMsg(msg, function(status){
+        callback(status);
+      });
 }
 // Send PDF files to an email address
 export function sendPDF(to, subject, text, filename, callback) {

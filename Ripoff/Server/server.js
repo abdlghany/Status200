@@ -307,7 +307,7 @@ const server = http.createServer(function(request, response) {
                 }
                 query.push("ORDER BY is_active DESC, " + queryParams.get("order_by") + " "+ direction);
             }else{
-              query.push("ORDER BY is_active DESC ");  
+              query.push("ORDER BY is_active DESC ");
             }
             var finalQuery = "";
             for(let i = 0; i< query.length; i++){
