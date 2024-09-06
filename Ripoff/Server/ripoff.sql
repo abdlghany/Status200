@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 06, 2024 at 12:22 AM
+-- Generation Time: Sep 06, 2024 at 03:05 AM
 -- Server version: 8.3.0
 -- PHP Version: 7.4.33
 
@@ -32,7 +32,6 @@ CREATE TABLE IF NOT EXISTS `categories` (
   `category_id` int NOT NULL AUTO_INCREMENT,
   `category_name` varchar(50) NOT NULL,
   `category_image` varchar(255) DEFAULT NULL,
-  `category_description` text,
   PRIMARY KEY (`category_id`)
 ) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -40,17 +39,17 @@ CREATE TABLE IF NOT EXISTS `categories` (
 -- Dumping data for table `categories`
 --
 
-INSERT INTO `categories` (`category_id`, `category_name`, `category_image`, `category_description`) VALUES
-(1, 'Electronics', './img/categories/electronics.png', 'Devices and gadgets'),
-(2, 'Home Appliances', './img/categories/home_appliances.png', 'Appliances for home use'),
-(3, 'Clothing', './img/categories/clothes.png', 'Men and women apparel'),
-(4, 'Books', './img/categories/Books.png', 'Various genres of books'),
-(5, 'Furniture', './img/categories/furniture.png', 'Household and office furniture'),
-(6, 'Sports Equipment', './img/categories/sports_equipment.png', 'Gear and equipment for sports'),
-(7, 'Toys', './img/categories/toys.png', 'Toys and games for children'),
-(8, 'Beauty Products', './img/categories/beauty_products.png', 'Cosmetics and skincare'),
-(9, 'Groceries', './img/categories/groceries.png', 'Fresh food and household items'),
-(10, 'Accessories', './img/categories/accessories.png', 'Various accessories for all of your needs.');
+INSERT INTO `categories` (`category_id`, `category_name`, `category_image`) VALUES
+(1, 'Electronics', './img/categories/electronics.png'),
+(2, 'Home Appliances', './img/categories/home_appliances.png'),
+(3, 'Clothing', './img/categories/clothes.png'),
+(4, 'Books', './img/categories/Books.png'),
+(5, 'Furniture', './img/categories/furniture.png'),
+(6, 'Sports Equipment', './img/categories/sports_equipment.png'),
+(7, 'Toys', './img/categories/toys.png'),
+(8, 'Beauty Products', './img/categories/beauty_products.png'),
+(9, 'Groceries', './img/categories/groceries.png'),
+(10, 'Accessories', './img/categories/accessories.png');
 
 -- --------------------------------------------------------
 
@@ -69,7 +68,7 @@ CREATE TABLE IF NOT EXISTS `orders` (
   `payment_method` varchar(50) NOT NULL,
   PRIMARY KEY (`order_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=29 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `orders`
@@ -101,7 +100,10 @@ INSERT INTO `orders` (`order_id`, `user_id`, `datetime`, `total_price`, `order_s
 (25, 6, '2024-09-05 11:04:13', 3630.93, 'completed', './orderReceipts/order25.pdf', 'FPX Online Banking'),
 (26, 6, '2024-09-05 12:26:13', 14385.00, 'completed', './orderReceipts/order26.pdf', 'FPX Online Banking'),
 (27, 6, '2024-09-05 13:47:58', 4498.00, 'completed', './orderReceipts/order27.pdf', 'FPX Online Banking'),
-(28, 6, '2024-09-05 13:48:28', 16.00, 'completed', './orderReceipts/order28.pdf', 'FPX Online Banking');
+(28, 6, '2024-09-05 13:48:28', 16.00, 'completed', './orderReceipts/order28.pdf', 'FPX Online Banking'),
+(29, 7, '2024-09-06 01:13:58', 5000.00, 'completed', './orderReceipts/order29.pdf', 'FPX Online Banking'),
+(30, 1, '2024-09-06 01:15:50', 49.98, 'completed', './orderReceipts/order30.pdf', 'FPX Online Banking'),
+(31, 1, '2024-09-06 01:18:25', 510.00, 'completed', './orderReceipts/order31.pdf', 'FPX Online Banking');
 
 -- --------------------------------------------------------
 
@@ -119,7 +121,7 @@ CREATE TABLE IF NOT EXISTS `order_details` (
   PRIMARY KEY (`order_detail_id`),
   KEY `order_id` (`order_id`),
   KEY `variation_id` (`variation_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=73 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=79 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `order_details`
@@ -188,7 +190,13 @@ INSERT INTO `order_details` (`order_detail_id`, `order_id`, `variation_id`, `qua
 (69, 26, 47, 1, 4.50),
 (70, 27, 69, 299, 15.00),
 (71, 27, 70, 1, 13.00),
-(72, 28, 44, 1, 16.00);
+(72, 28, 44, 1, 16.00),
+(73, 29, 60, 2, 250.00),
+(74, 29, 31, 3, 1500.00),
+(75, 30, 68, 5, 8.00),
+(76, 30, 63, 2, 4.99),
+(77, 31, 25, 4, 85.00),
+(78, 31, 24, 2, 85.00);
 
 -- --------------------------------------------------------
 
@@ -214,7 +222,7 @@ CREATE TABLE IF NOT EXISTS `products` (
 --
 
 INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `category_id`, `created_at`, `Sold`, `is_active`) VALUES
-(1, 'Asus Prime B450M-A II Motherboard, AM4 Socket, maATX, AMD Ryzen, DDR4 Memory, M.2, 6Gbps SATA, USB 3.1 Gen 2 Type-A, Aura Sync', 'Brand    ASUS\r\nCPU socket    Socket 1\r\nCompatible devices    CPU\r\nRAM memory technology    DDR\r\nCompatible processors    AMD Ryzen\r\nChipset type    AMD B450\r\nBellek Saat Hızı    4400 MHz\r\nPlatform    Windows 10\r\nModel name    Prime B450M-A II\r\nCPU model    6X86 ', 1, '2024-08-27 00:06:40', 0, 1),
+(1, 'Asus Prime B450M-A II Motherboard, AM4 Socket, maATX, AMD Ryzen, DDR4 Memory, M.2, 6Gbps SATA, USB 3.1 Gen 2 Type-A, Aura Sync', 'Brand    ASUS\nCPU socket    Socket 1\nCompatible devices    CPU\nRAM memory technology    DDR\nCompatible processors    AMD Ryzen\nChipset type    AMD B450\nBellek Saat Hızı    4400 MHz\nPlatform    Windows 10\nModel name    Prime B450M-A II\nCPU model    6X86 ', 1, '2024-08-27 00:06:40', 0, 1),
 (2, 'MSI MPG-B550 Motherboard', 'Brand    MSI\r\nCPU socket    Socket AM4\r\nCompatible devices    Personal Computer\r\nRAM memory technology    DDR4\r\nCompatible processors    https://msi.com/Motherboard/MPG-B550-GAMING-PLUS/Specification\r\nChipset type    AMD B550\r\nBellek Saat Hızı    4400 MHz\r\nPlatform    Windows 10\r\nModel name    MPG B550 Gaming Plus\r\nCPU model    AMD Ryzen 7', 1, '2024-08-27 00:07:35', 1, 1),
 (3, 'Apple 2021 iPad (10,2\", Wi-Fi, 64 GB) - Space Grau (9. Generation)', 'Brand    Apple\r\nModel name    iPad\r\nMemory storage capacity    64 GB\r\nScreen Size    10.2\r\nOperating system    iOS 14\r\nColour    Space Grau\r\nRAM memory installed size    3 GB\r\nGeneration    9th Generation\r\nBattery life    10 Hours\r\nItem weight    487 Grams', 1, '2024-08-27 00:08:43', 2, 1),
 (4, 'Apple 2020 iPad 10.2 (8. Gen) 32GB Wi-Fi - Space Grau (Generalüberholt)', 'Brand    Apple\r\nModel name    apple ipad\r\nMemory storage capacity    32 GB\r\nScreen Size    10.2 Inches\r\nOperating system    iOS 11\r\nColour    grau, grau space grey)\r\nRAM memory installed size    4 GB\r\nGeneration    8. Generation\r\nModel year    2020\r\nItem weight    490 Grams', 1, '2024-08-27 00:09:55', 0, 1),
@@ -228,13 +236,13 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `ca
 (12, 'Xiaomi Redmi Note 13 Pro Smartphone, 5G, 8+256GB, 6.67 Inch Display, 1.5K 120Hz AMOLED Display, Snapdragon 7s, Ultra Clear 200MP Camera with OIS, 5100mAh, 67W Turbo Charging, Blue', 'Brand    Xiaomi\r\nOperating system    Android 13.0\r\nCPU model    Snapdragon\r\nCPU speed    1 Hz\r\nMemory storage capacity    8 GB\r\nScreen Size    6.67 Inches\r\nModel name    MZB0FFAEU\r\nWireless carrier    Unlocked\r\nCellular technology    5G\r\nConnectivity technology    Wi-Fi', 1, '2024-08-27 00:24:26', 1, 1),
 (13, 'CHERRY JK-0800EU-2 KC 1000 USB US English w / Euro symbol black, one color', 'Brand    CHERRY\r\nCompatible devices    Laptop, Universal, PC, PC / Server\r\nConnectivity technology    RS-485\r\nKeyboard description    QWERTY\r\nRecommended uses for product    Multimedia, Gaming, Alltagsgebrauch, Persönlich, Business\r\nSpecial feature    PC / Mac, Keyboard\r\nColour    Schwarz\r\nNumber of keys    104\r\nKeyboard backlighting colour support    Single Color\r\nStyle    EU-Layout - QWERTY', 10, '2024-08-27 00:25:30', 2, 1),
 (14, 'Logitech K120 Business Wired Keyboard for Windows and Linux, USB port, Silent Touch, rugged, splash-proof, keyboard stand, UK QWERTY layout - Black', 'Brand    Logitech\r\nCompatible devices    PC\r\nConnectivity technology    USB\r\nKeyboard description    Englisch (QWERTY)\r\nRecommended uses for product    Büro, Gaming\r\nSpecial feature    PC/Mac^Tastatur\r\nColour    Schwarz\r\nNumber of keys    104\r\nKeyboard backlighting colour support    Single Color\r\nStyle    UK LAYOUT', 10, '2024-08-27 00:27:22', 78, 0),
-(15, 'Logitech M185 wireless mouse, 2.4 GHz connection via nano USB receiver, 1000 DPI optical sensor, 12-month battery life, for left and right-handed users, PC / Mac - gray, English packaging', 'Brand    Logitech\r\nColour    gray\r\nConnectivity technology    Wi-Fi, USB\r\nSpecial feature    Wireless\r\nMovement detection technology  No', 10, '2024-08-27 00:29:36', 5, 1),
+(15, 'Logitech M185 wireless mouse, 2.4 GHz connection via nano USB receiver, 1000 DPI optical sensor, 12-month battery life, for left and right-handed users, PC / Mac - gray, English packaging', 'Brand    Logitech\r\nColour    gray\r\nConnectivity technology    Wi-Fi, USB\r\nSpecial feature    Wireless\r\nMovement detection technology  No', 10, '2024-08-27 00:29:36', 11, 1),
 (16, 'Amazon Basics Ergonomische kabellose USB Maus - DPI einstellbar - Schwarz\r\n', 'Brand    Amazon Basics\r\nColour    black\r\nConnectivity technology    2.4 GHz wireless\r\nSpecial feature    Wireless\r\nMovement detection technology    Optical', 10, '2024-08-27 00:30:08', 70, 0),
 (17, 'NEW\'C Pack of 3 Tempered Glass Screen Protector for iPhone 15/15 Pro (6.1 Inches), Scratch Free, 9H Hardness, HD Screen Protector, 0.33 mm Ultra Clear, Ultra Resistant\r\n', 'Brand    NEW\'C\r\nCompatible devices    iPhone 15 Pro (6.1 inches), iPhone 15 (6.1 inches)\r\nMaterial    Glass\r\nItem hardness    9H\r\nProduct dimensions    14.4L x 6.8W centimetres\r\nCompatible phone models    iPhone 15 Pro (6.1 inches), iPhone 15 (6.1 inches)\r\nSpecial feature    Scratch-resistant\r\nFinish type    Glossy\r\nUnit count    3.0 stück\r\nScreen Size    6.1 Inches', 10, '2024-08-27 00:30:40', 5, 1),
 (18, 'Rcokas For Protection OnePlus 12 Tempered Glass Screen Protector OnePlus 12 Screen Protector [Pack of 2] [HD Screen Protector] [Soft TPU], for OnePlus 12 5G Screen Protector [Ultra Clear] [Scratch]', 'Brand    Rcokas\r\nProduct dimensions    15L x 7W centimetres\r\nManufacturer    Rcokas', 10, '2024-08-27 00:31:34', 1, 1),
 (19, 'JBL Flip 6 Bluetooth box in grey: waterproof portable speaker with 2-way speaker system for powerful sound – up to 12 hours of wireless music play', 'Brand    JBL\r\nSpeaker maximum output power    30 Watts\r\nConnectivity technology    Bluetooth, USB\r\nAudio output mode    Stereo\r\nMounting type    Tabletop Mount\r\nModel name    JBL Flip 6\r\nSpeaker type    Monitor\r\nSpecial feature    For music\r\nRecommended uses for product    For music players\r\nCompatible devices    Smartphone', 10, '2024-08-27 00:31:58', 2, 1),
 (20, 'JBL Wave 200TWS True Wireless In-Ear Bluetooth Headphones in Black, with Built-in Microphone, Music Streaming up to 20 Hours, Includes Charging Case', 'Brand    JBL\r\nColour    black\r\nEar placement    In Ear\r\nForm factor    In Ear\r\nNoise control    Active Noise Cancellation\r\nFrequency response    20 KHz\r\nHeadphone jack    USB\r\nModel name    JBL W200TWSBLK\r\nConnectivity technology    Wireless\r\nWireless communication technology    Bluetooth', 10, '2024-08-27 00:32:18', 10, 1),
-(21, 'DICTAC Bed 140 x 200 cm with LED Lighting, Bed Frame 140 x 200 cm with Metal Slatted Frame, Adult Floating Bed Frame with Light, Robust and Stable, Easy to Assemble, Black (without Mattress)', 'Size    140x200cm\r\nProduct dimensions    2L x 1.4W x 0.2H metres\r\nSpecial feature    No Box Spring Needed, Floating design, Squeak Resistant, Metal slatted frame, With LED lighting, Squeakproof, No box spring requiredNo Box Spring Needed, Floating design, Squeak Resistant, Metal slatted frame, With LED lighting, Squeakproof, No box spring required\r\nColour    Black\r\nIncluded components    Installation Manual, Bed frame, slatted frame, Easy installation tools, bed frame, Slat, Installation instructions (English language not guaranteed)Installation Manual, Bed frame, slatted frame, Easy installation tools, bed frame, Slat, Installation instructions (English language not guaranteed)\r\n', 5, '2024-08-27 00:33:01', 1, 1),
+(21, 'DICTAC Bed 140 x 200 cm with LED Lighting, Bed Frame 140 x 200 cm with Metal Slatted Frame, Adult Floating Bed Frame with Light, Robust and Stable, Easy to Assemble, Black (without Mattress)', 'Size    140x200cm\r\nProduct dimensions    2L x 1.4W x 0.2H metres\r\nSpecial feature    No Box Spring Needed, Floating design, Squeak Resistant, Metal slatted frame, With LED lighting, Squeakproof, No box spring requiredNo Box Spring Needed, Floating design, Squeak Resistant, Metal slatted frame, With LED lighting, Squeakproof, No box spring required\r\nColour    Black\r\nIncluded components    Installation Manual, Bed frame, slatted frame, Easy installation tools, bed frame, Slat, Installation instructions (English language not guaranteed)Installation Manual, Bed frame, slatted frame, Easy installation tools, bed frame, Slat, Installation instructions (English language not guaranteed)\r\n', 5, '2024-08-27 00:33:01', 4, 1),
 (22, 'BASE Timeless wardrobe in three different sizes - Versatile swing door wardrobe in white - 120 x 177 x 52 cm (W / H / D)', 'Brand    Stella Trading\r\nColour    White\r\nRecommended uses for product    Shoes\r\nProduct dimensions    52D x 120W x 177H centimetres\r\nSpecial feature    revolving doors', 5, '2024-08-27 00:33:35', 0, 1),
 (23, 'Koonmi Bogen Full Length Mirror, 44 x 147 cm, Curved Standing Mirror, Large Full Length, Wall Mounted, Leaning, Floor Mirror, Full Body as Dressing Vanity Mirror for Living Room, Black', 'Brand    Koonmi\r\nRoom type    Living Room\r\nShape    Rectangular\r\nProduct dimensions    147L x 44W centimetres\r\nFrame material    Aluminium', 5, '2024-08-27 00:34:02', 1, 1),
 (24, 'JUMMICO Gaming Table 130 x 130 x 75 cm, Desk with Monitor Stand, Corner Desk, L Shape, Gaming Desk L-Shaped, Large PC Corner Table, Black', 'Brand    JUMMICO\r\nProduct dimensions    130D x 130W x 75H centimetres\r\nColour    Black\r\nStyle    Modern\r\nBase material    Engineered Wood\r\nSpecial feature    Scratch Resistant\r\nRoom type    Office\r\nRecommended uses for product    Intensive computer use, especially for gaming, due to its ergonomic and stable design\r\nMounting type    Freestanding\r\nFurniture leg material    Engineered Wood', 5, '2024-08-27 00:34:32', 0, 1),
@@ -253,12 +261,12 @@ INSERT INTO `products` (`product_id`, `product_name`, `product_description`, `ca
 (37, 'SEVERIN MW 7886 Microwave Solo, Microwave for Defrosting and Heating, Microwave with Turntable for Even Heat Distribution, Black', 'Brand    SEVERIN\r\nProduct dimensions    36D x 45W x 24H centimetres\r\nColour    Black\r\nCapacity    1 load\r\nSpecial feature    For defrosting and heating with turntable\r\nRecommended uses for product    Defrosting and heating food\r\nInstallation type    Over-the-Range\r\nWattage    700\r\nIncluded components    Installation hardware\r\nController type    Semi-automatic', 2, '2024-08-27 00:41:12', 19, 1),
 (38, 'ArtSport Set of 2 Dumbbells 20/30/40 kg –Dumbbell Set with 2 Dumbbells, Weights and 4 Spinlock Collars', 'Brand    ArtSport\r\nColour    black\r\nItem weight    20 Kilograms\r\nMaterial    Plastic\r\nSpecial feature    Non-Slip', 6, '2024-08-27 00:41:45', 3, 1),
 (39, 'flintronic Fitness Gloves, Breathable Training Gloves with Microfibre Fabric, Non-Slip Silicone Gym Gloves, Weightlifting Gloves, Sports Gloves for Men and Women (Improved Style)', 'Brand    flintronic\r\nMaterial    Silicone\r\nSize    M/L\r\nSport    Exercise and Fitness\r\nGlove type    Sports gloves\r\nAge range (description)    Adult\r\nColour    #1 Black-M\r\nSpecial feature    Slip Resistant, Flexible, Lightweight\r\nHand orientation    Ambidextrous\r\nItem package quantity    1\r\n', 6, '2024-08-27 00:42:04', 130, 0),
-(40, 'Ultrasport F-Bike, Bicycle Trainer, Exercise Bike, Folding Home Trainer, LCD Display, Opt. Hand Pulse Sensors, Adjustable Resistance Levels, Easy Assembly, Ideal for Athletes and Seniors', 'Brand    Ultrasport\r\nSpecial feature    Calories Monitor, Speed Monitor, Distance Travelled Monitor, Foldable\r\nColour    Black/silver\r\nPower source    Battery Powered\r\nRecommended uses for product    Indoor\r\nItem weight    15.5 Kilograms\r\nMaterial    Stainless Steel\r\nResistance mechanism    Magnetic\r\nProduct dimensions    87D x 43.5W x 118H centimetres\r\nMaximum weight recommendation    110 Kilograms', 6, '2024-08-27 00:42:32', 2, 1),
+(40, 'Ultrasport F-Bike, Bicycle Trainer, Exercise Bike, Folding Home Trainer, LCD Display, Opt. Hand Pulse Sensors, Adjustable Resistance Levels, Easy Assembly, Ideal for Athletes and Seniors', 'Brand    Ultrasport\r\nSpecial feature    Calories Monitor, Speed Monitor, Distance Travelled Monitor, Foldable\r\nColour    Black/silver\r\nPower source    Battery Powered\r\nRecommended uses for product    Indoor\r\nItem weight    15.5 Kilograms\r\nMaterial    Stainless Steel\r\nResistance mechanism    Magnetic\r\nProduct dimensions    87D x 43.5W x 118H centimetres\r\nMaximum weight recommendation    110 Kilograms', 6, '2024-08-27 00:42:32', 4, 1),
 (41, 'YOLEO Folding Weight Bench Multifunctional Training Fitness Bench Abdominal Trainer Slanted Bench with 6-Way Adjustable Backrest/3-Way Adjustable Seat Cushion, Load 250 kg, Sit Up Bench', 'Brand    YOLEO\r\nItem weight    10.5 Kilograms\r\nMaterial    Alloy Steel\r\nColour    black\r\nProduct dimensions    110D x 43W x 114.3H centimetres\r\nFrame material    Alloy Steel\r\nWeight limit    300 Kilograms\r\nManufacturer    YOLEO', 6, '2024-08-27 00:42:57', 1, 1),
-(42, 'Oball Rattle – Flexible and Easy-to-Grip Design for Children of All Ages Classic', 'Brand    Bright Starts\r\nMaterial    Plastic\r\nColour    Blue, green, red, yellow\r\nAge range (description)    baby, toddler\r\nItem weight    0.02 Kilograms', 7, '2024-08-27 00:43:27', 6, 1),
+(42, 'Oball Rattle – Flexible and Easy-to-Grip Design for Children of All Ages Classic', 'Brand    Bright Starts\r\nMaterial    Plastic\r\nColour    Blue, green, red, yellow\r\nAge range (description)    baby, toddler\r\nItem weight    0.02 Kilograms', 7, '2024-08-27 00:43:27', 8, 1),
 (43, 'FPVERA Pram Toy for Babies Activity Spiral Toy Hanging Toy Baby Seat Cot Toy Baby Spiral Plush Toy for Toddlers Boys Girls from 0 3 6 9 12 Months', 'colourful animal shape design, and a BB cry is built into the top of the animal, which creates a soft and sweet sound when pressed, which can not only attract the baby\'s attention, but also train the baby\'s hearing. At the same time, accessories are hung on each ring that can train the baby\'s gripping ability\r\nSafe and soft spiral crib toy: hanging stroller toys are made of soft and safe fabric material, non-toxic, BPA free, no fluorescent additives, no irritation to baby\'s skin, safety for baby\r\nWidely Used The spiral plush toy is especially suitable for entertainment at home or on the go. Can be placed in different places, stroller, car seat, cot, travel or other places to use\r\nParent-child interaction: baby crib accessories are not only cute decoration for cribs and cradles, but also valuable sensory toys or photography props for babies, which are very suitable for interacting with babies. It can be hung on the cradle so that the baby can play alone and you have time to do some of your own things', 7, '2024-08-27 00:44:14', 1, 1),
 (44, 'Fisher-Price FPM50 Stuffed Toy Puppies with Songs and Sets Growing Play Levels Baby Toy from 6 Months', 'Age: 6 Months +\r\nEncourages these development areas: Curiosity and amazement, Early Childhood Learning, Communicative Skills\r\nThe child\'s best friend guarantees endless learning fun by responding to touch with great singing and phrases that familiarise with over 100 simple words, body parts, colours, shapes and more\r\nAnd because every child develops at its own pace, the cuddly soft puppy features Smart Stages technology so parents can choose the level that is good for their child.\r\nEach of the three levels holds a series of songs, sounds and phrases\r\nAnd by the way, the vocabulary of the little one expands in a playful way.\r\n', 7, '2024-08-27 00:44:51', 0, 1),
-(45, 'Baby Teething Toy, Baby Remote Control Teething Ring, Silicone Teething Aid Baby BPA-Free with Baby Dummy Chain, Silicone, Teething Nursing Accessories for 3+ Months Baby (Black)', 'Material    Silicone\r\nColour    black\r\nBrand    Svalor\r\nMaterial Type Free    Kunststofffrei\r\nItem dimensions L x W x H    22 x 8.5 x 1.5 centimetres', 7, '2024-08-27 00:45:23', 3, 1),
+(45, 'Baby Teething Toy, Baby Remote Control Teething Ring, Silicone Teething Aid Baby BPA-Free with Baby Dummy Chain, Silicone, Teething Nursing Accessories for 3+ Months Baby (Black)', 'Material    Silicone\r\nColour    black\r\nBrand    Svalor\r\nMaterial Type Free    Kunststofffrei\r\nItem dimensions L x W x H    22 x 8.5 x 1.5 centimetres', 7, '2024-08-27 00:45:23', 8, 1),
 (46, 'Maybelline New York Feuchtigkeitsspendender Lippenstift mit pflegenden Ölen, Cremige Textur mit Collagen und Jojoba-Öl, Moisture Extreme, Nr. 132 Metallic Mauve (Violett), 1 x 5g', 'Brand    MAYBELLINE\r\nItem form    Pencil\r\nFinish type    Glossy\r\nSun protection    15 SPF\r\nSkin type    Dry\r\nColour    Metallic Mauve\r\nProduct benefits    Combines glamorous colour with intensive care\r\nFlavour    jade\r\nMaterial feature    Natural\r\nNumber of items    1\r\n', 8, '2024-08-27 00:45:52', 329, 1),
 (47, 'Essence cosmetics liquid ink eyeliner waterproof, Eye Liner, Nr. 01, schwarz, definierend, langanhaltend, wasserfest, vegan, ohne Parfüm (3ml)', 'Colour    black\r\nBrand    essence cosmetics\r\nItem form    Gel\r\nFinish type    Matte\r\nSpecial feature    Waterproof, Oil-free\r\nProduct benefits    Defining\r\nMaterial Type Free    Oil-free\r\nNumber of items    1\r\nUnit count    1 stück\r\nCoverage    Full', 8, '2024-08-27 00:46:18', 4, 1),
 (48, 'Maybelline New York Mascara for Volume and Definition, Lash Sensational, Very Black, 9.5 ml', 'Colour    Black (very black)\r\nProduct benefits    With the innovative 2-in-1 eyelash defalter brush, a long, dense and full eyelash fan is created in 2 easy stepsWith the innovative 2-in-1 eyelash defalter brush, a long, dense and full eyelash fan is created in 2 easy steps\r\nBrand    MAYBELLINE\r\nSpecialty    Tested, lightweight, without\r\nNumber of items    1\r\nUnit count    9.5 milliliter\r\nItem volume    9.5 Millilitres\r\nSkin type    Normal\r\nWater resistance level    Waterproof\r\nCoverage    Lightweight', 8, '2024-08-27 00:47:15', 4, 1),
@@ -496,14 +504,14 @@ INSERT INTO `products_variations` (`variation_id`, `variation_price`, `variation
 (21, 1250.00, 155, 'Sky Blue', 12, 1),
 (22, 150.00, 248, 'Black', 13, 1),
 (23, 195.50, 0, 'Black', 14, 0),
-(24, 85.00, 34, 'Black', 15, 1),
-(25, 85.00, 22, 'White', 15, 1),
+(24, 85.00, 32, 'Black', 15, 1),
+(25, 85.00, 18, 'White', 15, 1),
 (26, 110.00, 0, 'Black', 16, 0),
 (27, 14.99, 345, 'Tempered Glass', 17, 1),
 (28, 12.99, 149, 'Tempered Glass', 18, 1),
 (29, 75.50, 48, 'Gray', 19, 1),
 (30, 180.00, 55, 'Black', 20, 1),
-(31, 1500.00, 34, 'Size King', 21, 1),
+(31, 1500.00, 31, 'Size King', 21, 1),
 (32, 1200.00, 40, 'Size Queen', 21, 1),
 (33, 1150.00, 45, 'height 177cm', 22, 1),
 (34, 1350.00, 65, 'height 200cm', 22, 1),
@@ -532,15 +540,15 @@ INSERT INTO `products_variations` (`variation_id`, `variation_price`, `variation
 (57, 460.00, 0, '30L', 37, 0),
 (58, 150.00, 107, '40Kg', 38, 1),
 (59, 20.00, 0, 'Black', 39, 0),
-(60, 250.00, 23, 'Standard', 40, 1),
+(60, 250.00, 21, 'Standard', 40, 1),
 (61, 300.00, 0, 'Extended', 40, 0),
 (62, 450.00, 9, 'Standard', 41, 1),
-(63, 4.99, 80, 'Small', 42, 1),
+(63, 4.99, 78, 'Small', 42, 1),
 (64, 7.99, 144, 'Big', 42, 1),
 (65, 15.00, 74, '3 hanging toys', 43, 1),
 (66, 19.99, 399, 'Female voice', 44, 1),
 (67, 19.99, 500, 'Male voice', 44, 1),
-(68, 8.00, 996, 'Black', 45, 1),
+(68, 8.00, 991, 'Black', 45, 1),
 (69, 15.00, 4, 'Sort of Pink', 46, 1),
 (70, 13.00, 244, 'Waterproof', 47, 1),
 (71, 18.00, 135, 'Full Effect', 48, 1),
@@ -576,7 +584,7 @@ CREATE TABLE IF NOT EXISTS `shopping_cart` (
   PRIMARY KEY (`cart_item_id`),
   KEY `user_id` (`user_id`),
   KEY `variation_id` (`variation_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=210 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=231 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `shopping_cart`
@@ -720,7 +728,7 @@ INSERT INTO `shopping_cart` (`cart_item_id`, `user_id`, `in_cart`, `variation_id
 (136, 1, 0, 18, 3),
 (137, 1, 1, 66, 0),
 (138, 1, 0, 49, 30),
-(139, 1, 1, 63, 2),
+(139, 1, 0, 63, 2),
 (140, 6, 0, 71, 1),
 (141, 6, 0, 40, 4),
 (142, 6, 0, 57, 18),
@@ -783,7 +791,28 @@ INSERT INTO `shopping_cart` (`cart_item_id`, `user_id`, `in_cart`, `variation_id
 (206, 6, 0, 69, 300),
 (207, 6, 0, 69, 299),
 (208, 6, 1, 42, 0),
-(209, 6, 1, 70, 1);
+(209, 6, 1, 70, 1),
+(210, 7, 0, 31, 3),
+(211, 7, 0, 37, 35),
+(212, 7, 0, 37, 34),
+(213, 7, 1, 37, 10),
+(214, 7, 0, 60, 2),
+(215, 7, 1, 51, 4),
+(216, 1, 0, 68, 5),
+(217, 1, 0, 24, 2),
+(218, 1, 0, 25, 4),
+(219, 1, 0, 48, 1),
+(220, 1, 1, 48, 0),
+(221, 1, 0, 70, 2),
+(222, 1, 0, 70, 3),
+(223, 1, 0, 70, 2),
+(224, 1, 0, 70, 1),
+(225, 1, 1, 70, 0),
+(226, 1, 0, 29, 46),
+(227, 1, 0, 29, 45),
+(228, 1, 1, 29, 44),
+(229, 1, 1, 50, 3),
+(230, 1, 1, 50, 10);
 
 -- --------------------------------------------------------
 
@@ -802,18 +831,19 @@ CREATE TABLE IF NOT EXISTS `users` (
   `last_name` varchar(50) DEFAULT NULL,
   `is_active` tinyint(1) NOT NULL DEFAULT '1',
   PRIMARY KEY (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=7 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users`
 --
 
 INSERT INTO `users` (`user_id`, `user_name`, `password`, `email`, `phone`, `first_name`, `last_name`, `is_active`) VALUES
-(1, 'abdalghany', 'JustJeez', 'abdalghany@windowslive.com', '011119151798', 'Abdlghany', 'Dada', 1),
+(1, 'abdalghany', '12345', 'abdalghany@windowslive.com', '011119151798', 'Abdlghany', 'Dada', 1),
 (3, 'bbbbbb', 'ccccc', 'aaaaa@bbb.ccc', '159532167', 'aaaaa', 'bbbbb', 1),
 (4, 'userNumberEleven', 'numbertwelve please2', 'number11@gmail.com', '0111789653', 'Number', 'Eleven', 1),
 (5, 'amal', '12345', 'amal@gmail.com', '2733563623', 'amal', 'akram', 1),
-(6, 'lolo', '1234', 'alaaknifaty1@gmail.com', '10827365635', 'lolo', 'lala', 1);
+(6, 'lolo', '1234', 'alaaknifaty1@gmail.com', '10827365635', 'lolo', 'lala', 1),
+(7, 'streamTesting', 'stream2', 'stream@streaming.net', '011511999', 'Lala', 'Streaaaaaming', 1);
 
 -- --------------------------------------------------------
 
@@ -833,7 +863,7 @@ CREATE TABLE IF NOT EXISTS `users_addresses` (
   `label` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`address_id`),
   KEY `user_id` (`user_id`)
-) ENGINE=MyISAM AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 --
 -- Dumping data for table `users_addresses`
@@ -844,8 +874,8 @@ INSERT INTO `users_addresses` (`address_id`, `user_id`, `street`, `city`, `state
 (7, 1, '385-Blok 15', 'Taiping', 'Perak', 'Malaysia', '40100', 'Home'),
 (9, 4, '5-9-3L, Lower half street', 'Shah Alam', 'Selangor', 'Malaysia', '50201', 'Work'),
 (10, 4, '895632', 'Muar', 'Johor', 'Malaysia', '80450', 'Moms House'),
-(11, 1, '8-3-6E, Pakala Papito Street', 'Sandakan', 'Sabah', 'Malaysia', '89000', 'Dads House'),
-(12, 6, '45 Tower A, Jalan Serra', 'Kuala Krai', 'Kelantan', 'Malaysia', '60150', 'Home');
+(12, 6, '45 Tower A, Jalan Serra', 'Kuala Krai', 'Kelantan', 'Malaysia', '60150', 'Home'),
+(13, 7, 'Block 17, House 5', 'Petaling Jaya', 'Selangor', 'Malaysia', '60131', 'Dads House');
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
