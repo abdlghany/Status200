@@ -1,15 +1,13 @@
-import {Counter} from './components/Counter'
+import UnorderedList from './components/UnorderedList'
 import './App.css'
-
+import Counter from './components/Counter'
 function App() {
   return (
     <>
-      <Counter/>
-      <Counter/>
-      <Counter/>
-      <Counter/>
+    <Counter/>
+    <UnorderedList/>
+    <Counter/>
     </>
-    
   )
 }
 
