@@ -6,7 +6,7 @@ export default function UnorderedList(){
     if(forbiddenCity == "Amesterdam" || forbiddenCity == "Moscow"){
       return (
         <ul className='list-group'>
-          YOU HAVE NO HUMAN RIGHTS, because you're from <b>{forbiddenCity}</b>.
+          YOU HAVE NO HUMAN RIGHTS, because you're from <b>{forbiddenCity}</b>
         </ul>
     )
     }
