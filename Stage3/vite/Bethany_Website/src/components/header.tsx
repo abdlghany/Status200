@@ -1,10 +1,9 @@
-export default function Header() {
+export default function Header({liClasses, aClasses, lis, ulClasses}:{liClasses:string, aClasses:string, lis:any, ulClasses:string}) {
   return (
-        <ul className="list-group d-inline-flex flex-row justify-content-around list-group-flush">
-            <li className="list-group-item">BIO</li>
-            <li className="list-group-item">PORTFOLIO</li>
-            <li className="list-group-item">PODCAST</li>
-            <li className="list-group-item">BLOG</li>
+        <ul className={ulClasses}>
+            {lis.map(
+              (item: any) => <li className={liClasses}><a href={item.href} className={aClasses}>{item.name}</a></li>
+            )}
         </ul>
   )
 }

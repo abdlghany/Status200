@@ -12,9 +12,11 @@ export default function UnorderedList(){
     }
     return (
       <ul className='list-group'>
-        {cities.map(
+        {
+        cities.map(
           (item: any, index: any) => <li className="list-group-item">{index+1}. {item}</li>
-          )}
+          )
+        }
       </ul>
   )
 }
