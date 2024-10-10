@@ -5,21 +5,27 @@ export default function Counter(){
     return (
     <>
       <div className="card">
-        <p>Please enter your credit card number<br/>(example: 58265985236):</p>
-      <button onClick={() => setCount((count) => count - 2)}>
-          -2
+        
+      <button onClick={() => setCount((count) => count - 1000000000)}>
+          -1000000000
+        </button>
+        <button onClick={() => setCount((count) => count - 1000)}>
+          -1000
         </button>
         <button onClick={() => setCount((count) => count - 1)}>
           -1
         </button>
         <span>
-          Count is {count}
+          My card number is {count}
         </span>
         <button onClick={() => setCount((count) => count + 1)}>
           +1
         </button>
-        <button onClick={() => setCount((count) => count + 2)}>
-          +2
+        <button onClick={() => setCount((count) => count + 1000)}>
+          +1000
+        </button>
+        <button onClick={() => setCount((count) => count + 1000000000)}>
+          +1000000000
         </button>
       </div>
     </>
