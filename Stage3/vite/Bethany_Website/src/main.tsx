@@ -6,6 +6,7 @@ import './index.css'
 // Importing Bootstrap css
 import "../node_modules/bootstrap/scss/bootstrap.scss";
 import './App.css'
+import './App.scss'
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <App />

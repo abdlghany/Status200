@@ -1,0 +1,16 @@
+// Import Bootstrap's functions and variables first
+@import "../node_modules/bootstrap/scss/functions";
+@import "../node_modules/bootstrap/scss/variables";
+
+// Override Bootstrap's primary color
+$primary: rgb(231, 223, 217);
+$font-size-1: $h1-font-size * 2;
+// overwrite the primary color ot the bg required color
+$theme-colors: map-merge($theme-colors, (
+  "primary": $primary
+));
+// overwrite the existing fs-1 class to a bigger size.
+$font-sizes: map-merge($font-sizes,(
+"1": $font-size-1
+));
+@import "../node_modules/bootstrap/scss/bootstrap";

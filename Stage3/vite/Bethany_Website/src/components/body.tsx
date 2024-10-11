@@ -1,42 +1,52 @@
 export default function Body(
-      {BodyClasses, TitleText, AboutText, liClasses, aClasses, lis, ulClasses, hashTag, profilePicture, imgClasses, hashTagClasses, titleClasses}:
+      {BodyClasses, TitleText, AboutText, liClasses, aClasses, lis, ulClasses, hashTag, profilePicture, imgClasses, hashTagClasses,
+             TitleClasses, AboutClasses, ProfilePictureClasses, SocialMediaClasses, leftSide}:
       {BodyClasses?:string, TitleText?:string, AboutText?:string, liClasses?:string, aClasses?:string, lis:any, ulClasses?:string,
-            hashTag?:string, profilePicture?:string, imgClasses?:string, hashTagClasses?:string, titleClasses?:string}) {
+            hashTag?:string, profilePicture?:string, imgClasses?:string, hashTagClasses?:string, TitleClasses?:string, AboutClasses?:string,
+            ProfilePictureClasses?:string, SocialMediaClasses?:string, leftSide?:string}) {
     return (
       <div className={BodyClasses}>
-          <div>
+          <div className={leftSide}>
             <Title TitleText = {TitleText}
-                  titleClasses = {titleClasses}/>
-            <About AboutText = {AboutText}/>
-            <HashTag hashTag={hashTag} hashTagClasses = {hashTagClasses}/>
-            <SocialMedia 
+                   TitleClasses = {TitleClasses}/>
+            <About AboutText = {AboutText} 
+                   AboutClasses = {AboutClasses}/>
+            <div className="mt-auto">
+            <HashTag hashTag={hashTag} 
+                     hashTagClasses = {hashTagClasses}/>
+            <SocialMedia
+                  SocialMediaClasses = {SocialMediaClasses} 
                   liClasses = {liClasses}
                   aClasses = {aClasses}
                   lis = {lis}
                   ulClasses = {ulClasses}
                   imgClasses = {imgClasses}
             />
+            </div>
           </div>
-          <ProfilePicture imgSrc={profilePicture}/>
+          <ProfilePicture 
+          imgSrc={profilePicture}
+          ProfilePictureClasses = {ProfilePictureClasses}
+          />
       </div>
     )
 }
 
-function Title({TitleText, titleClasses}:{TitleText?:string, titleClasses?:string}){
+function Title({TitleText, TitleClasses}:{TitleText?:string, TitleClasses?:string}){
       return (
-            <h1 className={titleClasses}>{TitleText}</h1>
+            <h1 className={TitleClasses}>{TitleText}</h1>
       )
 }
 
-function About({AboutText}:{AboutText?:string}){
+function About({AboutText, AboutClasses}:{AboutText?:string, AboutClasses?:string}){
       return(
-            <p>{AboutText}</p>
+            <p className={AboutClasses}>{AboutText}</p>
       )
 }
 
-function ProfilePicture({ imgSrc }: { imgSrc?: string }){
+function ProfilePicture({imgSrc, ProfilePictureClasses}: {imgSrc?: string, ProfilePictureClasses?:string}){
       return(
-            <img src={imgSrc} alt="Profile Picture" />
+            <img src={imgSrc} alt="Profile Picture" className={ProfilePictureClasses}/>
       )
 }
 
@@ -46,15 +56,18 @@ function HashTag({hashTag, hashTagClasses}:{hashTag?: string, hashTagClasses?:st
       )
 }
 
-function SocialMedia({liClasses, aClasses, lis, ulClasses,imgClasses}:{liClasses?:string, aClasses?:string, lis?:any, ulClasses?:string, imgClasses?:string}){
+function SocialMedia({liClasses, aClasses, lis, ulClasses,imgClasses, SocialMediaClasses}:
+      {liClasses?:string, aClasses?:string, lis?:any, ulClasses?:string, imgClasses?:string, SocialMediaClasses?:string}){
       return (
-      <ul className={ulClasses}>
-            {lis.map(
-                  (item: any) =>
-                  <li className={liClasses}>
-                        <a href={item.href} className={aClasses}><img src={item.src} alt={item.src} className={imgClasses}/></a>
-                        </li>
-                )}
-      </ul>
+      <div className={SocialMediaClasses}>
+            <ul className={ulClasses}>
+                  {lis.map(
+                        (item: any) =>
+                        <li className={liClasses}>
+                              <a href={item.href} className={aClasses} target="_blank"><img src={item.src} alt={item.src} className={imgClasses}/></a>
+                              </li>
+                  )}
+            </ul>
+      </div>
       )
 }
