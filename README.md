@@ -3,3 +3,4 @@
 [Stage 1 code](./Stage1/)
 [Stage 2 code](./Stage2/)
 [View Stage 2 Project](./Ripoff/)
+[Stage 3 code](./Stage3/vite//)

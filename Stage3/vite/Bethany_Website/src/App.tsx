@@ -37,7 +37,6 @@ function App() {
           hashTagClasses ="fw-bold fs-5"
           leftSide="d-flex flex-column"
       />
-
     </div>
   )
 }
