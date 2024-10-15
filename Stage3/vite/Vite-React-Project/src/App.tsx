@@ -5,7 +5,7 @@ function App() {
   return (
     <>
     {/*  */}
-    <CToF initialCelsius={0} initialFahrenheit={32}/>
+    <CToF defaultCelsius={0} defaultFahrenheit={32}/>
     </>
   )
 }

@@ -1,17 +1,23 @@
 import { useState } from 'react';
 
 // convert between C and F
-const toCelsius = (fahrenheit: number) => (fahrenheit - 32) * 5 / 9;
-const toFahrenheit = (celsius: number) => (celsius * 9 / 5) + 32;
+// (0°C × 9/5) + 32 = 32°F
 
-interface TemperatureConverterProps {
-  initialCelsius: number;
-  initialFahrenheit: number;
+function toFahrenheit (celsius: number){
+    return (celsius * 9 / 5) + 32;
 }
-function TemperatureConverter(props: TemperatureConverterProps) {
+function toCelsius(fahrenheit: number){
+    return (fahrenheit - 32) * 5 / 9;
+}
+
+interface TemperatureConverterProperties {
+  defaultCelsius: number;
+  defaultFahrenheit: number;
+}
+function TemperatureConverter(props: TemperatureConverterProperties) {
   // States for Celsius and Fahrenheit
-  const [celsius, setCelsius] = useState(props.initialCelsius);
-  const [fahrenheit, setFahrenheit] = useState(props.initialFahrenheit);
+  const [celsius, setCelsius] = useState(props.defaultCelsius);
+  const [fahrenheit, setFahrenheit] = useState(props.defaultFahrenheit);
 
   // celsius input change
   const CelsiusChanged = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -20,8 +26,8 @@ function TemperatureConverter(props: TemperatureConverterProps) {
       setCelsius(value);
       setFahrenheit(toFahrenheit(value));
     } else {
-      setCelsius(props.initialCelsius);
-      setFahrenheit(toFahrenheit(props.initialCelsius));
+      setCelsius(0);
+      setFahrenheit(toFahrenheit(0));
     }
   };
 
@@ -32,8 +38,8 @@ function TemperatureConverter(props: TemperatureConverterProps) {
       setFahrenheit(value);
       setCelsius(toCelsius(value));
     } else {
-      setFahrenheit(props.initialFahrenheit);
-      setCelsius(toCelsius(props.initialFahrenheit));
+      setFahrenheit(0);
+      setCelsius(toCelsius(0));
     }
   };
 
