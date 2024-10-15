@@ -1,33 +1,16 @@
-import { useState } from 'react'
+import { useState } from "react";
+const defaultValue = 10;
+function Counter() {
+    const [value, setValue] = useState(defaultValue);
 
-export default function Counter(){
-    const [count, setCount] = useState(45);
     return (
-    <>
-      <div className="card">
-        
-      <button onClick={() => setCount((count) => count - 1000000000)}>
-          -1000000000
-        </button>
-        <button onClick={() => setCount((count) => count - 1000)}>
-          -1000
-        </button>
-        <button onClick={() => setCount((count) => count - 1)}>
-          -1
-        </button>
-        <span>
-          My card number is {count}
-        </span>
-        <button onClick={() => setCount((count) => count + 1)}>
-          +1
-        </button>
-        <button onClick={() => setCount((count) => count + 1000)}>
-          +1000
-        </button>
-        <button onClick={() => setCount((count) => count + 1000000000)}>
-          +1000000000
-        </button>
-      </div>
-    </>
-  )
+        <>
+            <h2>{value}</h2>
+            <button onClick={() => setValue(value - 1)}>decrease by 1</button>
+            <button onClick={() => setValue(defaultValue)}>reset</button>
+            <button onClick={() => setValue(value + 1)}>increase by 1</button>
+        </>
+    );
 }
+
+export default Counter;
