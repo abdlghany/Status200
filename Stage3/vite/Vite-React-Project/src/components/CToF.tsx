@@ -1,7 +1,7 @@
 import { useState } from 'react';
 
 // convert between C and F
-// (0°C × 9/5) + 32 = 32°F
+// Formula: (0°C × 9/5) + 32 = 32°F
 
 function toFahrenheit (celsius: number){
     return (celsius * 9 / 5) + 32;

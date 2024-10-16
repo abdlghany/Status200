@@ -6,6 +6,7 @@ function App() {
     <>
     {/*  */}
     <CToF defaultCelsius={0} defaultFahrenheit={32}/>
+
     </>
   )
 }
