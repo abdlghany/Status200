@@ -1,13 +1,9 @@
 import './App.css'
-import CToF from './components/CToF'
+import BMIComponent from './components/BMICalculator'
 
 function App() {
   return (
-    <>
-    {/*  */}
-    <CToF defaultCelsius={0} defaultFahrenheit={32}/>
-
-    </>
+    <BMIComponent/>
   )
 }
 
