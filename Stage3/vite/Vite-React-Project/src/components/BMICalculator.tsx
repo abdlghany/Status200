@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+
 // rewrote my stage 2 bmi calculator in React, tried to (and succeeded I suppose) use the exact same functions.
 // check if the value is between 2 numbers x, y, return the result True, False
 function isValueBetween(value: number, x: number, y: number){
