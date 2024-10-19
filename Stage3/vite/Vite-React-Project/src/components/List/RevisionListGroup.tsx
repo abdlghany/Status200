@@ -1,8 +1,7 @@
 import RevisionListItem from "./RevisionListItem"
 interface properties {
     name?: string,
-    ListItems?: string[]
-
+    ListItems?: {label: string, value: string}[],
 }
 export default function RevisionListGroup({name, ListItems}:properties){
 
@@ -11,7 +10,12 @@ export default function RevisionListGroup({name, ListItems}:properties){
             <h2>{name}</h2>
             <ul className="list-group">
                 {ListItems?.map(
-                    (element) => <RevisionListItem value={element}/>
+                    (element) => (
+                        <>
+                        <RevisionListItem value={element.value} name={element.label}/>
+                        </>
+                    )
+                    
                 )}
             </ul>
         </div>

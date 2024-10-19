@@ -1,11 +1,10 @@
 interface properties {
-    value?: string
+    value?: any,
+    name?: string
 }
-export default function RevisionListItem({value}:properties){
+export default function RevisionListItem({value, name}:properties){
 
     return(
-        <>
-        <li className="list-group-item">{value}</li>
-        </>
+            <li className="list-group-item">{name}: {value}</li>
     )
 }
