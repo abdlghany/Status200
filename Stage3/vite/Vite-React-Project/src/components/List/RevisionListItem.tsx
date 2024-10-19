@@ -1,6 +1,6 @@
 interface properties {
-    value?: any,
-    name?: string
+    value: any,
+    name: string
 }
 export default function RevisionListItem({value, name}:properties){
 

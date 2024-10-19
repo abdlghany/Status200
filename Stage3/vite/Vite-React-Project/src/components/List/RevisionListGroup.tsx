@@ -1,7 +1,7 @@
 import RevisionListItem from "./RevisionListItem"
 interface properties {
-    name?: string,
-    ListItems?: {label: string, value: string}[],
+    name: string,
+    ListItems: {label: string, value: string}[],
 }
 export default function RevisionListGroup({name, ListItems}:properties){
 
