@@ -1,12 +1,10 @@
 import './App.css'
-import BMIComponent from './components/BMICalculator'
+import RevisionEnrollment from './components/RevisionEnrollment'
 
 
 function App() {
   return (
-    <>
-    <BMIComponent/>
-    </>
+    <RevisionEnrollment/>
   )
 }
 
