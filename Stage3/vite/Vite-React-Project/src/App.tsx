@@ -1,10 +1,14 @@
 import './App.css'
-import RevisionEnrollment from './components/RevisionEnrollment'
+import Page from './components/Page'
+import RevisionListGroup from './components/List/RevisionListGroup'
 
-
+const myList = ["Item 1", "Item 2", "Item 30", "Item 40", "..."];
 function App() {
   return (
-    <RevisionEnrollment/>
+    <>
+      <Page/>
+      <RevisionListGroup name="My List" ListItems={myList}/>
+    </>
   )
 }
 
