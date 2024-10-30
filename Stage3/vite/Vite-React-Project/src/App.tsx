@@ -1,29 +1,27 @@
-import './App.css'
-import Page from './components/Page'
-import RevisionListGroup from './components/List/RevisionListGroup'
+import "bootstrap/dist/css/bootstrap.min.css";
+import Board from "./components/Board/Board";
 
-const myList = ["Item 1", "Item 2", "Item 30", "Item 40", "..."];
-const items = [
-  {
-    label: "Karel",
-    value: "15"
-  },
-  {
-    label: "Ferry",
-    value: "25"
-  },
-  {
-    label: "Aboo",
-    value: "38"
-  }
-]
 function App() {
-  return (
-    <div className='m-4s'>
-      <Page/>
-        <RevisionListGroup name="My List" ListItems={items}/>
-    </div>
-  )
+    const cards = [
+        {
+            title: "Card 1",
+            items: ["Item 1.1", "Item 1.2"],
+        },
+        {
+            title: "Card 2",
+            items: ["Item 2.1", "Item 2.2"],
+        },
+        {
+            title: "Card 3",
+            items: ["Item 3.1", "Item 3.2", "Item 3.3"],
+        },
+    ];
+
+    return (
+        <>
+            <Board cards={cards} />
+        </>
+    );
 }
 
-export default App
+export default App;
