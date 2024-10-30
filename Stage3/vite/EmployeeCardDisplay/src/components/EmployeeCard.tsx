@@ -7,13 +7,14 @@ interface EmployeeCardProps {
 
 function EmployeeCard({ employee, onRemove }: EmployeeCardProps) {
     return (
-        <div className="employee-card">
-            <img src={employee.picture} alt={employee.name} />
+        <div className="w-25 employee-card d-flex flex-column justify-content-between">
+            {/* profile-picture class is custom css in App.css */}
+            <img src={"./src/assets/" + employee.picture} alt={employee.name + "'s Picuture"} className="profile-picture img-thumbnail"/>
             <h3>{employee.name}</h3>
             <p>Role: {employee.role}</p>
             <p>Phone: {employee.phone}</p>
             <p>Year of Hiring: {employee.yearOfHiring}</p>
-            <button onClick={onRemove}>Remove</button>
+            <button onClick={onRemove} className="rounded-2">Remove</button>
         </div>
     );
 }

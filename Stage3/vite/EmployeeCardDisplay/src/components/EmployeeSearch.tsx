@@ -4,20 +4,19 @@ interface SearchBarProps {
     setSearchQuery: (query: string) => void;
 }
 
-function SearchBar({ setSearchQuery }: SearchBarProps) {
+function EmployeeSearch({ setSearchQuery }: SearchBarProps) {
     const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
         setSearchQuery(event.target.value);
     };
 
     return (
-        <div className="search-bar">
             <input
                 type="text"
                 placeholder="Search employees..."
                 onChange={handleSearchChange}
+                className="fs-5 rounded-3 ps-1"
             />
-        </div>
     );
 }
 
-export default SearchBar;
+export default EmployeeSearch;
