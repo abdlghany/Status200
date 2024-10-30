@@ -20,6 +20,7 @@ const initialEmployees: Employee[] = [
     { id: 4, picture: "pic4.png", name: "Another Each", role: "Shoplifter", phone: "012-589-8569", yearOfHiring: 2023 },
     { id: 5, picture: "pic5.png", name: "Not Telling", role: "Assassin", phone: "058-588-9999", yearOfHiring: 2000 },
     { id: 6, picture: "pic6.png", name: "Wealthier Dan U.", role: "Wealth Management", phone: "055-555-5555", yearOfHiring: 1998 },
+    { id: 7, picture: "pic7.png", name: "Allison Burgers", role: "Foot taster", phone: "033-333-3333", yearOfHiring: 2018 },
 ];
 
 function App() {
