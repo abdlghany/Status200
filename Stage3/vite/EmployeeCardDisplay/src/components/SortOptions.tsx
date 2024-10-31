@@ -11,9 +11,9 @@ function SortOptions({ sortBy, setSortBy }: SortOptionsProps) {
     };
 
     return (
-        <div className="mt-2 mb-2">
+        <div>
             <label className="me-1 fs-5">Sort by:</label>
-            <select value={sortBy} onChange={handleSortChange} className="rounded-3 ps-1">
+            <select value={sortBy} onChange={handleSortChange} className="rounded-3 ps-1 sort-selection">
                 <option value="name">Name</option>
                 <option value="seniority">Seniority</option>
             </select>

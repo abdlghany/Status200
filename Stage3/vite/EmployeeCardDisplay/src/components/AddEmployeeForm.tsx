@@ -34,7 +34,7 @@ function AddEmployeeForm({ onAddEmployee }: AddEmployeeFormProps) {
                 placeholder="Picture file name"
                 value={newEmployee.picture}
                 onChange={handleInputChange}
-                className="fs-5 rounded-3 ps-1"
+                className="fs-5 rounded-3 ps-1 pb-1"
             />
             <input
                 type="text"
@@ -42,7 +42,7 @@ function AddEmployeeForm({ onAddEmployee }: AddEmployeeFormProps) {
                 placeholder="Name"
                 value={newEmployee.name}
                 onChange={handleInputChange}
-                className="fs-5 rounded-3 ps-1"
+                className="fs-5 rounded-3 ps-1 pb-1"
             />
             <input
                 type="text"
@@ -50,7 +50,7 @@ function AddEmployeeForm({ onAddEmployee }: AddEmployeeFormProps) {
                 placeholder="Role"
                 value={newEmployee.role}
                 onChange={handleInputChange}
-                className="fs-5 rounded-3 ps-1"
+                className="fs-5 rounded-3 ps-1 pb-1"
             />
             <input
                 type="text"
@@ -58,7 +58,7 @@ function AddEmployeeForm({ onAddEmployee }: AddEmployeeFormProps) {
                 placeholder="Phone"
                 value={newEmployee.phone}
                 onChange={handleInputChange}
-                className="fs-5 rounded-3 ps-1"
+                className="fs-5 rounded-3 ps-1 pb-1"
             />
             <input
                 type="number"
@@ -66,10 +66,10 @@ function AddEmployeeForm({ onAddEmployee }: AddEmployeeFormProps) {
                 placeholder="Year of Hiring"
                 value={newEmployee.yearOfHiring}
                 onChange={handleInputChange}
-                className="fs-5 rounded-3 ps-1"
+                className="fs-5 rounded-3 ps-1 pb-1"
                 min={1900}
-                /* Date fornmat is as follows:
-                2024-12-30T24:60:60 therefore splitting by - then selecting the first index will give us the highest possible selectable year  */
+                /* Date toISOString() formatted as follows:
+                    2024-12-30T24:60:60 therefore splitting by - then selecting the first index will give us the highest possible selectable year  */
                 max={new Date().toISOString().split("-")[0]}
             />
             <button type="submit" className="rounded-3 fs-5">Add Employee</button>

@@ -14,7 +14,7 @@ function EmployeeSearch({ setSearchQuery }: SearchBarProps) {
                 type="text"
                 placeholder="Search employees..."
                 onChange={handleSearchChange}
-                className="fs-5 rounded-3 ps-1"
+                className="fs-5 rounded-3 ps-1 pb-1"
             />
     );
 }

@@ -19,6 +19,15 @@
   height: 550px;
   max-height: 580px;
 }
+
 .employee-grid{
-  min-width: 1000px;
+  min-width: 900px;
+}
+
+.sort-selection{
+  height: 2.5rem;
+}
+
+.employee-card-paragraph{
+  overflow: hidden;
 }
