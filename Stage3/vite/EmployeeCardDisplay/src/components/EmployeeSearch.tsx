@@ -5,8 +5,8 @@ interface SearchBarProps {
 }
 
 function EmployeeSearch({ setSearchQuery }: SearchBarProps) {
-    const handleSearchChange = (event: ChangeEvent<HTMLInputElement>) => {
-        setSearchQuery(event.target.value);
+    const handleSearchChange = (e: ChangeEvent<HTMLInputElement>) => {
+        setSearchQuery(e.target.value);
     };
 
     return (

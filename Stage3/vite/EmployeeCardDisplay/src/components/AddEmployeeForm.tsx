@@ -4,6 +4,7 @@ import { Employee } from "../App";
 interface AddEmployeeFormProps {
     onAddEmployee: (newEmployee: Employee) => void;
 }
+
 const defaultNewEmployeeInfo = {
     picture: "",
     name: "",
@@ -11,6 +12,7 @@ const defaultNewEmployeeInfo = {
     phone: "",
     yearOfHiring: 2020,
 }
+
 function AddEmployeeForm({ onAddEmployee }: AddEmployeeFormProps) {
     const [newEmployee, setNewEmployee] = useState(defaultNewEmployeeInfo);
 

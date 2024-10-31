@@ -8,7 +8,7 @@ interface EmployeeCardProps {
 function EmployeeCard({ employee, onRemove }: EmployeeCardProps) {
     return (
         <div className="w-25 employee-card d-flex flex-column justify-content-between text-start">
-            {/* profile-picture class is custom css in App.css */}
+            {/* profile-picture class is custom css in App.css, not from bootstrap */}
             <img src={"./src/assets/" + employee.picture} alt={employee.name + "'s Picuture"} className="profile-picture img-thumbnail"/>
             <h3>{employee.name}</h3>
             <p className="employee-card-paragraph">Role: {employee.role}</p>
