@@ -26,6 +26,7 @@ const initialEmployees: Employee[] = [
 function App() {
     const [employees, setEmployees] = useState<Employee[]>(initialEmployees);
     const handleAddEmployee = (newEmployee: Employee) => {
+      /* add the previous array + the newEmployee */
         setEmployees([...employees, newEmployee]);
     };
 
