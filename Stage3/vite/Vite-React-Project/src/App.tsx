@@ -1,5 +1,7 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Board from "./components/Board/Board";
+import ParentComponent from "./components/CustomRenderLogic";
+import FormComponent from "./components/ControlledFormComponent";
 
 function App() {
     const cards = [
@@ -20,6 +22,8 @@ function App() {
     return (
         <>
             <Board cards={cards} />
+            <ParentComponent/>
+            <FormComponent/>
         </>
     );
 }
