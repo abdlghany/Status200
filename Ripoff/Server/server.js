@@ -35,7 +35,7 @@ const server = http.createServer(function(request, response) {
                 response.end(JSON.stringify({ message: "No categories found." }));
             }
         });
-    } 
+    }
     // Route GET Signup
     else if (pathname === "/signup" && queryParams) {
         doesAccountExist(queryParams.get('username'), queryParams.get('email'), function(result) {
