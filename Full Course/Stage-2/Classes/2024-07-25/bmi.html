@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BMI Calculator</title>
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="js/bmi.js"></script>
+        <script src="js/validators.js"></script>
+        <script src="js/rounder.js"></script>
+    </head>
+    <body>
+        <main>
+            <div>
+                <h1>BMI Calculator</h1>
+            </div>
+            <div>
+                <label>Your name</label>
+                <div>
+                    <input
+                        type="text"
+                        placeholder="name"
+                        id="inputName"
+                        onkeyup="emptyError('errorName')"
+                        autofocus
+                    />
+                    <div class="info">
+                        <p class="help">only letters and spaces</p>
+                        <p class="error" id="errorName"></p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label>Your height</label>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Height"
+                        id="inputHeight"
+                        onkeyup="emptyError('errorHeight')"
+                    />
+                    <select id="inputHeightUnitSystem">
+                        <option value="inches">Inches</option>
+                        <option value="centimeters">Centimeters</option>
+                    </select>
+                    <div class="info">
+                        <p class="help">
+                            height must be between 50 and 250 cm or 20 and 100
+                            inches
+                        </p>
+                        <p class="error" id="errorHeight"></p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label>Your weight</label>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Weight"
+                        id="inputWeight"
+                        onkeyup="emptyError('errorWeight')"
+                    />
+                    <select id="inputWeightUnitSystem">
+                        <option value="pounds">Pounds</option>
+                        <option value="kilograms">Kilograms</option>
+                    </select>
+                    <div class="info">
+                        <p class="help">
+                            weight must be between 20 and 200 kg or 40 and 400
+                            pounds
+                        </p>
+                        <p class="error" id="errorWeight"></p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label>Decimals to use in BMI score</label>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Decimals"
+                        id="inputDecimals"
+                        value="1"
+                        onkeyup="emptyError('errorDecimals')"
+                    />
+                    <div class="info">
+                        <p class="help">
+                            number of decimals must be between 0 and 10
+                        </p>
+                        <p class="error" id="errorDecimals"></p>
+                    </div>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label></label>
+                <button onclick="calculateBMI()" id="outputBmiResult">
+                    Calulate BMI
+                </button>
+            </div>
+        </main>
+    </body>
+</html>

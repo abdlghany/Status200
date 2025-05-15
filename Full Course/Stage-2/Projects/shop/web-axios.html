@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Example HTML</title>
+        <!-- Get HTTP client for the browser  -->
+        <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    </head>
+    <body>
+        <h1>Categories</h1>
+        <div id="categories"></div>
+
+        <script>
+            // Use HTTP client to get data from the node server
+            axios
+                .get("http://localhost:3000/api/categories")
+                .then(function (response) {
+                    // Log response for testing
+                    console.log(response);
+
+                    // Get the categories from the response
+                    const categories = response.data;
+
+                    // Create a string for the categories
+                    let output = "";
+
+                    // Loop through the categories and add them to the output
+                    for (let i = 0; i < categories.length; i++) {
+                        output += "<div>" + categories[i].name + "</div>";
+                    }
+
+                    // Add the output to the categories div
+                    document.getElementById("categories").innerHTML = output;
+                })
+                .catch(function (error) {
+                    // handle error
+                    console.log(error);
+                });
+        </script>
+    </body>
+</html>

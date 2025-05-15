@@ -1,0 +1,42 @@
+body {
+  margin: 10px;
+}
+
+.boxes {
+  border: 3px solid lightgray;
+
+  /*  
+    The .boxes element will be positioned relatively.
+    We need to do this so that the .box-two element can be positioned absolutely relative to the .boxes element.
+  */
+  position: relative;
+}
+
+.box {
+  width: 5rem;
+  height: 5rem;
+}
+
+.box-one {
+  background-color: gold;
+}
+
+.box-two {
+  background-color: tomato;
+
+  /* 
+    The box will be positioned absolutely, relative to the nearest non static positioned ancestor.
+    In this case, the nearest non static positioned ancestor is the .boxes element, because it has a position of relative.
+   */
+  position: absolute;
+
+  /* 
+    
+   */
+
+  right: 0;
+}
+
+.box-three {
+  background-color: dodgerblue;
+}

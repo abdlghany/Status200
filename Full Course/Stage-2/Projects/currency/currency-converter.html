@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Currency Convertor</title>
+        <style>
+            body {
+                display: flex;
+                gap: 10px;
+                align-items: center;
+            }
+            input {
+                text-align: center;
+            }
+            div {
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                align-items: center;
+            }
+        </style>
+    </head>
+    <body>
+        <select
+            id="leftCurrency"
+            onchange="convertCurrency('right', 'left')"
+        ></select>
+        <input
+            type="number"
+            id="leftAmount"
+            oninput="convertCurrency('left', 'right')"
+            onfocus="selectAll('leftAmount')"
+            value="0"
+            step="0.01"
+        />
+        <span>&harr;</span>
+        <input
+            type="number"
+            id="rightAmount"
+            oninput="convertCurrency('right', 'left')"
+            onfocus="selectAll('rightAmount')"
+            value="0"
+            step="0.01"
+        />
+        <select
+            id="rightCurrency"
+            onchange="convertCurrency('left', 'right')"
+        ></select>
+
+        <script>
+            // Currencies to choose from
+            var currencies = [
+                "EUR (€)",
+                "USD ($)",
+                "MYR (RM)",
+                "JPY (¥)",
+                "GBP (£)",
+                "AUD ($)",
+                "CAD ($)",
+                "CHF (Fr)",
+                "CNY (¥)",
+                "SEK (kr)",
+                "NOK (kr)",
+            ];
+
+            // Conversion rates to EUR
+            // Same order as the currencies array
+            var conversionRates = [
+                1, // EUR to EUR
+                1.12, // EUR to USD
+                4.7, // EUR to MYR
+                120.2, // EUR to JPY
+                0.88, // EUR to GBP
+                1.62, // EUR to AUD
+                1.47, // EUR to CAD
+                1.07, // EUR to CHF
+                7.83, // EUR to CNY
+                10.6, // EUR to SEK
+                10.1, // EUR to NOK
+            ];
+
+            // Fill the select elements with options
+            for (var i = 0; i < currencies.length; i++) {
+                ge("leftCurrency").innerHTML +=
+                    "<option value='" + i + "'>" + currencies[i] + "</option>";
+                ge("rightCurrency").innerHTML +=
+                    "<option value='" + i + "'>" + currencies[i] + "</option>";
+            }
+
+            // Get element by ID (just a shortcut, less code to write)
+            function ge(id) {
+                return document.getElementById(id);
+            }
+
+            // Select all text in an input element (for easier input)
+            function selectAll(id) {
+                ge(id).select();
+            }
+
+            /**
+             * Convert the currency
+             *
+             * @param {string} from - The side to convert from
+             * @param {string} to - The side to convert to
+             */
+            function convertCurrency(from, to) {
+                // Get the input values
+                var fromAmount = parseFloat(ge(from + "Amount").value);
+                var fromCurrency = ge(from + "Currency").value;
+                var toCurrency = ge(to + "Currency").value;
+
+                // Set the output element
+                var outputElement = ge(to + "Amount");
+
+                // If the input <= 0 or not a number, set input amounts
+                // to 0 and stop the function from running further
+                if (fromAmount <= 0 || isNaN(fromAmount)) {
+                    ge("leftAmount").value = 0;
+                    ge("rightAmount").value = 0;
+                    return;
+                }
+
+                // Convert to EUR
+                var amountEUR = fromAmount / conversionRates[fromCurrency];
+
+                // Convert to target currency
+                var amountTarget = amountEUR * conversionRates[toCurrency];
+
+                // Update the output element
+                outputElement.value = amountTarget.toFixed(2);
+            }
+        </script>
+    </body>
+</html>

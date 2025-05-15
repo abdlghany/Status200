@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Status Zoo</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                margin: 0;
+                padding: 0;
+                font-family: Arial, sans-serif;
+                background-color: saddlebrown;
+                color: white;
+                min-height: 100vh;
+            }
+            h1,
+            h2,
+            h3 {
+                margin: 0;
+            }
+            h2 {
+                font-weight: 500;
+                font-size: 1.1rem;
+            }
+            h3 {
+                font-size: 1.5rem;
+            }
+            header {
+                display: flex;
+                border-bottom: 1px solid black;
+                flex-grow: 0;
+                gap: 3px;
+                width: 100%;
+                cursor: pointer;
+            }
+            header img {
+                width: 100px;
+                height: 100px;
+            }
+            header div {
+                flex-grow: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+            }
+            .page {
+                display: none;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                flex-grow: 1;
+                gap: 3rem;
+                width: 100%;
+                padding-top: 4rem;
+                padding-bottom: 4rem;
+                background-color: burlywood;
+                color: saddlebrown;
+            }
+            .content {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 1rem;
+            }
+            button {
+                padding: 1rem;
+                width: 200px;
+                cursor: pointer;
+                font-size: 1.1rem;
+                background-color: saddlebrown;
+                color: white;
+                border: none;
+            }
+            .gallery {
+                text-align: center;
+            }
+            .gallery p {
+                font-weight: 700;
+                text-transform: capitalize;
+            }
+            .gallery-image {
+                width: 150px;
+            }
+        </style>
+    </head>
+    <body>
+        <header onclick="loadPage('home')">
+            <img src="images/header-monkey.png" />
+            <div>
+                <h1>Status Zoo</h1>
+                <h2 id="title-page">&nbsp;</h2>
+            </div>
+            <img src="images/header-dinosaur.png" />
+        </header>
+        <main id="home" class="page">
+            <h3>Choose your favorite!</h3>
+            <div class="content">
+                <button onclick="loadPage('birds')">Birds</button>
+                <button onclick="loadPage('nocturnals')">Nocturnals</button>
+                <button onclick="loadPage('safaris')">Safari</button>
+                <button onclick="loadPage('reptiles')">Reptiles</button>
+            </div>
+        </main>
+        <main id="birds" class="page">
+            <div id="birdsGallery" class="content"></div>
+            <button id="birdsToggleButton" onclick="toggleMore('birds')">
+                Load More
+            </button>
+        </main>
+        <main id="nocturnals" class="page">
+            <div id="nocturnalsGallery" class="content"></div>
+            <button
+                id="nocturnalsToggleButton"
+                onclick="toggleMore('nocturnals')"
+            >
+                Load More
+            </button>
+        </main>
+        <main id="safaris" class="page">
+            <div id="safarisGallery" class="content"></div>
+            <button id="safarisToggleButton" onclick="toggleMore('safaris')">
+                Load More
+            </button>
+        </main>
+        <main id="reptiles" class="page">
+            <div id="reptilesGallery" class="content"></div>
+            <button id="reptilesToggleButton" onclick="toggleMore('reptiles')">
+                Load More
+            </button>
+        </main>
+        <script>
+            // Birds category
+            const birds = [
+                "birdie",
+                "tweety",
+                "polly",
+                "chirpy",
+                "sparrow",
+                "robin",
+            ];
+
+            // Nocturnals category
+            const nocturnals = [
+                "owl",
+                "bat",
+                "raccoon",
+                "firefly",
+                "moth",
+                "possum",
+            ];
+
+            // Safari category
+            const safaris = [
+                "lion",
+                "elephant",
+                "giraffe",
+                "zebra",
+                "rhino",
+                "hippo",
+            ];
+
+            // Reptiles category
+            const reptiles = [
+                "snake",
+                "lizard",
+                "turtle",
+                "crocodile",
+                "iguana",
+                "chameleon",
+            ];
+
+            // Get all pages
+            const pages = document.getElementsByClassName("page");
+
+            // Generate galleries for each category
+            generateGallery("birds", birds);
+            generateGallery("nocturnals", nocturnals);
+            generateGallery("safaris", safaris);
+            generateGallery("reptiles", reptiles);
+
+            // Load home page
+            getById("home").style.display = "flex";
+
+            // Logic to show or hide gallery items
+            function toggleMore(id) {
+                const gallery = getById(id);
+                const galleryImages = gallery.getElementsByClassName(
+                    id + "-gallery-item"
+                );
+                let buttonText = "";
+                for (let i = 4; i < galleryImages.length; i++) {
+                    if (galleryImages[i].style.display === "none") {
+                        galleryImages[i].style.display = "block";
+                        buttonText = "Load Less";
+                    } else {
+                        galleryImages[i].style.display = "none";
+                        buttonText = "Load More";
+                    }
+                }
+                getById(id + "ToggleButton").innerText = buttonText;
+            }
+
+            // Logic to make a page visible and hide others
+            function loadPage(page) {
+                for (let i = 0; i < pages.length; i++) {
+                    pages[i].style.display = "none";
+                }
+                getById(page).style.display = "flex";
+                if (page === "home") {
+                    getById("title-page").innerHTML = "&nbsp;";
+                } else {
+                    getById("title-page").innerHTML = page.toUpperCase();
+                }
+            }
+
+            // Logic to generate the different image galleries
+            function generateGallery(id, gallery) {
+                const galleryContainer = getById(id + "Gallery");
+                let galleryHTML = "";
+                for (let i = 0; i < gallery.length; i++) {
+                    style = i > 3 ? "display: none;" : "";
+                    const name = gallery[i];
+                    const img = id + "-" + name + ".png";
+                    const alt = id + name;
+                    galleryHTML +=
+                        "<div class='gallery " +
+                        id +
+                        "-gallery-item' style='" +
+                        style +
+                        "'><p>" +
+                        name +
+                        "</p><img src='images/" +
+                        img +
+                        "' alt='" +
+                        alt +
+                        "' class='gallery-image' /></div>";
+                    console.log(galleryHTML);
+                }
+                galleryContainer.innerHTML = galleryHTML;
+            }
+
+            // Helper function to get elements by id
+            function getById(id) {
+                return document.getElementById(id);
+            }
+        </script>
+    </body>
+</html>

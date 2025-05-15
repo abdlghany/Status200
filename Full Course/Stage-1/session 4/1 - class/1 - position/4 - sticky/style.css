@@ -1,0 +1,50 @@
+body {
+  margin: 0;
+  height: 200vh;
+}
+
+.box {
+  width: 5rem;
+  height: 5rem;
+}
+
+.box-one {
+  background-color: gold;
+
+  /* 
+    The box will be positioned sticky relative to the viewport.
+    This means that the box will be positioned relative to the browser window, 
+    and will stay in the same place even if the page is scrolled.
+
+    The box will be placed at the top of the viewport.
+
+    It will remain visible at the top of the viewport even if the page is scrolled.
+   */
+  position: sticky;
+  top: 0;
+}
+
+.box-two {
+  background-color: tomato;
+  position: relative;
+  left: 5rem;
+}
+
+.box-three {
+  background-color: dodgerblue;
+
+  /* 
+    The box will be positioned sticky relative to the viewport.
+    This means that the box will be positioned relative to the browser window, 
+    and will stay in the same place even if the page is scrolled.
+   */
+  position: sticky;
+  top: 0;
+  left: 10rem;
+}
+
+.box-four {
+  background-color: lightgreen;
+  position: relative;
+  left: 15rem;
+}

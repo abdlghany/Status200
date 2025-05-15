@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Read More or Less</title>
+    </head>
+    <body>
+        <p>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Fuga
+            reiciendis minima voluptates nostrum dolorem, officia ex. Nulla
+            eligendi est laboriosam cumque quidem magni illum aperiam!
+            Reprehenderit blanditiis similique fugiat exercitationem.
+        </p>
+        <p id="rest-of-text" style="display: none">
+            Fuga maiores harum cum, voluptates delectus accusamus explicabo
+            illum aperiam neque, quas, magni odit distinctio vitae nam? Aperiam
+            porro atque sapiente et sunt distinctio, adipisci aliquid fugiat?
+            Sequi, nihil sed? Deserunt, ratione ipsa. Consequuntur deleniti,
+            ipsa, placeat architecto vero atque, perspiciatis autem quia impedit
+            dolorem sequi odit. Hic dignissimos aperiam incidunt eligendi, error
+            reiciendis provident obcaecati nam delectus? Enim, officiis? A vitae
+            animi hic error ad quis eius dolor sequi quia id laborum
+            necessitatibus esse ipsum nostrum vel porro natus deleniti, illo
+            quas explicabo eum odio in! Saepe, illum! Quae.
+        </p>
+        <button id="readmore" onclick="toggleText()">Read More</button>
+
+        <script>
+            function toggleText() {
+                var moreText = document.getElementById("rest-of-text");
+                var btnText = document.getElementById("readmore");
+
+                if (moreText.style.display === "none") {
+                    btnText.innerHTML = "Read less";
+                    moreText.style.display = "block";
+                } else {
+                    moreText.style.display = "none";
+                    btnText.innerHTML = "Read more";
+                }
+            }
+        </script>
+    </body>
+</html>

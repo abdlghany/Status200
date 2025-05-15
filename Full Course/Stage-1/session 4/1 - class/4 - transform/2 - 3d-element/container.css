@@ -1,0 +1,37 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: gold;
+}
+
+/* 
+  The whole container will transfrom in this case.
+  All the children will be affected by the transformation.
+  The children will not be transformed individually.
+  The children will be transformed as a whole.
+ */
+.container:hover {
+
+  /* 
+    The transform-origin property is used to change the position of the origin of the transformation of an element.
+   */
+  transform-origin: 0 50%;
+
+  /* 
+    Example 1
+   */
+  transform: perspective(200px) rotateY(45deg); */
+  
+
+  /* 
+    Example 2
+   */
+  /* transform: perspective(200px) rotateX(45deg) rotateY(45deg) rotateZ(45deg); */
+}

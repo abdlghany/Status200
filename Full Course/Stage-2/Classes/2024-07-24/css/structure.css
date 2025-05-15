@@ -1,0 +1,91 @@
+/* Tag selectors */
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Tag selectors for headings */
+h1,
+h2,
+h3 {
+    margin: 0;
+    padding: 0.5em 0;
+}
+
+/* ID selectors */
+#main-header {
+    background-color: #333;
+    color: white;
+    padding: 1em 0;
+}
+
+#main-content {
+    flex: 1;
+    display: flex;
+    align-items: center;
+}
+
+#main-footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 1em 0;
+}
+
+/* Class selectors */
+.container {
+    width: 90%;
+    margin: 0 auto;
+}
+
+.feature-items {
+    display: flex;
+    flex-direction: column;
+    gap: 1em;
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+.feature-item {
+    background-color: #f4f4f4;
+    width: 100%;
+}
+
+.intro {
+    margin-bottom: 2em;
+}
+
+/* Descendant selectors */
+header nav ul {
+    list-style: none;
+    padding: 0;
+}
+
+header nav ul li {
+    display: inline;
+    margin-right: 1em;
+}
+
+header nav ul li a {
+    color: white;
+    text-decoration: none;
+}
+
+main .features .feature-item h3 {
+    color: #333;
+}
+
+.feature-item * {
+    padding-left: 1em;
+    padding-right: 1em;
+}
+
+/* Combination of class and tag selectors */
+.container p {
+    margin: 0.5em 0;
+}

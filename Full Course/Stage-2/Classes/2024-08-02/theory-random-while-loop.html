@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Counter</title>
+    </head>
+    <body>
+        <h2>Don't know when loop should start beforehand</h2>
+        <h3>
+            Select a random number between 0 and <span id="pool_size"></span>
+        </h3>
+        <h3>Keep getting random numbers until you get the number 8</h3>
+        <p id="demo"></p>
+        <script>
+            let pool_size = 1000;
+            let number = -1;
+            let itterations = 0;
+
+            document.getElementById("pool_size").innerHTML = pool_size;
+
+            while (number !== 8) {
+                // Random number between 0 and 1000
+                //
+                // Math.random() - returns a random number between 0 and 1
+                // Math.floor() - rounds a number down to the nearest whole number
+                number = Math.floor(Math.random() * pool_size);
+
+                // Keep track of itterations
+                itterations++;
+            }
+            document.getElementById("demo").innerHTML =
+                "It took " + itterations + " itterations to get the number 8";
+        </script>
+    </body>
+</html>

@@ -1,0 +1,32 @@
+@media screen and (min-width: 601px) {
+    .container {
+        width: 80%;
+    }
+    .feature-items {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    .feature-item {
+        flex: 1 1 40%;
+    }
+}
+
+@media (min-width: 800px) {
+    .container {
+        width: 70%;
+    }
+    .feature-item {
+        flex: 1 1 20%;
+    }
+}
+
+@media screen and (min-width: 601px) and (max-width: 800px) {
+    body,
+    main .features .feature-item h3 {
+        color: tomato;
+    }
+    #main-header,
+    #main-footer {
+        background-color: tomato;
+    }
+}

@@ -1,0 +1,29 @@
+body {
+  margin: 10px;
+}
+
+.flag {
+  width: 300px;
+  height: 201px;
+}
+
+.stripe {
+  height: 67px;
+  position: relative;
+}
+
+.stripe-yellow {
+  background-color: yellow;
+  top: 134px;
+}
+
+.stripe-black {
+  background-color: black;
+  top: -67px;
+}
+
+.stripe-red {
+  background-color: red;
+  top: -67px;
+  /* z-index: -1; */
+}

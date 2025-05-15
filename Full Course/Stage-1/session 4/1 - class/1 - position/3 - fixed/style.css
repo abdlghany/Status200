@@ -1,0 +1,60 @@
+body {
+  margin: 10px;
+  height: 200vh;
+}
+
+.boxes {
+  border: 3px solid lightgray;
+}
+
+.box {
+  width: 5rem;
+  height: 5rem;
+}
+
+.box-one {
+  background-color: gold;
+
+  /* 
+    The box will be positioned fixed relative to the viewport.
+    This means that the box will be positioned relative to the browser window, 
+    and will stay in the same place even if the page is scrolled.
+   */
+  position: fixed;
+
+  /* 
+    The box will be placed at the top left corner of the viewport.
+   */
+  top: 0;
+  left: 0;
+
+  /* 
+    The box will be placed behind the other boxes.
+    If not set, the box will be placed in front of the other boxes.
+   */
+  z-index: -1;
+
+  /* 
+    Other example
+
+    The box will be placed at the top of the viewport.
+    The box will be placed 2rem from the left of the viewport.
+    The box will be placed 2rem from the right of the viewport.
+    The width of the box will be auto.
+
+    Not try it out and change the width of your screen
+  */
+
+  /* top: 0; */
+  /* left: 2rem; */
+  /* right: 2rem; */
+  /* width: auto; */
+}
+
+.box-two {
+  background-color: tomato;
+}
+
+.box-three {
+  background-color: dodgerblue;
+}

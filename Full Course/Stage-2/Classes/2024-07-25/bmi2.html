@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>BMI Calculator</title>
+        <link rel="stylesheet" href="css/style.css" />
+        <script src="js/bmi2.js"></script>
+        <script src="js/rounder.js"></script>
+    </head>
+    <body>
+        <main>
+            <div>
+                <h1>BMI Calculator</h1>
+            </div>
+            <div>
+                <label>Your name</label>
+                <div>
+                    <input type="text" placeholder="name" id="inputName" />
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label>Your height</label>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Height"
+                        id="inputHeight"
+                    />
+                    <select id="inputHeightUnitSystem">
+                        <option value="inches">Inches</option>
+                        <option value="centimeters">Centimeters</option>
+                    </select>
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label>Your weight</label>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Weight"
+                        id="inputWeight"
+                    />
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label>Decimals to use in BMI score</label>
+                <div>
+                    <input
+                        type="number"
+                        placeholder="Decimals"
+                        id="inputDecimals"
+                    />
+                </div>
+            </div>
+            <hr />
+            <div>
+                <label></label>
+                <button onclick="calculateBMI()" id="outputBmiResult">
+                    Calulate BMI
+                </button>
+            </div>
+        </main>
+    </body>
+</html>

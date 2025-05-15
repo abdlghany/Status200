@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Relative Positioning</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <!-- 
+      The position property specifies the type of positioning method used for an element.
+      The top, right, bottom, and left properties are used to position the element.
+      An element with position: relative; is positioned relative to its normal position.
+
+      Note: A "positioned" element is one whose position is anything except static.
+
+      Note: `z-index` only works on positioned elements (position: absolute, position: relative, position: fixed, or position: sticky).
+
+      Note: If two positioned elements overlap without a z-index specified, the element positioned last in the HTML code will be shown on top.
+    -->
+    <div class="boxes">
+      <div class="box box-one"></div>
+      <div class="box box-two"></div>
+      <div class="box box-three"></div>
+    </div>
+  </body>
+</html>

@@ -1,0 +1,82 @@
+body {
+  margin: 0;
+}
+
+.container {
+  /* 
+    The flex-direction property is used to define the direction in which the flex items are placed in the flex container. 
+    The value column places the flex items in a column.
+   */
+  display: flex;
+
+  /* 
+    The flex-direction property is used to define the direction in which the flex items are placed in the flex container. 
+    The value column places the flex items in a column.
+
+    Note: using mobile first approach, in this case we set the flex-direction property to column for mobile devices.
+   */
+  flex-direction: column;
+}
+
+.box {
+  padding: 1rem;
+  background-color: gold;
+}
+
+.box:nth-of-type(2) {
+  background-color: dodgerblue;
+}
+
+/* 
+  The @media rule is used to apply different styles for different media types/devices.
+  In this case, we are using the @media rule to apply different styles for different screen sizes.
+  The screen size is defined by the min-width and max-width properties.
+  
+  If the screen size is between 700px:
+
+  - the flex-direction property of the container is set to row, which places the flex items in a row.
+ */
+@media screen and (min-width: 700px) {
+  .container {
+    /* 
+      Nice for large screens, but not for small screens in this example
+     */
+    flex-direction: row;
+  }
+}
+
+/* 
+  If the screen size is between 700px and 900px:
+
+  - the text color of the box elements is set to darkgray.
+ */
+@media screen and (min-width: 700px) and (max-width: 900px) {
+  .box {
+    color: darkgray;
+  }
+}
+
+/* 
+  If the screen size is greater than or equal to 900px:
+
+  - the background colors of the box elements are changed. 
+ */
+@media screen and (min-width: 900px) {
+  .box-one {
+    background-color: cyan;
+  }
+  .box-two {
+    background-color: pink;
+  }
+}
+
+/* 
+  Print styles
+
+  Try commenting out the print styles and print the page to see the difference.
+ */
+@media print {
+  body {
+    font-size: 25pt;
+  }
+}

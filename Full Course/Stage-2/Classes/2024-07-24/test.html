@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label>Height (in cm)</label>
+            <input type="number" placeholder="Your height" id="inputHeight" />
+        </div>
+        <div>
+            <label>Weight (in kg)</label>
+            <input type="number" placeholder="Your weight" id="inpuWeight" />
+        </div>
+
+        <div>
+            <button onclick="calculateBMI()">Calulate BMI</button>
+        </div>
+
+        <p id="result"></p>
+
+        <script>
+            function calculateBMI() {
+                // Get height from HTML input
+                var height = document.getElementById("inputHeight").value;
+
+                // Get weight from HTML input
+                var weight = document.getElementById("inpuWeight").value;
+
+                // Convert height centimeters to meters
+                var meterHeight = height / 100;
+
+                // Calculate BMI
+                var bmi = weight / (meterHeight * meterHeight);
+
+                // Round down calcultaed BMI to 1 decimal
+                var bmi_rounded = Math.round(bmi * 10) / 10;
+
+                // Classify
+                var classification = "";
+                if (bmi_rounded < 18.5) {
+                    classification = "Underweight";
+                } else if (bmi_rounded >= 18.5 && bmi_rounded < 25) {
+                    classification = "Normal";
+                } else if (bmi_rounded >= 25 && bmi_rounded < 30) {
+                    classification = "Overweight";
+                } else {
+                    classification = "Obese";
+                }
+
+                // Output sentence
+                var sentence =
+                    "Your BMI is <i>" +
+                    bmi_rounded +
+                    "</i>, which classifies you as <i>" +
+                    classification +
+                    "</i>";
+
+                // Output
+                document.getElementById("result").innerHTML = sentence;
+            }
+        </script>
+    </body>
+</html>

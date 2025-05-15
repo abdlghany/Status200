@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Teachers</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+            #errorMessage {
+                color: red;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label>New teacher name</label>
+            <input type="text" id="inputTeacherName" autofocus />
+            <input type="number" id="inputTeacherAge" />
+            <button onclick="addTeacherData()">
+                Add teacher date to memory
+            </button>
+        </div>
+        <div>
+            <p id="errorMessage">&nbsp;</p>
+        </div>
+        <div>
+            <button onclick="showTeacherData()">Show teacher names</button>
+        </div>
+        <div id="demo">No teachers in array yet</div>
+        <script>
+            var teacherNameInput = document.getElementById("inputTeacherName");
+            var teacherAgeInput = document.getElementById("inputTeacherAge");
+            var teacherNames = [];
+            var teacherAges = [];
+
+            function addTeacherData() {
+                var newTeacherName = teacherNameInput.value;
+                var newTeacherAge = teacherAgeInput.value;
+
+                // Trim the input value (remove white spaces)
+                newTeacherName = newTeacherName.trim();
+
+                // Make age a number
+                newTeacherAge = parseInt(newTeacherAge);
+
+                // Check if the name input is not empty
+                if (newTeacherName == "") {
+                    document.getElementById("errorMessage").innerHTML =
+                        "Please enter a name";
+                    return;
+                }
+
+                // Check if the age input is a number and bigger than 0
+                if (isNaN(newTeacherAge) || newTeacherAge <= 0) {
+                    document.getElementById("errorMessage").innerHTML =
+                        "Please enter a number bigger than 0 for the age";
+                    return;
+                }
+
+                // Add new name to the array
+                teacherNames.push(newTeacherName);
+
+                // Add new age to the array
+                teacherAges.push(newTeacherAge);
+
+                // empty name input field after adding the name to the names array
+                teacherNameInput.value = "";
+
+                // empty age input field after adding the age to the ages array
+                teacherAgeInput.value = "";
+
+                // focus on the input field so we can immediately add another name
+                teacherNameInput.focus();
+
+                // clear the error message
+                document.getElementById("errorMessage").innerHTML = "&nbsp;";
+            }
+
+            function showTeacherData() {
+                if (teacherNames.length > 0) {
+                    let output = "Teachers:<br>";
+                    let counter = 1;
+                    for (let index = 0; index < teacherNames.length; index++) {
+                        counter = index + 1;
+                        output =
+                            output +
+                            "Teacher " +
+                            counter +
+                            ": " +
+                            teacherNames[index] +
+                            " (" +
+                            teacherAges[index] +
+                            " yrs)<br>";
+                    }
+                    document.getElementById("demo").innerHTML = output;
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Animals</title>
+        <style>
+            body {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                min-height: 100vh;
+            }
+            .viewDiv,
+            #buttonsDiv {
+                display: none;
+                width: 50%;
+            }
+            .viewDiv,
+            #buttonsDiv {
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 1rem;
+            }
+            div {
+                text-align: center;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="authenticateDiv" class="viewDiv">
+            <h1>Login</h1>
+            <div>
+                <label for="username">Username</label>
+                <br />
+                <input type="text" id="username" placeholder="Username" />
+            </div>
+            <div>
+                <label for="password">Password</label>
+                <br />
+                <input type="password" id="password" placeholder="Password" />
+            </div>
+            <div>
+                <button onclick="login()">Login</button>
+            </div>
+            <div>
+                <p id="loginErrorMessage"></p>
+            </div>
+        </div>
+        <div id="welcomeDiv" class="viewDiv">
+            <h1>Welcome</h1>
+            <p>Choose an option on the right</p>
+        </div>
+        <div id="bearDiv" class="viewDiv">
+            <h1>Bear</h1>
+            <img src="https://picsum.photos/id/1020/600/400" alt="" />
+            <p>This is a bear</p>
+        </div>
+        <div id="dogDiv" class="viewDiv">
+            <h1>Dog</h1>
+            <img src="https://picsum.photos/id/237/600/400" alt="" />
+            <p>This is a dog</p>
+        </div>
+        <div id="deerDiv" class="viewDiv">
+            <h1>Deer</h1>
+            <img src="https://picsum.photos/id/1003/600/400" alt="" />
+            <p>This is a deer</p>
+        </div>
+        <div id="buttonsDiv">
+            <div>
+                <button onclick="showView('bear')">Show Bear</button>
+                <br />
+                <button onclick="showView('dog')">Show Dog</button>
+                <br />
+                <button onclick="showView('deer')">Show Deer</button>
+            </div>
+            <div>
+                <button onclick="showView('welcome')">Show Welcome</button>
+                <br />
+                <button onclick="logout()">Logout</button>
+            </div>
+        </div>
+
+        <script>
+            // Define views
+            var authenticate = document.getElementById("authenticateDiv");
+            var welcome = document.getElementById("welcomeDiv");
+            var bear = document.getElementById("bearDiv");
+            var dog = document.getElementById("dogDiv");
+            var deer = document.getElementById("deerDiv");
+
+            // Define inputs
+            var username = document.getElementById("username");
+            var password = document.getElementById("password");
+
+            // Define buttons
+            var buttons = document.getElementById("buttonsDiv");
+
+            // Define login credentials
+            var users = ["bearlover", "doglover", "deerlover"];
+            var passwords = ["bear", "dog", "deer"];
+
+            // Define flag for logged in status
+            var loggedIn = false;
+
+            // Show authenticate view
+            showView("authenticate");
+
+            function login() {
+                document.getElementById("loginErrorMessage").innerText = "";
+
+                const userIndex = users.indexOf(username.value);
+                if (
+                    userIndex !== -1 &&
+                    passwords[userIndex] === password.value
+                ) {
+                    loggedIn = true;
+                    username.value = "";
+                    password.value = "";
+                } else {
+                    document.getElementById("loginErrorMessage").innerText =
+                        "Invalid username or password";
+                }
+                if (loggedIn) {
+                    username.value = "";
+                    password.value = "";
+                    buttons.style.display = "flex";
+                    showView("welcome");
+                } else {
+                    document.getElementById("loginErrorMessage").innerText =
+                        "Invalid username or password";
+                }
+            }
+
+            function logout() {
+                if (!loggedIn) {
+                    alert("Please login first");
+                    return;
+                }
+                loggedIn = false;
+                buttons.style.display = "none";
+                showView("authenticate");
+            }
+
+            function showView(view) {
+                if (view !== "authenticate") {
+                    if (!loggedIn) {
+                        alert("Please login first");
+                        return;
+                    }
+                }
+
+                var views = document.getElementsByClassName("viewDiv");
+                for (var i = 0; i < views.length; i++) {
+                    if (views[i].id === view + "Div") {
+                        views[i].style.display = "flex";
+                    } else {
+                        views[i].style.display = "none";
+                    }
+                }
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>ATM</title>
+        <script src="/ATMFunc.JS"></script>
+    </head>
+    <body onload="ReadNotesStackSize()">
+        <h1>Welcome to the BootCamp Bank ATM</h1>
+        <p id="notesstack">Available notes:</p>
+        <br />
+        <p>Specify the amount you would like to withdraw</p>
+        <br />
+        <br />
+        <label for="withdrawal_amount"
+            >Please specify the withdrawal amount</label
+        ><br />
+        <input id="withdrawal_amount" type="text" /><br />
+        <button id="btn_withdraw" onclick="CheckAmount()">Check Amount</button
+        ><br />
+        <p id="error"></p>
+        <br />
+        <br />
+        <br />
+        <button id="btn_showdenominations" onclick="ShowDenominations();">
+            Show Denominations (notes)</button
+        ><br />
+        <p id="notes_dispensed"></p>
+
+        <script>
+            const denominations = [10, 20, 50, 100];
+            var stacksize_notes = [100, 200, 500, 1000];
+
+            function CheckAmount() {
+                var amount = document.getElementById("withdrawal_amount").value;
+                if (isNaN(amount) || amount === "") {
+                    document.getElementById("error").innerHTML =
+                        "Amount specified is not valid!<br>Try again!";
+                } else {
+                    document.getElementById("error").innerHTML =
+                        amount + " is a valid amount!";
+                }
+            }
+
+            function ReadNotesStackSize() {
+                var output = "";
+                for (let x = 0; x < stacksize_notes.length; x++) {
+                    output +=
+                        "Notes: " +
+                        denominations[x] +
+                        " RMB: " +
+                        stacksize_notes[x] +
+                        "<br>";
+                }
+                document.getElementById("notesstack").innerHTML = output;
+            }
+
+            function ShowDenominations() {
+                var wd_amount =
+                    document.getElementById("withdrawal_amount").value;
+                var noteswithdrawn = [0, 0, 0, 0];
+                wd_amount = parseInt(wd_amount);
+
+                if (wd_amount / 100 <= stacksize_notes[3]) {
+                    noteswithdrawn[3] = Math.floor(wd_amount / 100);
+                    wd_amount = wd_amount % 100;
+                }
+                if (wd_amount / 50 <= stacksize_notes[2] || wd_amount != 0) {
+                    noteswithdrawn[2] = Math.floor(wd_amount / 50);
+                    wd_amount = wd_amount % 50;
+                }
+                if (wd_amount / 20 <= stacksize_notes[1] || wd_amount != 0) {
+                    noteswithdrawn[1] = Math.floor(wd_amount / 20);
+                    wd_amount = wd_amount % 20;
+                }
+                if (wd_amount / 10 <= stacksize_notes[0] || wd_amount != 0) {
+                    noteswithdrawn[0] = Math.floor(wd_amount / 10);
+                    wd_amount = wd_amount % 10;
+                }
+
+                var notes_output = "You will receive:<br>";
+                for (let i = noteswithdrawn.length - 1; i >= 0; i--) {
+                    if (noteswithdrawn[i] > 0) {
+                        notes_output +=
+                            noteswithdrawn[i] +
+                            " x " +
+                            denominations[i] +
+                            " notes<br>";
+                    }
+                }
+                document.getElementById("notes_dispensed").innerHTML =
+                    notes_output;
+            }
+        </script>
+    </body>
+</html>

@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Example using CSS display property</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+            }
+            main {
+                display: inline-flex;
+                flex-direction: column;
+                gap: 2rem;
+            }
+            #images {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                gap: 0.5rem;
+            }
+            .imageContainer {
+                width: 6rem;
+                height: 6rem;
+                border-width: 1px;
+                border-style: solid;
+            }
+            .catWrapper {
+                border-color: blue;
+                background-color: rgba(0, 0, 255, 0.1);
+            }
+            .dogWrapper {
+                border-color: red;
+                background-color: rgba(255, 0, 0, 0.1);
+            }
+            img {
+                width: 100%;
+                height: 100%;
+                background-color: white;
+            }
+            #controls {
+                display: flex;
+                gap: 0.5rem;
+                text-align: center;
+                width: 100%;
+            }
+            button {
+                width: 100%;
+            }
+        </style>
+    </head>
+    <body>
+        <main>
+            <div id="images">
+                <div class="imageContainer catWrapper">
+                    <img class="cat" src="images/cat-1.png" alt="Cat 1" />
+                </div>
+                <div class="imageContainer dogWrapper">
+                    <img class="dog" src="images/dog-1.png" alt="Dog 1" />
+                </div>
+                <div class="imageContainer dogWrapper">
+                    <img class="dog" src="images/dog-2.png" alt="Dog 2" />
+                </div>
+                <div class="imageContainer catWrapper">
+                    <img class="cat" src="images/cat-2.png" alt="Cat 2" />
+                </div>
+                <div class="imageContainer catWrapper">
+                    <img class="cat" src="images/cat-3.png" alt="Cat 3" />
+                </div>
+                <div class="imageContainer dogWrapper">
+                    <img class="dog" src="images/dog-3.png" alt="Dog 3" />
+                </div>
+                <div class="imageContainer dogWrapper">
+                    <img class="dog" src="images/dog-4.png" alt="Dog 4" />
+                </div>
+                <div class="imageContainer catWrapper">
+                    <img class="cat" src="images/cat-4.png" alt="Cat 4" />
+                </div>
+                <div class="imageContainer catWrapper">
+                    <img class="cat" src="images/cat-5.png" alt="Cat 5" />
+                </div>
+                <div class="imageContainer dogWrapper">
+                    <img class="dog" src="images/dog-5.png" alt="Dog 5" />
+                </div>
+            </div>
+            <div id="controls">
+                <button id="dogToggeButton" onclick="toggleVisibility('dog')">
+                    Hide dogs
+                </button>
+                <button id="catToggeButton" onclick="toggleVisibility('cat')">
+                    Hide cats
+                </button>
+            </div>
+        </main>
+        <script>
+            function toggleVisibility(className) {
+                var elements = document.getElementsByClassName(className);
+                for (var i = 0; i < elements.length; i++) {
+                    if (elements[i].style.display === "none") {
+                        elements[i].style.display = "block";
+                    } else {
+                        elements[i].style.display = "none";
+                    }
+                }
+                if (elements[0].style.display === "none") {
+                    document.getElementById(
+                        className + "ToggeButton"
+                    ).innerText = "Show " + className + "s";
+                } else {
+                    document.getElementById(
+                        className + "ToggeButton"
+                    ).innerText = "Hide " + className + "s";
+                }
+            }
+        </script>
+    </body>
+</html>

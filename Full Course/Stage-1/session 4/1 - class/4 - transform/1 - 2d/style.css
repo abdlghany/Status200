@@ -1,0 +1,85 @@
+body {
+  align-items: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: gold;
+}
+
+/* 
+  We're setting the transform property on the :hover pseudo-class 
+  to apply a transformation to the box element when the user hovers over it.
+ */
+
+.box:hover {
+  /* 
+    Example 1:
+
+    The rotate() function is used to rotate the element by a specified number of degrees.
+    In this case, the box element is rotated by 15 degrees when the user hovers over it.
+
+    Note: can be degrees (e.g., 45deg, 90deg) or radians (e.g., 0.7854rad, 1.5708rad).
+
+    Note: can be a negative value.
+   */
+  transform: rotate(15deg);
+
+  /* 
+    Example 2:
+
+    The scale() function is used to scale the element by a specified factor.
+    In this case, the box element is scaled down to 50% of its original size when the user hovers over it.
+
+    Note: can be percentages (50%, 225%) or decimals (e.g., 0.5 means 50%, 2.25 means 225%).
+
+    Note: can be a negative value.
+   */
+  /* transform: scale(1.2); */
+
+  /* 
+    Example 3:
+
+    The skew() function is used to skew the element by a specified number of degrees.
+    In this case, the box element is skewed by 15 degrees when the user hovers over it.
+
+    Note: can be degrees (e.g., 45deg, 90deg) or radians (e.g., 0.7854rad, 1.5708rad).
+
+    Note: can be a negative value.
+   */
+  /* transform: skew(-15deg); */
+
+  /* 
+    Example 4:
+
+    The translate() function is used to move the element along the X and Y axes by a specified distance.
+    In this case, the box element is moved 10px to the right and 20px down when the user hovers over it.
+
+    Note: can be pixels (e.g., 10px, 20px) or percentages (e.g., 50%, 100%).
+
+    Note: can be a negative value.
+
+    Note: if you use only 1 value, it will be applied to the X axis, like `translate(10px)`
+
+    Remark: there's also translateX() and translateY() functions to move the element along the X and Y axes, respectively.
+   */
+  /* transform: translate(10px, 20px); */
+
+  /* 
+    Example 5:
+
+    You can combine multiple transformations by separating them with spaces.
+
+    Note: the order of transformations matters. The transformations are applied from right to left.
+
+    Try out the following combinations and see teh difference.
+    - transform: rotate(45deg) translateX(50px); rotates somewhere near to the bottom left corner
+    - transform: translateX(50px) rotate(45deg); rotates somewhere near to the bottom right corner
+    */
+  /* transform: rotate(45deg) translateX(50px); */
+  /* transform: translateX(50px) rotate(45deg); */
+}

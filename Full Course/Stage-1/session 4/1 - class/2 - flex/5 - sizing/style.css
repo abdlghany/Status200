@@ -1,0 +1,90 @@
+body {
+  margin: 10px;
+}
+
+.container {
+  height: 90vh;
+  border: 3px solid lightgray;
+
+  /* 
+    Set the container to a flex container
+    with the following properties:
+    - justify-content: center
+    - align-items: center
+   */
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+}
+
+.box {
+  width: 5rem;
+  height: 5rem;
+  background-color: gold;
+  margin: 1rem;
+
+  /*
+    Note: flex-basis is set to the item, not the flex container
+
+    Note: default value for flex-basis is auto
+
+    Note: flex-basis follows the main axis:
+
+    - If flex-direction is row, flex-basis effects the width of the item
+    - If flex-direction is column, flex-basis effects the height of the item
+
+   */
+  /* flex-basis: auto; */
+  flex-basis: 5rem;
+
+  /* 
+    Note: flex-grow sets the item grow factor
+
+    Note: flex-grow is set to the item, not the flex container
+
+    Note: default value for flex-grow is 0
+
+    If, for example, teh grow factor is set to one, all items with the class .box will grow equally
+   */
+  flex-grow: 1;
+
+  /* 
+    Note: flex-shrink sets the item shrink factor
+
+    Note: flex-shrink is set to the item, not the flex container
+
+    Note: default value for flex-shrink is 1
+
+    If, for example, the shrink factor is set to one, all items with the class .box will shrink equally
+   */
+  flex-shrink: 1;
+
+  /* 
+    Example 2
+
+    flex: <flex-grow> <flex-shrink> <flex-basis>
+
+    It is a shorthand for the flex-grow, flex-shrink, and flex-basis properties
+   */
+  /* flex: 1 1 5rem; */
+}
+
+.box-one {
+  /* 
+    In the .box class, we set the flex to:
+    
+    flex: 1 1 5rem;
+
+    We can change the flex-basis, flex-grow and flex-shrink for an individual item, for example:
+    
+    `flex: 2 0 10rem;`
+
+    This will make the item:
+     - grow twice as much as the other items
+     - it will not shrink
+     - it will have a basis of 10rem
+
+   */
+  /* flex: 2 0 10rem; */
+}

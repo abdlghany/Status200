@@ -1,0 +1,70 @@
+* {
+  margin: 0;
+}
+
+body {
+  font-family: Inter;
+  height: 100vh;
+  text-align: center;
+}
+
+.exercise {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow {
+  font-size: 3rem;
+}
+
+.flags {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.wrapper {
+  padding: 1rem;
+}
+
+.wrapper.wrong {
+  border: 5px solid rgba(255, 99, 71, 0.25);
+}
+.wrapper.right {
+  border: 5px solid rgba(144, 238, 144, 0.25);
+}
+
+.wrapper.wrong:hover {
+  border-color: tomato;
+}
+
+.wrapper.right:hover {
+  border-color: lightgreen;
+}
+
+.flag {
+  width: 9rem;
+  height: 6.3rem;
+}
+
+.stripe {
+  height: 2.01rem;
+}
+
+.stripe-yellow {
+  background-color: yellow;
+}
+
+.stripe-black {
+  background-color: black;
+}
+
+.stripe-red {
+  background-color: red;
+}

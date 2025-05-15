@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Task 3</title>
+    </head>
+    <body>
+        <h2>Save Profiles</h2>
+        <ol>
+            <li>Calculate average age of people saved</li>
+            <li>Sow name and professions of all people older than 40</li>
+        </ol>
+        <br />
+        <label>Name</label>
+        <br />
+        <input type="text" id="name" placeholder="Enter your name" />
+        <br />
+        <br />
+        <label>Age</label>
+        <br />
+        <input type="number" id="age" placeholder="Enter your age" />
+        <br />
+        <br />
+        <label>Profession</label>
+        <br />
+        <input
+            type="text"
+            id="profession"
+            placeholder="Enter your profession"
+        />
+        <br />
+        <br />
+        <button onclick="addPerson()">Submit</button>
+
+        <p id="add-person-result"></p>
+
+        <button onclick="displayData()">Display Data</button>
+
+        <p id="averageAge"></p>
+        <p id="peopleOlderThan40"></p>
+
+        <script>
+            const names = [];
+            const ages = [];
+            const professions = [];
+
+            function addPerson() {
+                // Get  input
+                var name = document.getElementById("name").value;
+                var age = document.getElementById("age").value;
+                var profession = document.getElementById("profession").value;
+
+                // Store valies in arrays
+                names.push(name);
+                ages.push(parseInt(age));
+                professions.push(profession);
+
+                // Clear input fields
+                document.getElementById("name").value = "";
+                document.getElementById("age").value = "";
+                document.getElementById("profession").value = "";
+
+                // Display result
+                document.getElementById("add-person-result").innerHTML =
+                    "Person " + names.length + " added successfully";
+            }
+
+            function displayData() {
+                // Get total age of all people
+                // Create output string containing only the names of people older than 40
+                let totalAge = 0;
+                let pplOlderThan40 = "";
+                for (let i = 0; i < ages.length; i++) {
+                    totalAge += ages[i];
+                    if (ages[i] > 40) {
+                        pplOlderThan40 += `${names[i]} - ${professions[i]}<br>`;
+                    }
+                }
+
+                // Calculate average age
+                let averageAge = totalAge / ages.length;
+
+                // Display average age
+                document.getElementById("averageAge").innerHTML =
+                    "<u>Average age of all stored persons:</u><br>" +
+                    averageAge.toFixed(1);
+
+                // Display names and professions of people older than 40
+                document.getElementById("peopleOlderThan40").innerHTML =
+                    "<u>Persons older than 40:</u><br>" + pplOlderThan40;
+            }
+        </script>
+    </body>
+</html>

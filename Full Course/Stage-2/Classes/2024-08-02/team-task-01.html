@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Task 1</title>
+    </head>
+    <body>
+        <input type="number" id="upper_bound" placeholder="Enter upper bound" />
+        <button onclick="startCounter()">Submit</button>
+        <p id="demo"></p>
+        <script>
+            function startCounter() {
+                var upper_bound = document.getElementById("upper_bound").value;
+                var counter = 0;
+                var output = "";
+                while (counter <= upper_bound) {
+                    output += counter + "<br>";
+                    counter++;
+                }
+                document.getElementById("demo").innerHTML = output;
+            }
+        </script>
+    </body>
+</html>

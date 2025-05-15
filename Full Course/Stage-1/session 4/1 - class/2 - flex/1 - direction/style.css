@@ -1,0 +1,56 @@
+body {
+    margin: 10px;
+}
+
+.container {
+    border: 3px solid lightgray;
+
+    /* 
+    The container will be a flex container. 
+    This means that the direct children of the container will be flex items.
+
+    Notes: 
+      - Properties like flex-direction, justify-content, align-items, align-content, and flex-wrap have no effect on the container itself.
+      - Without setting the display property to flex or inline-flex, the flex properties will have no effect.
+
+    Note: this property we set on the container class, not the flex items.
+
+    Note: comment out the display property to see the difference.
+   */
+    display: flex;
+
+    /* 
+    The flex items will be placed in a row.
+    This means that the flex items will be placed next to each other in a row.
+
+    Possible values (flex-direction): 
+      - row: places the flex items in a row.
+      - column: places the flex items in a column.
+      - row-reverse: places the flex items in a row, but in reverse order.
+      - column-reverse: places the flex items in a column, but in reverse order.
+
+    Note: If you don't specify a value for the flex-direction property, the flex items will be placed in a row.
+
+    Note: this property we set on the container class, not the flex items.
+   */
+    flex-direction: row;
+
+    height: 90vh;
+
+    justify-content: space-between;
+
+    flex-wrap: wrap;
+
+    /* align-items: flex-end; */
+}
+
+.box {
+    width: 5rem;
+    height: 5rem;
+    background-color: gold;
+    margin: 1rem;
+}
+
+.middle {
+    /* align-self: center; */
+}

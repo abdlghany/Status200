@@ -1,0 +1,98 @@
+[
+    {
+        "id": 1,
+        "name": "Laptop",
+        "categoryId": 1,
+        "price": 500,
+        "stock": 10,
+        "description": "This is a laptop"
+    },
+    {
+        "id": 2,
+        "name": "Mobile",
+        "categoryId": 1,
+        "price": 200,
+        "stock": 20,
+        "description": "This is a mobile"
+    },
+    {
+        "id": 3,
+        "name": "Televison",
+        "categoryId": 1,
+        "price": 1000,
+        "stock": 5,
+        "description": "This is a televison"
+    },
+    {
+        "id": 4,
+        "name": "Shirt",
+        "categoryId": 2,
+        "price": 50,
+        "stock": 50,
+        "description": "This is a shirt"
+    },
+    {
+        "id": 5,
+        "name": "T-Shirt",
+        "categoryId": 2,
+        "price": 20,
+        "stock": 100,
+        "description": "This is a t-shirt"
+    },
+    {
+        "id": 6,
+        "name": "Jeans",
+        "categoryId": 2,
+        "price": 70,
+        "stock": 30,
+        "description": "This is a jeans"
+    },
+    {
+        "id": 7,
+        "name": "Harry Potter",
+        "categoryId": 3,
+        "price": 10,
+        "stock": 100,
+        "description": "This is a book"
+    },
+    {
+        "id": 8,
+        "name": "Game of Thrones",
+        "categoryId": 3,
+        "price": 15,
+        "stock": 50,
+        "description": "This is a book"
+    },
+    {
+        "id": 9,
+        "name": "The Lord of the Rings",
+        "categoryId": 3,
+        "price": 20,
+        "stock": 30,
+        "description": "This is a book"
+    },
+    {
+        "id": 10,
+        "name": "Table",
+        "categoryId": 4,
+        "price": 100,
+        "stock": 10,
+        "description": "This is a table"
+    },
+    {
+        "id": 11,
+        "name": "Chair",
+        "categoryId": 4,
+        "price": 50,
+        "stock": 20,
+        "description": "This is a chair"
+    },
+    {
+        "id": 12,
+        "name": "Bed",
+        "categoryId": 4,
+        "price": 200,
+        "stock": 5,
+        "description": "This is a bed"
+    }
+]

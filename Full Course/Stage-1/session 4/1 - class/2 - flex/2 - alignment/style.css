@@ -1,0 +1,61 @@
+body {
+    margin: 10px;
+}
+
+.container {
+    border: 3px solid lightgray;
+    height: 90vh;
+
+    /* 
+    Don't forget to add the display property with the value flex to the container class.
+   */
+    display: flex;
+
+    /* 
+    The flex-direction property is used to define the direction in which the flex items are placed in the flex container.
+    The value column places the flex items in a column.
+   */
+    flex-direction: column;
+
+    /* 
+    The justify-content property is used to align the flex items along the main axis.
+    Since we set the flex-direction property to column, the main axis is vertical.
+
+    Possible values (justify-content):
+    - flex-start: aligns the flex items at the start of the container.
+    - flex-end: aligns the flex items at the end of the container.
+    - center: aligns the flex items at the center of the container.
+    - space-between: aligns the flex items with space between them.
+    - space-around: aligns the flex items with space around them.
+    - space-evenly: aligns the flex items with space around them, so that the space between two adjacent items is the same.
+
+    Note: if flex-direction is set to row, the main axis is horizontal. Change the flex-direction property to row to see the difference.
+
+    Note: this property we set on the container class, not the flex items.
+   */
+    justify-content: center;
+
+    /* 
+    The align-items property is used to align the flex items along the cross axis.
+    Since we set the flex-direction property to column, the cross axis is horizontal.
+
+    Possible values:
+    - flex-start: aligns the flex items at the start of the container.
+    - flex-end: aligns the flex items at the end of the container.
+    - center: aligns the flex items at the center of the container.
+    - baseline: aligns the flex items at the baseline of the container.
+    - stretch: stretches the flex items to fill the container.
+
+    Note: if flex-direction is set to row, the cross axis is vertical. Change the flex-direction property to row to see the difference.
+
+    Note: this property we set on the container class, not the flex items.
+   */
+    align-items: center;
+}
+
+.box {
+    width: 5rem;
+    height: 5rem;
+    background-color: gold;
+    margin: 1rem;
+}

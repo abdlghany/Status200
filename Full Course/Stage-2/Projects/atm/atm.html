@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<title>ATM</title>
+		<link rel="stylesheet" href="css/default.css" />
+		<link rel="stylesheet" href="css/atm.css" />
+		<script src="js/atm-settings.js"></script>
+		<script src="js/atm-core.js"></script>
+		<script src="js/helpers.js"></script>
+		<script src="js/validation.js"></script>
+	</head>
+	<body
+		class="flex-column justify-between align-center"
+		onload="initialise()"
+	>
+		<!--  Header -->
+		<header class="w-100 h-3 flex-row justify-center align-center">
+			<h1>ATM</h1>
+		</header>
+		<!-- Login -->
+		<main
+			id="authenticate"
+			class="flex-column justify-center align-center w-100 gap-2"
+		>
+			<div>
+				<h2>Authenticate</h2>
+			</div>
+			<div>
+				<label for="account">Enter you Account#:</label>
+				<input type="text" id="account" value="00001" />
+			</div>
+			<div>
+				<label for="pincode">Enter your PIN:</label>
+				<input type="password" id="pincode" value="0001" />
+			</div>
+
+			<div>
+				<p id="authenticate-error" class="color-tomato"></p>
+			</div>
+
+			<button type="button" onclick="processAuthenticate()">
+				Authenticate
+			</button>
+		</main>
+		<!-- Out of Service -->
+		<main
+			id="out-of-service"
+			class="hidden justify-center align-center w-100 gap-2"
+		>
+			<h2>Out of Service</h2>
+			<p>Sorry, the ATM is out of service. Please try again later.</p>
+		</main>
+		<!-- Welcome -->
+		<main
+			id="choose-operation"
+			class="hidden justify-center align-center w-100 text-center gap-2"
+		>
+			<h2>Choose Operation</h2>
+			<p>
+				Welcome <span class="customer-name"></span>,<br />Please choose
+				an operation below.
+			</p>
+		</main>
+		<!-- Withdraw -->
+		<main
+			id="withdraw"
+			class="hidden justify-center align-center w-100 gap-2"
+		>
+			<h2>Withdraw</h2>
+			<p>
+				You can still withdraw
+				<span id="can-withdraw"></span> today
+			</p>
+			<div>
+				<label for="withdraw-amount"
+					>Enter the amount to withdraw:</label
+				>
+				<input type="text" id="withdraw-amount" value="0" />
+			</div>
+			<div>
+				<p id="withdraw-error" class="color-tomato"></p>
+			</div>
+			<button type="button" onclick="processWithdraw()">Withdraw</button>
+			<div>
+				<p id="withdraw-result" class="text-center"></p>
+			</div>
+		</main>
+		<!-- Deposit -->
+		<main
+			id="deposit"
+			class="hidden justify-center align-center w-100 gap-2"
+		>
+			<h2>Deposit</h2>
+			<div>
+				<label for="withdraw-amount">100 bills:</label>
+				<input type="text" id="deposit-100" />
+			</div>
+			<div>
+				<label for="withdraw-amount">50 bills:</label>
+				<input type="text" id="deposit-50" />
+			</div>
+			<div>
+				<label for="withdraw-amount">20 bills:</label>
+				<input type="text" id="deposit-20" />
+			</div>
+			<div>
+				<label for="withdraw-amount">10 bills:</label>
+				<input type="text" id="deposit-10" />
+			</div>
+			<div>
+				<p id="deposit-error" class="color-tomato"></p>
+			</div>
+			<button type="button" onclick="processDeposit()">Deposit</button>
+		</main>
+		<!-- Balance -->
+		<main
+			id="balance"
+			class="hidden justify-center align-center w-100 text-center gap-2"
+		>
+			<h2>Balance</h2>
+			<p>Your current balance is: <span id="balance-amount"></span></p>
+			<p>Your current credit is: <span id="credit-amount"></span></p>
+			<p>
+				Today you can still withdraw: <span id="withdraw-left"></span>
+			</p>
+		</main>
+		<!-- Footer -->
+		<footer class="flex-column justify-center align-center gap-1 w-100 h-5">
+			<div>
+				<button class="operation" onclick="loadWithdraw('withdraw')">
+					Withdraw
+				</button>
+				<button class="operation" onclick="loadDeposit('deposit')">
+					Deposit
+				</button>
+				<button class="operation" onclick="loadBalance('balance')">
+					Balance
+				</button>
+				<button
+					class="operation"
+					onclick="loadAuthenticate('authenticate')"
+				>
+					Exit
+				</button>
+			</div>
+			<div id="note_quantities"></div>
+		</footer>
+	</body>
+</html>

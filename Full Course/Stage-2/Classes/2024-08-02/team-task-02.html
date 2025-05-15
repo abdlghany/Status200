@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Task 2</title>
+    </head>
+    <body>
+        <input type="number" id="lower_bound" placeholder="Enter lower bound" />
+        <input type="number" id="upper_bound" placeholder="Enter upper bound" />
+        <button onclick="startCounter()">Submit</button>
+        <p id="demo"></p>
+        <script>
+            function startCounter() {
+                var lower = document.getElementById("lower_bound").value;
+                var upper = document.getElementById("upper_bound").value;
+                var output = "";
+                for (var counter = lower; counter <= upper; counter++) {
+                    if (counter % 2 === 0) {
+                        output += counter + "<br>";
+                    }
+                }
+                document.getElementById("demo").innerHTML = output;
+            }
+        </script>
+    </body>
+</html>

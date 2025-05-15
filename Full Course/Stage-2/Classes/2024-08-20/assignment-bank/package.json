@@ -1,0 +1,13 @@
+{
+    "name": "task",
+    "version": "1.0.0",
+    "description": "Create a program, with a module that contains a account holder class. The program offers a bunch of action mentioned under methods.",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC"
+}

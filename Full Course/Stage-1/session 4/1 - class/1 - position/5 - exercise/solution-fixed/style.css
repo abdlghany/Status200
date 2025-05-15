@@ -1,0 +1,48 @@
+body {
+  margin: 10px;
+  height: 200vh;
+}
+
+.flag {
+  width: 300px;
+  height: 201px;
+}
+
+.stripe {
+  width: 300px;
+  height: 67px;
+  right: 10px;
+
+  /* 
+    `position: fixed` will position the stripes relative to the viewport.
+    This means that the stripes will stay in the same position even when the user scrolls the page.
+   */
+  position: fixed;
+}
+
+.stripe-yellow {
+  background-color: yellow;
+
+  /* 
+    `bottom: 10px` will position the stripe 10px from the bottom of the viewport.
+   */
+  bottom: 10px;
+}
+
+.stripe-black {
+  background-color: black;
+
+  /* 
+    `bottom: 144px` will position the stripe 144px from the bottom of the viewport.
+   */
+  bottom: 144px;
+}
+
+.stripe-red {
+  background-color: red;
+
+  /* 
+    `bottom: 77px` will position the stripe 77px from the bottom of the viewport.
+   */
+  bottom: 77px;
+}

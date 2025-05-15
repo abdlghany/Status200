@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Document</title>
+    </head>
+    <body>
+        Distance (km)
+        <br />
+        <input type="number" id="input_distance" />
+        <br />
+        <br />
+        Time (hours)
+        <br />
+        <input type="number" id="input_time" />
+        <br />
+        <br />
+        Decimals
+        <br />
+        <input type="number" id="input_decimals" value="1" />
+        <br />
+        <br />
+
+        <button onclick="calculateBMI()">Calculate speed</button>
+        <br />
+        <br />
+        <b id="result"></b>
+
+        <script>
+            function calculateBMI() {
+                // Collecting data (ingredients / input)
+                var distance = document.getElementById("input_distance").value;
+                var time = document.getElementById("input_time").value;
+                var decimals = document.getElementById("input_decimals").value;
+
+                // Processing data (recipe / algorithm)
+                var speed = distance / time;
+                var speed_rounded = speed.toFixed(4);
+
+                // Presenting data (dish / output)
+                document.getElementById("result").innerHTML =
+                    speed_rounded + " km/h";
+            }
+        </script>
+    </body>
+</html>

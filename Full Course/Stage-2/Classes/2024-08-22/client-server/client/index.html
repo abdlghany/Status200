@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Document</title>
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+	</head>
+	<body>
+		<h1>Categories</h1>
+		<div id="categories"></div>
+
+		<script>
+			axios
+				.get("http://localhost:3000/api/categories")
+				.then(function (response) {
+					// handle success
+					console.log(response);
+
+					const categories = response.data;
+
+					let output = "";
+					for (let i = 0; i < categories.length; i++) {
+						output += "<div>" + categories[i].name + "</div>";
+					}
+					document.getElementById("categories").innerHTML = output;
+				})
+				.catch(function (error) {
+					// handle error
+					console.log(error);
+				});
+		</script>
+	</body>
+</html>

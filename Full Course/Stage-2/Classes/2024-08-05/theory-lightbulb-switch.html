@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Lightbulb Switch</title>
+        <style>
+            body {
+                position: relative;
+                height: 100vh;
+                margin: 0;
+                font-family: Arial, sans-serif;
+            }
+
+            .lightbulb {
+                position: absolute;
+                top: 1rem;
+                left: 1rem;
+                width: 300px;
+                height: 300px;
+                border-radius: 50%;
+                cursor: pointer;
+            }
+
+            #lightbulb_on {
+                background: radial-gradient(
+                    circle,
+                    white 0%,
+                    yellow 40%,
+                    orange 95%,
+                    red 100%
+                );
+            }
+
+            #lightbulb_off {
+                background-color: white;
+                width: 296px;
+                height: 296px;
+                border: 2px solid black;
+            }
+
+            #lightbulb_switch {
+                position: absolute;
+                bottom: 1rem;
+                left: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div
+            id="lightbulb_on"
+            class="lightbulb"
+            style="display: none"
+            onclick="toggleLightbulb()"
+        ></div>
+        <div
+            id="lightbulb_off"
+            class="lightbulb"
+            onclick="toggleLightbulb()"
+        ></div>
+        <button id="lightbulb_switch" onclick="toggleLightbulb()">
+            Turn On Light
+        </button>
+        <script>
+            /**
+             * Toggles the lightbulb on and off.
+             *
+             * Using DIV objects instead of the image objects Ferry used in class.
+             */
+            function toggleLightbulb() {
+                const lightbulbOn = document.getElementById("lightbulb_on");
+                const lightbulbOff = document.getElementById("lightbulb_off");
+                const lightbulbSwitch =
+                    document.getElementById("lightbulb_switch");
+                if (lightbulbOn.style.display === "none") {
+                    lightbulbOn.style.display = "block";
+                    lightbulbOff.style.display = "none";
+                    // lightbulbSwitch.innerText = "Turn Off Light";
+                    lightbulbSwitch.textContent = "Turn Off Light";
+                } else {
+                    lightbulbOn.style.display = "none";
+                    lightbulbOff.style.display = "block";
+                    // lightbulbSwitch.innerText = "Turn On Light";
+                    lightbulbSwitch.textContent = "Turn On Light";
+                }
+            }
+        </script>
+    </body>
+</html>

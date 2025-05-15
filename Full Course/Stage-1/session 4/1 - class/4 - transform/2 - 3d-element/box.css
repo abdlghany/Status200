@@ -1,0 +1,62 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: gold;
+}
+
+.box:hover {
+  /* 
+    The transform-origin property is used to change the position of the origin of the transformation of an element.
+    - transform-origin: 0 0: sets the origin of the transformation to the top-left corner of the element.
+    - transform-origin: 0 50%: sets the origin of the transformation to the top-center of the element.
+
+    Note: the default value of the transform-origin property is 50% 50% which sets the origin of the transformation to the center of the element.
+
+    Note: try play with the transform-origin values and see how it effects transform effect of the element.
+   */
+  transform-origin: 50% 50%;
+  /* transform-origin: 0 0; */
+  /* transform-origin: 0 50%; */
+  /* transform-origin: 50% 0; */
+
+  /* 
+    Example 1:
+    
+    The perspective() function is used to apply a perspective transformation to an element.
+    - perspective(500px): defines how far the object is away from the user. 
+    - The lower the value, the closer the object appears.
+
+    The translateZ() property is used to move the element along the Z axis by a specified distance with respect to the give perspective value.
+    - translateZ(100px): moves the element 100px towards from the user.
+
+    Note: without the perspective value, the translateZ() function won't have any effect.
+
+    Note: try play with the perspective value. Set it to 1000px and 100px and see how it effects the translateZ() effect.
+   */
+  transform: perspective(500px) translateZ(100px);
+
+  /* 
+    Example 2:
+
+    The rotateX() function is used to rotate an element around the horizontal axis.
+    - rotateX(45deg): rotates the element 45 degrees around the horizontal axis.
+
+    The rotateY() function is used to rotate an element around the vertical axis.
+    - rotateY(45deg): rotates the element 45 degrees around the vertical axis.
+
+    The rotateZ() function is used to rotate an element around the Z axis.
+    - rotateZ(45deg): rotates the element 45 degrees around the Z axis.
+
+    Note: try play with the rotateX(), rotateY(), and rotateZ() values and see how it effects the element.
+    
+    Note: you won't see any tarnsform when using rotateZ() alone.
+   */
+  /* transform: perspective(200px) rotateX(45deg) rotateY(45deg) rotateZ(45deg); */
+}

@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Login with Local Storage</title>
+        <style>
+            body {
+                font-family: Arial, sans-serif;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                height: 100vh;
+                background-color: #f0f0f0;
+                flex-direction: column;
+            }
+            #loginDiv,
+            #registerDiv,
+            #welcomeDiv {
+                display: none;
+                flex-direction: column;
+                align-items: center;
+            }
+            #loginDiv,
+            #registerDiv {
+                display: flex;
+            }
+            #loginDiv,
+            #registerDiv,
+            #welcomeDiv {
+                margin-bottom: 20px;
+            }
+            #loginDiv button,
+            #registerDiv button {
+                margin-top: 10px;
+            }
+        </style>
+    </head>
+    <body>
+        <div id="loginDiv">
+            <h2>Login</h2>
+            <label for="loginUsername">Username:</label>
+            <input type="text" id="loginUsername" /><br /><br />
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" /><br /><br />
+            <button onclick="login()">Login</button>
+            <button onclick="showRegister()">Create Account</button>
+            <p id="loginMessage" style="color: red"></p>
+        </div>
+
+        <div id="registerDiv">
+            <h2>Create Account</h2>
+            <label for="registerUsername">Username:</label>
+            <input type="text" id="registerUsername" /><br /><br />
+            <label for="registerPassword">Password:</label>
+            <input type="password" id="registerPassword" /><br /><br />
+            <button onclick="register()">Register</button>
+            <button onclick="showLogin()">Back to Login</button>
+            <p id="registerMessage" style="color: red"></p>
+        </div>
+
+        <div id="welcomeDiv">
+            <h2>Welcome, <span id="welcomeUser"></span>!</h2>
+            <button onclick="logout()">Logout</button>
+        </div>
+
+        <script>
+            function checkLogin() {
+                if (localStorage.getItem("loggedInUser")) {
+                    document.getElementById("loginDiv").style.display = "none";
+                    document.getElementById("registerDiv").style.display =
+                        "none";
+                    document.getElementById("welcomeUser").textContent =
+                        localStorage.getItem("loggedInUser");
+                    document.getElementById("welcomeDiv").style.display =
+                        "flex";
+                } else {
+                    document.getElementById("loginDiv").style.display = "flex";
+                    document.getElementById("registerDiv").style.display =
+                        "none";
+                }
+            }
+
+            function login() {
+                const username = document.getElementById("loginUsername").value;
+                const password = document.getElementById("loginPassword").value;
+                const storedPassword = localStorage.getItem(username);
+
+                if (storedPassword && storedPassword === password) {
+                    localStorage.setItem("loggedInUser", username);
+                    document.getElementById("loginDiv").style.display = "none";
+                    document.getElementById("welcomeUser").textContent =
+                        username;
+                    document.getElementById("welcomeDiv").style.display =
+                        "flex";
+                    document.getElementById("loginMessage").textContent = "";
+                } else {
+                    document.getElementById("loginMessage").textContent =
+                        "Invalid username or password.";
+                }
+            }
+
+            function register() {
+                const username =
+                    document.getElementById("registerUsername").value;
+                const password =
+                    document.getElementById("registerPassword").value;
+
+                if (username && password) {
+                    if (!localStorage.getItem(username)) {
+                        localStorage.setItem(username, password);
+                        document.getElementById("registerMessage").textContent =
+                            "Account created successfully!";
+                        showLogin();
+                    } else {
+                        document.getElementById("registerMessage").textContent =
+                            "Username already exists.";
+                    }
+                } else {
+                    document.getElementById("registerMessage").textContent =
+                        "Please enter both username and password.";
+                }
+            }
+
+            function showLogin() {
+                document.getElementById("loginDiv").style.display = "flex";
+                document.getElementById("registerDiv").style.display = "none";
+                document.getElementById("loginMessage").textContent = "";
+                document.getElementById("registerMessage").textContent = "";
+            }
+
+            function showRegister() {
+                document.getElementById("loginDiv").style.display = "none";
+                document.getElementById("registerDiv").style.display = "flex";
+                document.getElementById("loginMessage").textContent = "";
+                document.getElementById("registerMessage").textContent = "";
+            }
+
+            function logout() {
+                localStorage.removeItem("loggedInUser");
+                document.getElementById("welcomeDiv").style.display = "none";
+                document.getElementById("loginDiv").style.display = "flex";
+            }
+
+            // Run the checkLogin function when the script is loaded
+            checkLogin();
+        </script>
+    </body>
+</html>

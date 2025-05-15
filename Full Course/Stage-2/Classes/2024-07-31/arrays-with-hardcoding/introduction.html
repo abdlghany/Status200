@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Teachers</title>
+        <style>
+            body {
+                display: flex;
+                flex-direction: column;
+                gap: 1rem;
+            }
+        </style>
+    </head>
+    <body>
+        <div>
+            <label>Add 3rd teacher name</label>
+            <input type="text" id="inputThirdTeacherName" />
+        </div>
+        <div>
+            <button onclick="addTeacherName()">
+                Add name to teachers array
+            </button>
+            <button onclick="showTeacherNames()">Show teacher names</button>
+        </div>
+        <div id="demo"></div>
+        <script>
+            var teachers = ["Karel", "Ferry"];
+
+            function addTeacherName() {
+                teachers[2] = document.getElementById(
+                    "inputThirdTeacherName"
+                ).value;
+            }
+
+            function showTeacherNames() {
+                document.getElementById("demo").innerHTML = teachers;
+            }
+        </script>
+    </body>
+</html>

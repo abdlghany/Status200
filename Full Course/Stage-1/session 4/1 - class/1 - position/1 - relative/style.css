@@ -1,0 +1,41 @@
+body {
+  margin: 10px;
+}
+
+.boxes {
+  border: 3px solid lightgray;
+}
+
+.box {
+  width: 5rem;
+  height: 5rem;
+}
+
+.box-one {
+  background-color: gold;
+}
+
+.box-two {
+  background-color: tomato;
+
+  /* 
+    The box will be positioned relative to itself.
+   */
+  position: relative;
+
+  /* 
+    The box will be moved 4rem to the right and 2rem to the top
+    from its original position.
+   */
+  left: 4rem;
+  top: -2rem;
+
+  /* 
+    The box will be placed behind the box-one.
+    */
+  z-index: -1;
+}
+
+.box-three {
+  background-color: dodgerblue;
+}

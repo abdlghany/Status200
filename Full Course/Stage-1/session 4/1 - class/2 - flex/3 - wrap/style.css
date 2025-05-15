@@ -1,0 +1,87 @@
+body {
+  margin: 10px;
+}
+
+.container {
+  height: 90vh;
+  border: 3px solid lightgray;
+
+  /* 
+    Don't forget to add the display property with the value flex to the container class.
+   */
+  display: flex;
+
+  /* 
+    The flex-direction property is used to define the direction in which the flex items are placed in the flex container.
+    The value row places the flex items in a row.
+   */
+  flex-direction: row;
+
+  /* 
+    The justify-content property is used to align the flex items along the main axis.
+    Since we set the flex-direction property to column, the main axis is vertical.
+
+    Possible values:
+    - flex-start: aligns the flex items at the start of the container.
+    - flex-end: aligns the flex items at the end of the container.
+    - center: aligns the flex items at the center of the container.
+    - space-between: aligns the flex items with space between them.
+    - space-around: aligns the flex items with space around them.
+    - space-evenly: aligns the flex items with space around them, so that the space between two adjacent items is the same.
+
+    Note: if flex-direction is set to row, the main axis is horizontal. Change the flex-direction property to row to see the difference.
+
+    Note: this property we set on the container class, not the flex items.
+   */
+  justify-content: center;
+
+  /* 
+    The align-items property is used to align the flex items along the cross axis.
+    Since we set the flex-direction property to column, the cross axis is horizontal.
+
+    Possible values:
+    - flex-start: aligns the flex items at the start of the container.
+    - flex-end: aligns the flex items at the end of the container.
+    - center: aligns the flex items at the center of the container.
+    - baseline: aligns the flex items at the baseline of the container.
+    - stretch: stretches the flex items to fill the container.
+
+    Note: if flex-direction is set to row, the cross axis is vertical. Change the flex-direction property to row to see the difference.
+
+    Note: this property we set on the container class, not the flex items.
+   */
+  align-items: center;
+
+  /* 
+    The flex-wrap property is used to define whether the flex items should wrap or not.
+    The default value is nowrap, which means that the flex items will not wrap.
+
+    Note: this property we set on the container class, not the flex items.
+
+    Note: try comment this property and see the difference
+   */
+  flex-wrap: wrap;
+
+  /* 
+    The align-content property is used to align the flex lines along the cross axis.
+    This property has no effect if there is only one line of flex items.
+
+    Possible values:
+    - flex-start: aligns the flex lines at the start of the container.
+    - flex-end: aligns the flex lines at the end of the container.
+    - center: aligns the flex lines at the center of the container.
+    - space-between: aligns the flex lines with space between them.
+    - space-around: aligns the flex lines with space around them.
+    - stretch: stretches the flex lines to fill the container.
+
+    Note: this property we set on the container class, not the flex items.
+   */
+  align-content: center;
+}
+
+.box {
+  width: 15rem;
+  height: 15rem;
+  background-color: gold;
+  margin: 1rem;
+}

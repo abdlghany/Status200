@@ -1,0 +1,41 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: gold;
+}
+
+.container {
+  /* 
+    Note: we're setting the perspective on the container
+  
+    Note: we're using a style property `perspective` instead of a transform method perspective()
+   */
+  perspective: 200px;
+}
+
+.container:hover .box {
+  transform-origin: 0 50%;
+
+  /* 
+    Note: be aware of the fact the perspective() method is missing in the transform value. 
+    
+    Try add it, for example perspective(200px) and notice the difference of the hover effect.
+    This is because you overwrote the container perspective and set it for each individual element itself
+   */
+  /* transform: perspective(200px) rotateY(45deg); */
+  transform: rotateY(45deg);
+}
+
+.container:hover .box-special {
+  /* 
+    Apply a different transform for box-special
+   */
+  /* transform: rotateX(45deg); */
+}

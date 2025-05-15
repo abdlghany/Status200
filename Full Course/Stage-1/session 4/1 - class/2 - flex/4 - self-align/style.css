@@ -1,0 +1,87 @@
+body {
+  margin: 10px;
+}
+
+.container {
+  height: 90vh;
+  border: 3px solid lightgray;
+
+  /* 
+      Don't forget to add the display property with the value flex to the container class.
+     */
+  display: flex;
+
+  /* 
+      The flex-direction property is used to define the direction in which the flex items are placed in the flex container.
+      The value row places the flex items in a row.
+     */
+  flex-direction: row;
+
+  /* 
+      The justify-content property is used to align the flex items along the main axis.
+      Since we set the flex-direction property to column, the main axis is vertical.
+  
+      Possible values:
+      - flex-start: aligns the flex items at the start of the container.
+      - flex-end: aligns the flex items at the end of the container.
+      - center: aligns the flex items at the center of the container.
+      - space-between: aligns the flex items with space between them.
+      - space-around: aligns the flex items with space around them.
+      - space-evenly: aligns the flex items with space around them, so that the space between two adjacent items is the same.
+  
+      Note: if flex-direction is set to row, the main axis is horizontal. Change the flex-direction property to row to see the difference.
+  
+      Note: this property we set on the container class, not the flex items.
+     */
+  justify-content: center;
+
+  /* 
+      The align-items property is used to align the flex items along the cross axis.
+      Since we set the flex-direction property to column, the cross axis is horizontal.
+  
+      Possible values:
+      - flex-start: aligns the flex items at the start of the container.
+      - flex-end: aligns the flex items at the end of the container.
+      - center: aligns the flex items at the center of the container.
+      - baseline: aligns the flex items at the baseline of the container.
+      - stretch: stretches the flex items to fill the container.
+  
+      Note: if flex-direction is set to row, the cross axis is vertical. Change the flex-direction property to row to see the difference.
+  
+      Note: this property we set on the container class, not the flex items.
+     */
+  align-items: center;
+}
+
+.box {
+  width: 5rem;
+  height: 5rem;
+  background-color: gold;
+  margin: 1rem;
+}
+
+.box-top {
+  /* 
+        The align-self property is used to align a single flex item along the cross axis.
+        This property overrides the align-items property set on the container.
+
+        Possible values:
+        - flex-start: aligns the flex item at the start of the container.
+        - flex-end: aligns the flex item at the end of the container.
+        - center: aligns the flex item at the center of the container.
+        - baseline: aligns the flex item at the baseline of the container.
+        - stretch: stretches the flex item to fill the container.
+
+        Note: this property we set on the flex items, not the container.
+
+        Here, we set the align-self property to flex-start, which aligns the box-top class at the start of the container.
+    */
+  align-self: flex-start;
+}
+
+.box-bottom {
+  /* 
+        Here, we set the align-self property to flex-end, which aligns the box-bottom class at the end of the container.
+    */
+  align-self: flex-end;
+}

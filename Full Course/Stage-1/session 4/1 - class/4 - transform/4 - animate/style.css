@@ -1,0 +1,86 @@
+body {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}
+
+.box {
+  width: 100px;
+  height: 100px;
+  background-color: gold;
+
+  perspective: 200px;
+
+  /* 
+    Example 1
+
+    Note: `transition` is a shorthand property for `transition-property`, `transition-duration`, `transition-timing-function`, and `transition-delay`.
+
+    Note: `transform` is not set inside the hover, but on the box itself. This is because we want to animate the transform property on hover.
+
+    On hover, we're:
+    - targeting the transform property.
+    - 0.5 seconds duration.
+    - easing linear.
+    - 1 sec delay before the animation starts
+   */
+  /* transition: transform 0.5s; */
+
+  /* 
+    Example 2
+
+    On hover, we're:
+    - targeting the transform property.
+    - 0.5 seconds duration.
+    - easing custom cubic bezier curve.
+   */
+  /* transition: transform 0.5s cubic-bezier(1, 0, 1, 0.37); */
+
+  /* 
+    Example 3
+
+    On hover, we're:
+    - targeting the transform property.
+    - 0.5 seconds duration.
+    - easing custom cubic bezier curve.
+    - 1 second delay before the animation starts.
+   */
+  /* transition: transform 0.5s cubic-bezier(1, 0, 1, 0.37) 1s; */
+
+  /* 
+    Example 4
+
+    On hover, we're:
+    - targeting the transform property.
+      - 0.5 seconds duration.
+      - easing ease-in.
+      - 1 second delay before the animation starts.
+    - targeting the background property.
+      - 0.5 seconds duration.
+      - easing linear.
+   */
+  /* transition: transform 0.5s ease-in 1s, background 0.5s linear; */
+
+  /* 
+    Example 5
+
+    On hover, we're:
+    - targeting all properties that can be transitioned (in this case, it's the transform and background properties)
+    - 0.5 seconds duration.
+    - easing ease-in.
+   */
+  transition: all 0.5s ease-in;
+}
+
+.box:hover {
+  /* 
+    Note: we're setting the perspective on the container. We could have use perspective() instead, but it's preferred to set it on the container.
+
+    On hover, we're:
+    - Rotating the box 45 (Z-axis in a 2D plane) with the transform-origin set to 0 0 (default).
+    - Changing the background color to dodgerblue.
+   */
+  transform: rotate(45deg);
+  background: dodgerblue;
+}

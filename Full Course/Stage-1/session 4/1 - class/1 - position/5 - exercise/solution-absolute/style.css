@@ -1,0 +1,56 @@
+body {
+  margin: 10px;
+}
+
+.flag {
+  width: 300px;
+  height: 201px;
+  border: 3px solid lightgray;
+
+  /* 
+    You need to add position: relative to the flag container, because the stripes are positioned absolutely.
+    This means that they are positioned relative to the flag container. 
+    If the flag container does not have a position set, the stripes will be positioned relative to the nearest ancestor
+    that has a position set. If no ancestor has a position set, the stripes will be positioned relative to the viewport.
+  */
+  position: relative;
+}
+
+.stripe {
+  /* 
+    You need to add the width for the stripes, because all the stripes are positioned absolutely.
+    As a result, they are taken out of the document flow. This means that they are not taking up any
+    space in the document flow (the parent box collapses in width). 
+    So, you need to add the width to the stripes to make them take up space in the document flow.
+  */
+  width: 100%;
+  height: 67px;
+  position: absolute;
+}
+
+.stripe-yellow {
+  background-color: yellow;
+
+  /* 
+    `bottom: 0` will position the stripe at the bottom of the flag container.
+   */
+  bottom: 0;
+}
+
+.stripe-black {
+  background-color: black;
+
+  /* 
+
+   */
+  top: 0;
+}
+
+.stripe-red {
+  background-color: red;
+
+  /* 
+    `top: 67px` will position the stripe 67px from the top of the flag container.
+   */
+  top: 67px;
+}

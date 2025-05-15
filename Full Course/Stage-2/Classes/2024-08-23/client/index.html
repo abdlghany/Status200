@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Categories, Products & product details</title>
+		<!-- Load Axios library for making HTTP requests -->
+		<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+		<style>
+			/* Change cursor to pointer for clickable divs */
+			.clickables div {
+				cursor: pointer;
+			}
+			/* Change text color to green on hover */
+			.clickables div:hover {
+				color: green;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- Button to initiate fetching categories -->
+		<button onclick="fetchCategories()">Start fetching categories</button>
+
+		<!-- Container to display fetched categories -->
+		<div id="categoriesContainer" style="display: none">
+			<h1>Categories</h1>
+			<div id="categories" class="clickables"></div>
+		</div>
+
+		<!-- Container to display fetched products within a selected category -->
+		<div id="productsContainer" style="display: none">
+			<h2>Products</h2>
+			<div id="products" class="clickables"></div>
+		</div>
+
+		<!-- Container to display details of a selected product -->
+		<div id="productContainer" style="display: none">
+			<h3>Product Details</h3>
+			<div id="product"></div>
+		</div>
+
+		<script>
+			function fetchCategories() {
+				/* Make GET request to fetch categories */
+				axios
+					.get("http://localhost:3000/api/categories")
+					.then(function (response) {
+						/* Store the categories data from the response */
+						const categories = response.data;
+
+						/* Initialize an empty string to store the output */
+						let output = "";
+
+						/* Loop through the categories and create div elements */
+						for (let i = 0; i < categories.length; i++) {
+							/* Add a div with an onclick event to fetch products for the category */
+							output += "<div onclick='fetchProducts(" + categories[i].id + ")'>" + categories[i].name + "</div>";
+						}
+
+						/* Show the categories container */
+						document.getElementById("categoriesContainer").style.display = "block";
+
+						/* Insert the category elements into the container */
+						document.getElementById("categories").innerHTML = output;
+					})
+					.catch(function (error) {
+						/* Log any errors to the console */
+						console.log(error);
+					});
+			}
+
+			function fetchProducts(categoryId) {
+				/* Make GET request to fetch products for a category */
+				axios
+					.get("http://localhost:3000/api/categories/" + categoryId + "/products")
+					.then(function (response) {
+						/* Hide the product details container */
+						document.getElementById("productContainer").style.display = "none";
+
+						/* Store the products data from the response */
+						const products = response.data;
+
+						/* Initialize an empty string to store the output */
+						let output = "";
+
+						/* Loop through the products and create div elements */
+						for (let i = 0; i < products.length; i++) {
+							/* Add a div with an onclick event to fetch product details */
+							output += "<div onclick='fetchProduct(" + products[i].id + ")'>" + products[i].name + "</div>";
+						}
+
+						/* Show the products container */
+						document.getElementById("productsContainer").style.display = "block";
+
+						/* Insert the product elements into the container */
+						document.getElementById("products").innerHTML = output;
+					})
+					.catch(function (error) {
+						/* Log any errors to the console */
+						console.log(error);
+					});
+			}
+
+			function fetchProduct(productID) {
+				axios
+					.get("http://localhost:3000/api/products/" + productID) /* Make GET request to fetch product details */
+					.then(function (response) {
+						/* Clear the previous product details */
+						document.getElementById("product").innerHTML = "";
+
+						/* Store the product data from the response */
+						const product = response.data;
+
+						/* Show the product details container */
+						document.getElementById("productContainer").style.display = "block";
+
+						/* Display the product ID */
+						document.getElementById("product").innerHTML += "<div>ID: " + product.id + "</div>";
+
+						/* Display the product name */
+						document.getElementById("product").innerHTML += "<div>Name: " + product.name + "</div>";
+					})
+					.catch(function (error) {
+						/* Log any errors to the console */
+						console.log(error);
+					});
+			}
+		</script>
+	</body>
+</html>

@@ -1,0 +1,8 @@
+#main-content {
+    background-color: red;
+}
+
+#main-content .content {
+    display: block;
+    /* display: flex; */
+}

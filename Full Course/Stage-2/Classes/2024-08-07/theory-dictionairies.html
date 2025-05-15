@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Simple Translator</title>
+    </head>
+    <body>
+        <h1>Simpel Translator</h1>
+        <div id="translator">
+            <input type="text" id="keyword" placeholder="Enter a word" />
+            <button onclick="translateEnglish2French()">
+                Translate to French
+            </button>
+            <button onclick="translateFrenchToEnglish()">
+                Translate to English
+            </button>
+            <p id="translated"></p>
+        </div>
+
+        <!-- eslint-disable -->
+        <!-- prettier-ignore -->
+        <script>
+            const englishToFrench = {
+                "hello": "bonjour",
+                "goodbye": "au revoir",
+                "thank you": "merci",
+                "please": "s'il vous plaît",
+                "sorry": "pardon",
+                "excuse me": "excusez-moi",
+                "yes": "oui",
+                "no": "non",
+                "dog": "chien",
+                "cat": "chat",
+                "house": "maison",
+                "car": "voiture",
+            };
+
+            const frenchToEnglish = {
+                "bonjour": "hello",
+                "au revoir": "goodbye",
+                "merci": "thank you",
+                "s'il vous plaît": "please",
+                "pardon": "sorry",
+                "excusez-moi": "excuse me",
+                "oui": "yes",
+                "non": "no",
+                "chien": "dog",
+                "chat": "cat",
+                "maison": "house",
+                "voiture": "car",
+            };
+
+            function translateEnglish2French() {
+                const text = document.getElementById("keyword").value;
+                const result = englishToFrench[text] || "Not found";
+                document.getElementById("translated").innerHTML = result;
+            }
+
+            function translateFrenchToEnglish() {
+                const text = document.getElementById("keyword").value;
+                const result = frenchToEnglish[text] || "Not found";
+                document.getElementById("translated").innerHTML = result;
+            }
+        </script>
+        <!-- eslint-enable -->
+    </body>
+</html>
