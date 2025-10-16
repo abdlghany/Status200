@@ -5,7 +5,7 @@ class MysqlQueries{
     #config = {
         host: "localhost",
         user: "root",
-        password: "",
+        password: "thisIndeed!s@HardP@sswword",
         database:"ripoff",
         multipleStatements: true
       };
